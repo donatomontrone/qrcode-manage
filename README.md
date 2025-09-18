@@ -114,7 +114,7 @@ CLOUDINARY_API_SECRET=your_api_secret
 
 ## 📝 License
 
-Questo progetto è sotto licenza MIT - vedi [LICENSE](LICENSE) per dettagli.
+Questo progetto è sotto licenza MIT - vedi [LICENSE](/LICENSE) per dettagli.
 
 ## 🙏 Acknowledgments
 
