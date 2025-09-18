@@ -34,15 +34,11 @@ cd qr-code-manager
 ```
 
 **Accesso**: http://localhost:8080
-- Admin: `admin@qrmanager.com` / `admin123`
+- Admin: `admin@qrmanager.com` / `******`
 
 ### Deploy su Render
 
 Segui la guida completa in `README-DEPLOY.md`
-
-## 📱 Demo Live
-
-Prova la demo dell'interface: [Link Demo](#)
 
 ## 🔧 Configurazione
 
