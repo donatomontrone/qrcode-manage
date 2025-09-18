@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: qr-code-manager
+    env: java
+    plan: free
+    buildCommand: "./mvnw clean install -DskipTests"
+    startCommand: "java -Dserver.port=$PORT -jar target/qr-code-manager-0.0.1-SNAPSHOT.jar"
+    healthCheckPath: "/actuator/health"
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        value: admin@qrmanager.com
+      - key: ADMIN_PASSWORD
+        sync: false

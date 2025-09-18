@@ -1,0 +1,114 @@
+package com.example.qrapp.service;
+
+import com.example.qrapp.model.Role;
+import com.example.qrapp.model.User;
+import com.example.qrapp.repository.RoleRepository;
+import com.example.qrapp.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import static com.example.qrapp.constants.Message.*;
+
+@Service
+@Transactional
+public class UserService implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND + email));
+    }
+
+    public User registerUser(String firstName, String lastName, String email, String password) {
+        if (userRepository.existsByEmail(email)) {
+            throw new RuntimeException(EMAIL_ALREADY_EXISTS + email);
+        }
+
+        User user = new User(firstName, lastName, email, passwordEncoder.encode(password));
+
+        // Assign default USER role
+        Role userRole = roleRepository.findByName(Role.USER)
+                .orElseThrow(() -> new RuntimeException(INIT_ROLE_USER_NOT_FOUND.getValue()));
+        user.setRoles(Set.of(userRole));
+
+        return userRepository.save(user);
+    }
+
+    public User createAdminUser(String firstName, String lastName, String email, String password) {
+        if (userRepository.existsByEmail(email)) {
+            throw new RuntimeException(EMAIL_ALREADY_EXISTS + email);
+        }
+
+        User user = new User(firstName, lastName, email, passwordEncoder.encode(password));
+
+        Role adminRole = roleRepository.findByName(Role.ADMIN)
+                .orElseThrow(() -> new RuntimeException(INIT_ROLE_ADMIN_NOT_FOUND.getValue()));
+        user.setRoles(Set.of(adminRole));
+
+        return userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> findById(UUID id) {
+        return userRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(UUID id) {
+        userRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    public long countAll() {
+        return userRepository.count();
+    }
+
+    public boolean isAdmin(User user) {
+        return user.getRoles().stream()
+                .anyMatch(role -> Role.ADMIN.equals(role.getName()));
+    }
+
+    public void changePassword(User user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+}
