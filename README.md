@@ -34,15 +34,11 @@ cd qr-code-manager
 ```
 
 **Accesso**: http://localhost:8080
-- Admin: `admin@qrmanager.com` / `admin123`
+- Admin: `admin@qrmanager.com` / `******`
 
 ### Deploy su Render
 
 Segui la guida completa in `README-DEPLOY.md`
-
-## 📱 Demo Live
-
-Prova la demo dell'interface: [Link Demo](#)
 
 ## 🔧 Configurazione
 
@@ -118,7 +114,7 @@ CLOUDINARY_API_SECRET=your_api_secret
 
 ## 📝 License
 
-Questo progetto è sotto licenza MIT - vedi [LICENSE](LICENSE) per dettagli.
+Questo progetto è sotto licenza MIT - vedi [LICENSE](/LICENSE) per dettagli.
 
 ## 🙏 Acknowledgments
 
