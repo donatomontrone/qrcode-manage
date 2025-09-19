@@ -41,7 +41,7 @@ public class AdminController {
 
         // QR code recenti per visualizzazione
         Pageable pageable = PageRequest.of(0, 5);
-        List<QrCode> recentQrCodes = qrCodeService.findAll(pageable).getContent();
+        Page<QrCode> recentQrCodes = qrCodeService.findAll(pageable, null, null);
 
         model.addAttribute("totalQrCodes", totalQrCodes);
         model.addAttribute("activeQrCodes", activeQrCodes);
@@ -61,17 +61,23 @@ public class AdminController {
                          Model model) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<QrCode> qrCodesPage = qrCodeService.findAll(pageable);
+        Page<QrCode> qrCodesPage = qrCodeService.findAll(pageable, filter, search);
 
         model.addAttribute("qrCodes", qrCodesPage.getContent());
-        model.addAttribute("currentPage", page);
+        model.addAttribute("page", pageable);
         model.addAttribute("totalPages", qrCodesPage.getTotalPages());
+        model.addAttribute("lastPage", qrCodesPage.getTotalPages() - 1);
         model.addAttribute("totalElements", qrCodesPage.getTotalElements());
         model.addAttribute("filter", filter);
         model.addAttribute("search", search);
-
+        System.out.println(pageable);
+        System.out.println(qrCodesPage.getTotalPages());
+        System.out.println(qrCodesPage.getTotalElements());
+        System.out.println(qrCodesPage.getTotalPages() - 1);
         return "admin/qr-list";
     }
+
+
 
     @GetMapping("/qr/create")
     public String qrCreateForm(Model model) {
@@ -98,11 +104,15 @@ public class AdminController {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<User> usersPage = userService.findAll(pageable);
+        Long todayRegistrations = userService.countRegistrationsToday();
+        Long countAdmins = userService.countAdmins();
 
         model.addAttribute("users", usersPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", usersPage.getTotalPages());
         model.addAttribute("totalElements", usersPage.getTotalElements());
+        model.addAttribute("todayRegistrations", todayRegistrations);
+        model.addAttribute("totalAdmin", countAdmins);
 
         return "admin/users";
     }

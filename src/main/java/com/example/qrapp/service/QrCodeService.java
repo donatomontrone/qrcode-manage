@@ -7,6 +7,7 @@ import com.example.qrapp.util.QrCodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -63,18 +65,50 @@ public class QrCodeService {
     }
 
     @Transactional(readOnly = true)
-    public Page<QrCode> findAll(Pageable pageable) {
-        return qrCodeRepository.findAllByOrderByCreatedAtDesc(pageable);
+    public Page<QrCode> findAll(Pageable pageable, String filter, String search) {
+        Page<QrCode> qrCodesPage;
+        if (filter != null && !filter.isEmpty()) {
+            if (filter.equalsIgnoreCase("active")) {
+                qrCodesPage = findActive(pageable);
+            } else if (filter.equalsIgnoreCase("expired")) {
+                qrCodesPage = findExpired(pageable);
+            } else if (filter.equalsIgnoreCase("full")) {
+                qrCodesPage = findFull(pageable);
+            }
+        }
+
+        qrCodesPage = switch (filter != null ? filter.toLowerCase() : "") {
+            case "active" -> findActive(pageable);
+            case "expired" -> findExpired(pageable);
+            case "full" -> findFull(pageable);
+            default -> qrCodeRepository.findAll(pageable);
+        };
+
+        if (search != null && !search.trim().isEmpty()) {
+            List<QrCode> filteredList = qrCodesPage.getContent().stream()
+                    .filter(qr -> qr.getDescription().toLowerCase().contains(search.toLowerCase()) ||
+                            qr.getOwner().getLastName().toLowerCase().contains(search.toLowerCase()) ||
+                            qr.getOwner().getFirstName().toLowerCase().contains(search.toLowerCase()))
+                    .collect(Collectors.toList());
+
+            return new PageImpl<>(filteredList, pageable, qrCodesPage.getTotalElements());
+        }
+
+        return qrCodesPage;
     }
 
     @Transactional(readOnly = true)
-    public List<QrCode> findActive() {
-        return qrCodeRepository.findByExpiryDateAfterOrderByCreatedAtDesc(LocalDateTime.now());
+    public Page<QrCode> findActive(Pageable pageable) {
+        return qrCodeRepository.findByExpiryDateAfterOrderByCreatedAtDesc(LocalDateTime.now(), pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<QrCode> findExpired() {
-        return qrCodeRepository.findByExpiryDateBeforeOrderByCreatedAtDesc(LocalDateTime.now());
+    public Page<QrCode> findExpired(Pageable pageable) {
+        return qrCodeRepository.findByExpiryDateBeforeOrderByCreatedAtDesc(LocalDateTime.now(), pageable);
+    }
+
+    public Page<QrCode> findFull(Pageable pageable) {
+        return qrCodeRepository.findByArticlesCountEqualsMaxArticles(pageable);
     }
 
     public QrCode updateQrCode(QrCode qrCode) {

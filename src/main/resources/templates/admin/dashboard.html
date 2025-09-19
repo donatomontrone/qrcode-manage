@@ -5,191 +5,192 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - QR Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
-    <div th:replace="~{fragments/header :: header}"></div>
+<!-- Header -->
+<div th:replace="~{fragments/header :: header}"></div>
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Welcome Section -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p class="text-gray-600">Pannello di controllo QR Manager</p>
-        </div>
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Welcome Section -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p class="text-gray-600">Pannello di controllo QR Manager</p>
+    </div>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <i data-lucide="qr-code" class="w-6 h-6 text-blue-600"></i>
-                        </div>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">QR Code Totali</p>
-                        <p class="text-2xl font-bold text-gray-900" th:text="${totalQrCodes ?: 24}">24</p>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="qr-code" class="w-6 h-6 text-blue-600"></i>
                     </div>
                 </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                            <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
-                        </div>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">QR Code Attivi</p>
-                        <p class="text-2xl font-bold text-gray-900" th:text="${activeQrCodes ?: 18}">18</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                            <i data-lucide="package" class="w-6 h-6 text-purple-600"></i>
-                        </div>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Articoli Totali</p>
-                        <p class="text-2xl font-bold text-gray-900" th:text="${totalArticles ?: 67}">67</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                            <i data-lucide="users" class="w-6 h-6 text-orange-600"></i>
-                        </div>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Utenti</p>
-                        <p class="text-2xl font-bold text-gray-900" th:text="${totalUsers ?: 15}">15</p>
-                    </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">QR Code Totali</p>
+                    <p class="text-2xl font-bold text-gray-900" th:text="${totalQrCodes ?: 24}">24</p>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Azioni Rapide</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <a href="/admin/qr/create" class="flex items-center p-4 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-200">
-                    <i data-lucide="plus-circle" class="w-6 h-6 mr-3"></i>
-                    <div>
-                        <p class="font-semibold">Nuovo QR Code</p>
-                        <p class="text-sm opacity-90">Crea un nuovo QR personalizzato</p>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
                     </div>
-                </a>
-
-                <a href="/admin/qr/list" class="flex items-center p-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-200">
-                    <i data-lucide="list" class="w-6 h-6 mr-3"></i>
-                    <div>
-                        <p class="font-semibold">Gestisci QR</p>
-                        <p class="text-sm opacity-90">Visualizza e modifica QR esistenti</p>
-                    </div>
-                </a>
-
-                <a href="/admin/reports" class="flex items-center p-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200">
-                    <i data-lucide="bar-chart-3" class="w-6 h-6 mr-3"></i>
-                    <div>
-                        <p class="font-semibold">Report</p>
-                        <p class="text-sm opacity-90">Analisi e statistiche</p>
-                    </div>
-                </a>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">QR Code Attivi</p>
+                    <p class="text-2xl font-bold text-gray-900" th:text="${activeQrCodes ?: 18}">18</p>
+                </div>
             </div>
         </div>
 
-        <!-- Recent QR Codes -->
-<!--        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">-->
-<!--            <div class="flex items-center justify-between mb-6">-->
-<!--                <h2 class="text-xl font-semibold text-gray-900">Recenti</h2>-->
-<!--                <a href="/admin/qr/list" class="text-teal-600 hover:text-teal-700 text-sm font-medium">Vedi tutti</a>-->
-<!--            </div>-->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="package" class="w-6 h-6 text-purple-600"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Articoli Totali</p>
+                    <p class="text-2xl font-bold text-gray-900" th:text="${totalArticles ?: 67}">67</p>
+                </div>
+            </div>
+        </div>
 
-<!--&lt;!&ndash;            <div class="overflow-x-auto">&ndash;&gt;-->
-<!--&lt;!&ndash;                <table class="min-w-full">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <thead>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <tr class="border-b border-gray-200">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Proprietario</th>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Descrizione</th>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Articoli</th>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Stato</th>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Scadenza</th>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </tr>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </thead>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <tbody class="divide-y divide-gray-100">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <tr th:each="qrCode : ${recentQrCodes ?: {}}">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <div class="flex items-center">&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <span class="text-sm font-medium text-gray-600" th:text="${qrCode.owner.firstName?.substring(0,1)}">M</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <div class="ml-3">&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <p class="font-medium text-gray-900" th:text="${qrCode.owner.fullName}">Mario Rossi</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <p class="text-sm text-gray-500" th:text="${qrCode.owner.email}">mario@email.com</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </td>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <p class="text-gray-900" th:text="${qrCode.description}">Collezione vintage</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </td>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <span class="text-gray-600" th:text="${qrCode.articles.size() + '/' + qrCode.maxArticles}">3/10</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </td>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"&ndash;&gt;-->
-<!--&lt;!&ndash;                                      th:classappend="${qrCode.status == 'ACTIVE'} ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"&ndash;&gt;-->
-<!--&lt;!&ndash;                                      th:text="${qrCode.status == 'ACTIVE'} ? 'Attivo' : 'Scaduto'">&ndash;&gt;-->
-<!--&lt;!&ndash;                                    Attivo&ndash;&gt;-->
-<!--&lt;!&ndash;                                </span>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </td>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <td class="py-4 px-4 text-gray-600" th:text="${#temporals.format(qrCode.expiryDate, 'dd/MM/yyyy')}">31/12/2025</td>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </tr>&ndash;&gt;-->
-<!--&lt;!&ndash;                        &lt;!&ndash; Demo data quando non ci sono QR code &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;                        <tr th:if="${#lists.isEmpty(recentQrCodes)}">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <div class="flex items-center">&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <span class="text-sm font-medium text-gray-600">M</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <div class="ml-3">&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <p class="font-medium text-gray-900">Mario Rossi</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <p class="text-sm text-gray-500">mario.rossi@email.com</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </td>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <p class="text-gray-900">Collezione vintage di Mario</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </td>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <span class="text-gray-600">3/10</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </td>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">&ndash;&gt;-->
-<!--&lt;!&ndash;                                    Attivo&ndash;&gt;-->
-<!--&lt;!&ndash;                                </span>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </td>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <td class="py-4 px-4 text-gray-600">31/12/2025</td>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </tr>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </tbody>&ndash;&gt;-->
-<!--&lt;!&ndash;                </table>&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;        </div>&ndash;&gt;-->
-<!--    </div>-->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="users" class="w-6 h-6 text-orange-600"></i>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Utenti</p>
+                    <p class="text-2xl font-bold text-gray-900" th:text="${totalUsers ?: 15}">15</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-    </script>
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Azioni Rapide</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a href="/admin/qr/create" class="flex items-center p-4 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-200">
+                <i data-lucide="plus-circle" class="w-6 h-6 mr-3"></i>
+                <div>
+                    <p class="font-semibold">Nuovo QR Code</p>
+                    <p class="text-sm opacity-90">Crea un nuovo QR personalizzato</p>
+                </div>
+            </a>
+
+            <a href="/admin/qr/list"
+               class="flex items-center p-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-200">
+                <i data-lucide="list" class="w-6 h-6 mr-3"></i>
+                <div>
+                    <p class="font-semibold">Gestisci QR</p>
+                    <p class="text-sm opacity-90">Visualizza e modifica QR esistenti</p>
+                </div>
+            </a>
+
+            <a href="/admin/reports"
+               class="flex items-center p-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200">
+                <i data-lucide="bar-chart-3" class="w-6 h-6 mr-3"></i>
+                <div>
+                    <p class="font-semibold">Report</p>
+                    <p class="text-sm opacity-90">Analisi e statistiche</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent QR Codes -->
+    <!--        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">-->
+    <!--            <div class="flex items-center justify-between mb-6">-->
+    <!--                <h2 class="text-xl font-semibold text-gray-900">Recenti</h2>-->
+    <!--                <a href="/admin/qr/list" class="text-teal-600 hover:text-teal-700 text-sm font-medium">Vedi tutti</a>-->
+    <!--            </div>-->
+
+    <!--&lt;!&ndash;            <div class="overflow-x-auto">&ndash;&gt;-->
+    <!--&lt;!&ndash;                <table class="min-w-full">&ndash;&gt;-->
+    <!--&lt;!&ndash;                    <thead>&ndash;&gt;-->
+    <!--&lt;!&ndash;                        <tr class="border-b border-gray-200">&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Proprietario</th>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Descrizione</th>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Articoli</th>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Stato</th>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <th class="text-left py-3 px-4 font-semibold text-gray-700">Scadenza</th>&ndash;&gt;-->
+    <!--&lt;!&ndash;                        </tr>&ndash;&gt;-->
+    <!--&lt;!&ndash;                    </thead>&ndash;&gt;-->
+    <!--&lt;!&ndash;                    <tbody class="divide-y divide-gray-100">&ndash;&gt;-->
+    <!--&lt;!&ndash;                        <tr th:each="qrCode : ${recentQrCodes ?: {}}">&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                <div class="flex items-center">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                        <span class="text-sm font-medium text-gray-600" th:text="${qrCode.owner.firstName?.substring(0,1)}">M</span>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                    <div class="ml-3">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                        <p class="font-medium text-gray-900" th:text="${qrCode.owner.fullName}">Mario Rossi</p>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                        <p class="text-sm text-gray-500" th:text="${qrCode.owner.email}">mario@email.com</p>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            </td>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                <p class="text-gray-900" th:text="${qrCode.description}">Collezione vintage</p>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            </td>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                <span class="text-gray-600" th:text="${qrCode.articles.size() + '/' + qrCode.maxArticles}">3/10</span>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            </td>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"&ndash;&gt;-->
+    <!--&lt;!&ndash;                                      th:classappend="${qrCode.status == 'ACTIVE'} ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"&ndash;&gt;-->
+    <!--&lt;!&ndash;                                      th:text="${qrCode.status == 'ACTIVE'} ? 'Attivo' : 'Scaduto'">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                    Attivo&ndash;&gt;-->
+    <!--&lt;!&ndash;                                </span>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            </td>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <td class="py-4 px-4 text-gray-600" th:text="${#temporals.format(qrCode.expiryDate, 'dd/MM/yyyy')}">31/12/2025</td>&ndash;&gt;-->
+    <!--&lt;!&ndash;                        </tr>&ndash;&gt;-->
+    <!--&lt;!&ndash;                        &lt;!&ndash; Demo data quando non ci sono QR code &ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;                        <tr th:if="${#lists.isEmpty(recentQrCodes)}">&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                <div class="flex items-center">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                        <span class="text-sm font-medium text-gray-600">M</span>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                    <div class="ml-3">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                        <p class="font-medium text-gray-900">Mario Rossi</p>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                        <p class="text-sm text-gray-500">mario.rossi@email.com</p>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+    <!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            </td>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                <p class="text-gray-900">Collezione vintage di Mario</p>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            </td>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                <span class="text-gray-600">3/10</span>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            </td>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <td class="py-4 px-4">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">&ndash;&gt;-->
+    <!--&lt;!&ndash;                                    Attivo&ndash;&gt;-->
+    <!--&lt;!&ndash;                                </span>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            </td>&ndash;&gt;-->
+    <!--&lt;!&ndash;                            <td class="py-4 px-4 text-gray-600">31/12/2025</td>&ndash;&gt;-->
+    <!--&lt;!&ndash;                        </tr>&ndash;&gt;-->
+    <!--&lt;!&ndash;                    </tbody>&ndash;&gt;-->
+    <!--&lt;!&ndash;                </table>&ndash;&gt;-->
+    <!--&lt;!&ndash;            </div>&ndash;&gt;-->
+    <!--&lt;!&ndash;        </div>&ndash;&gt;-->
+</div>
+
+<script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+</script>
 </body>
 </html>

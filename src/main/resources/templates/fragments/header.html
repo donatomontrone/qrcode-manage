@@ -2,6 +2,8 @@
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
     <!-- Header Fragment -->
@@ -57,35 +59,43 @@
                     </a>
                 </nav>
 
-                <!-- User Menu Desktop -->
-                <div class="hidden md:flex items-center space-x-4 relative">
-                    <button id="userMenuButton" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors dark:hover:bg-gray-700">
-                        <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                            <span class="text-sm font-medium text-white">A</span>
-                        </div>
-                        <div class="hidden sm:block text-left">
-                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Admin User</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Amministratore</p>
-                        </div>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 dark:text-gray-200"></i>
+                <!-- Dark Mode Toggle & User Menu Desktop -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <!-- Dark Mode Toggle -->
+                    <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i data-lucide="moon" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
                     </button>
 
-                    <!-- Dropdown Menu -->
-                    <div id="userDropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50 dark:bg-gray-800 dark:border-gray-700">
-                        <div class="py-1">
-                            <a href="/admin/profile" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">
-                                <i data-lucide="user" class="w-4 h-4 mr-3"></i>
-                                Il mio Profilo
-                            </a>
-                            <a href="/admin/settings" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">
-                                <i data-lucide="settings" class="w-4 h-4 mr-3"></i>
-                                Impostazioni
-                            </a>
-                            <div class="border-t border-gray-100 my-1 dark:border-gray-600"></div>
-                            <a href="/logout" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50 dark:text-red-500 dark:hover:bg-red-600">
-                                <i data-lucide="log-out" class="w-4 h-4 mr-3"></i>
-                                Logout
-                            </a>
+                    <!-- User Menu -->
+                    <div class="relative">
+                        <button id="userMenuButton" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors dark:hover:bg-gray-700">
+                            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                                <span class="text-sm font-medium text-white">A</span>
+                            </div>
+                            <div class="hidden sm:block text-left">
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Admin User</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Amministratore</p>
+                            </div>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 dark:text-gray-200"></i>
+                        </button>
+
+                        <!-- Dropdown Menu - CORRETTO: top-full invece di mt-2 -->
+                        <div id="userDropdown" class="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50 dark:bg-gray-800 dark:border-gray-700" style="display: none;">
+                            <div class="py-1">
+                                <a href="/admin/profile" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">
+                                    <i data-lucide="user" class="w-4 h-4 mr-3"></i>
+                                    Il mio Profilo
+                                </a>
+                                <a href="/admin/settings" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700">
+                                    <i data-lucide="settings" class="w-4 h-4 mr-3"></i>
+                                    Impostazioni
+                                </a>
+                                <div class="border-t border-gray-100 my-1 dark:border-gray-600"></div>
+                                <a href="/logout" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50 dark:text-red-500 dark:hover:bg-red-600">
+                                    <i data-lucide="log-out" class="w-4 h-4 mr-3"></i>
+                                    Logout
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,8 +109,8 @@
             </div>
         </div>
 
-        <!-- Mobile Navigation -->
-        <div id="mobileMenu" class="md:hidden border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 hidden z-40">
+        <!-- Mobile Navigation - CORRETTO: display none invece di hidden -->
+        <div id="mobileMenu" class="md:hidden border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 z-40" style="display: none;">
             <div class="px-4 pt-2 pb-3 space-y-1">
                 <a href="/admin/dashboard" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-teal-600 hover:bg-white dark:hover:bg-teal-900 rounded-lg">Dashboard</a>
                 <a href="/admin/qr/list" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-teal-600 hover:bg-white dark:hover:bg-teal-900 rounded-lg">QR Code</a>
@@ -125,28 +135,94 @@
         </div>
     </header>
 
-    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- JAVASCRIPT CORRETTO - Dentro <head> o prima di </body> -->
     <script>
-        lucide.createIcons();
-
+        // Inizializza Lucide icons
         document.addEventListener('DOMContentLoaded', function() {
+            // Inizializza icone
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // MOBILE MENU TOGGLE - CORRETTO
             const mobileMenuButton = document.getElementById('mobileMenuButton');
             const mobileMenu = document.getElementById('mobileMenu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Mobile menu clicked'); // Debug
+
+                    if (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') {
+                        mobileMenu.style.display = 'block';
+                    } else {
+                        mobileMenu.style.display = 'none';
+                    }
+                });
+            }
+
+            // USER DROPDOWN TOGGLE - CORRETTO  
             const userMenuButton = document.getElementById('userMenuButton');
             const userDropdown = document.getElementById('userDropdown');
 
-            mobileMenuButton.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-            });
+            if (userMenuButton && userDropdown) {
+                userMenuButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('User menu clicked'); // Debug
 
-            userMenuButton.addEventListener('click', function(event) {
-                event.stopPropagation(); // Prevent click bubbling
-                userDropdown.classList.toggle('hidden');
-            });
+                    if (userDropdown.style.display === 'none' || userDropdown.style.display === '') {
+                        userDropdown.style.display = 'block';
+                    } else {
+                        userDropdown.style.display = 'none';
+                    }
+                });
 
-            document.addEventListener('click', function(event) {
-                if (!userDropdown.classList.contains('hidden')) {
-                    userDropdown.classList.add('hidden');
+                // Chiudi dropdown cliccando fuori - MIGLIORATO
+                document.addEventListener('click', function(e) {
+                    if (!userMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.style.display = 'none';
+                    }
+                });
+            }
+
+            // DARK MODE TOGGLE
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', function() {
+                    document.documentElement.classList.toggle('dark');
+                    localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+
+                    // Cambia icona
+                    const icon = this.querySelector('i');
+                    if (document.documentElement.classList.contains('dark')) {
+                        icon.setAttribute('data-lucide', 'sun');
+                    } else {
+                        icon.setAttribute('data-lucide', 'moon');
+                    }
+                    lucide.createIcons();
+                });
+
+                // Carica preferenza dark mode
+                if (localStorage.getItem('darkMode') === 'true') {
+                    document.documentElement.classList.add('dark');
+                    darkModeToggle.querySelector('i').setAttribute('data-lucide', 'sun');
+                    lucide.createIcons();
+                }
+            }
+
+            // Active navigation highlighting
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (currentPath === href || 
+                    (href === '/admin/dashboard' && currentPath === '/') ||
+                    (href !== '/admin/dashboard' && currentPath.startsWith(href))) {
+                    link.classList.add('text-teal-600', 'font-medium');
+                    link.classList.remove('text-gray-600');
                 }
             });
         });

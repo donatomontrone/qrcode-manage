@@ -62,6 +62,10 @@ public class ArticleService {
         return articleRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
+    public void save(Article article) {
+        articleRepository.save(article);
+    }
+
     public Article updateArticle(Article article, String name, String description, MultipartFile imageFile) {
         if (!article.getQrCode().canAddArticle() && !article.getQrCode().isExpired()) {
             throw new QrCodeExpiredException(QR_CODE_EXPIRED_EDIT.getValue());

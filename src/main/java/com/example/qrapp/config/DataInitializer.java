@@ -1,7 +1,9 @@
 package com.example.qrapp.config;
 
+import com.example.qrapp.model.QrCode;
 import com.example.qrapp.model.Role;
 import com.example.qrapp.model.User;
+import com.example.qrapp.repository.QrCodeRepository;
 import com.example.qrapp.repository.RoleRepository;
 import com.example.qrapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import static com.example.qrapp.constants.Constant.ADMIN;
@@ -28,6 +35,8 @@ public class DataInitializer implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
 
+    private final QrCodeRepository qrCodeRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     @Value("${app.admin.email:admin@qrmanager.com}")
@@ -42,7 +51,8 @@ public class DataInitializer implements CommandLineRunner {
 
         try {
             initializeRoles();
-            initializeAdminUser();
+            User user = initializeAdminUser();
+            initializeQRCodes(user);
             logger.info(INIT_COMPLETED.getValue());
         } catch (Exception e) {
             logger.error(INIT_ERROR.getValue(), e);
@@ -72,7 +82,7 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
-    private void initializeAdminUser() {
+    private User initializeAdminUser() {
         logger.info(INIT_ADMIN_USER.getValue());
 
         // Controlla se esiste già un utente admin
@@ -89,12 +99,27 @@ public class DataInitializer implements CommandLineRunner {
             adminUser.setPassword(passwordEncoder.encode(adminPassword));
             adminUser.setRoles(Set.of(adminRole));
 
-            userRepository.save(adminUser);
 
             logger.info("Utente amministratore creato con email: {}", adminEmail);
             logger.info("Password: {} (cambiarla dopo il primo accesso!)", adminPassword);
+            return userRepository.save(adminUser);
         } else {
             logger.info("Utente amministratore già esistente con email: {}", adminEmail);
+            return null;
         }
+    }
+
+    private void initializeQRCodes(User user) {
+        List<QrCode> existingQRCodes = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            QrCode qrCode = new QrCode();
+            qrCode.setQrId("QR" + (i + 1));
+            qrCode.setMaxArticles(new Random().nextInt(5,11));
+            qrCode.setDescription("Test " + (i + 1));
+            qrCode.setExpiryDate(LocalDateTime.now().plusYears(1));
+            qrCode.setOwner(user);
+            existingQRCodes.add(qrCode);
+        }
+        qrCodeRepository.saveAll(existingQRCodes);
     }
 }

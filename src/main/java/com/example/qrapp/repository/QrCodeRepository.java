@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +23,12 @@ public interface QrCodeRepository extends JpaRepository<QrCode, UUID> {
 
     Page<QrCode> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-    List<QrCode> findByExpiryDateAfterOrderByCreatedAtDesc(LocalDateTime date);
+    Page<QrCode> findByExpiryDateAfterOrderByCreatedAtDesc(LocalDateTime date, Pageable pageable);
 
-    List<QrCode> findByExpiryDateBeforeOrderByCreatedAtDesc(LocalDateTime date);
+    Page<QrCode> findByExpiryDateBeforeOrderByCreatedAtDesc(LocalDateTime date, Pageable pageable);
+
+    @Query("SELECT q FROM QrCode q LEFT JOIN q.articles a GROUP BY q.id HAVING COUNT(a) = q.maxArticles")
+    Page<QrCode> findByArticlesCountEqualsMaxArticles(Pageable pageable);
 
     long countByExpiryDateAfter(LocalDateTime date);
 
