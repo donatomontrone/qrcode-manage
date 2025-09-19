@@ -93,9 +93,6 @@
 
         <!-- Additional Info -->
         <div class="mt-6 text-center">
-            <p class="text-sm text-gray-500">
-                ID Sessione: <span th:text="${#request.requestedSessionId ?: 'N/A'}" class="font-mono">abc123</span>
-            </p>
             <p class="text-xs text-gray-400 mt-1">
                 Timestamp: <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">19/09/2025 10:00</span>
             </p>
