@@ -7,18 +7,18 @@ import com.example.qrapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+import static com.example.qrapp.constants.Constant.ADMIN;
+import static com.example.qrapp.constants.Constant.USER;
 import static com.example.qrapp.constants.Message.*;
-import static com.example.qrapp.constants.Constant.*;
 
-@Component
+@Configuration
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 

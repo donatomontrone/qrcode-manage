@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report e Statistiche - QR Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Page Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Report e Statistiche</h1>
+                <p class="text-gray-600">Analisi dettagliata dell'utilizzo del sistema</p>
+            </div>
+            <div class="flex space-x-3">
+                <button class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center">
+                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                    Esporta Report
+                </button>
+                <button class="bg-gradient-to-r from-green-600 to-teal-600 text-white px-4 py-2 rounded-lg font-medium hover:from-green-700 hover:to-teal-700 transition-all duration-200 flex items-center">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                    Aggiorna Dati
+                </button>
+            </div>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">QR Code Generati</p>
+                        <p class="text-2xl font-bold text-gray-900" th:text="${totalQrCodes ?: 24}">24</p>
+                        <p class="text-xs text-green-600">+12% questo mese</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="qr-code" class="w-6 h-6 text-blue-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">QR Code Attivi</p>
+                        <p class="text-2xl font-bold text-gray-900" th:text="${activeQrCodes ?: 18}">18</p>
+                        <p class="text-xs text-green-600">75% del totale</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">QR Code Scaduti</p>
+                        <p class="text-2xl font-bold text-gray-900" th:text="${expiredQrCodes ?: 6}">6</p>
+                        <p class="text-xs text-red-600">25% del totale</p>
+                    </div>
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="clock-x" class="w-6 h-6 text-red-600"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Articoli Totali</p>
+                        <p class="text-2xl font-bold text-gray-900">156</p>
+                        <p class="text-xs text-blue-600">6.5 media per QR</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <i data-lucide="package" class="w-6 h-6 text-purple-600"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Usage Chart -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Utilizzo negli Ultimi 30 Giorni</h3>
+                <div class="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
+                    <div class="text-center">
+                        <i data-lucide="bar-chart-3" class="w-16 h-16 text-gray-400 mx-auto mb-2"></i>
+                        <p class="text-gray-500">Grafico utilizzo</p>
+                        <p class="text-sm text-gray-400">Integrazione Chart.js disponibile</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Status Distribution -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Distribuzione Status QR Code</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-green-500 rounded mr-3"></div>
+                            <span class="text-sm font-medium text-gray-700">Attivi</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-sm text-gray-900 mr-2" th:text="${activeQrCodes ?: 18}">18</span>
+                            <div class="w-24 h-2 bg-gray-200 rounded-full">
+                                <div class="h-2 bg-green-500 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-red-500 rounded mr-3"></div>
+                            <span class="text-sm font-medium text-gray-700">Scaduti</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-sm text-gray-900 mr-2" th:text="${expiredQrCodes ?: 6}">6</span>
+                            <div class="w-24 h-2 bg-gray-200 rounded-full">
+                                <div class="h-2 bg-red-500 rounded-full" style="width: 25%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-yellow-500 rounded mr-3"></div>
+                            <span class="text-sm font-medium text-gray-700">Limite Raggiunto</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-sm text-gray-900 mr-2">2</span>
+                            <div class="w-24 h-2 bg-gray-200 rounded-full">
+                                <div class="h-2 bg-yellow-500 rounded-full" style="width: 8%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Reports -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Top Users -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Utenti Più Attivi</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <span class="text-sm font-medium text-blue-600">M</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Mario Rossi</p>
+                                <p class="text-xs text-gray-500">mario.rossi@email.com</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">5 QR Code</p>
+                            <p class="text-xs text-gray-500">23 Articoli</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
+                                <span class="text-sm font-medium text-pink-600">G</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Giulia Bianchi</p>
+                                <p class="text-xs text-gray-500">giulia.bianchi@email.com</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">3 QR Code</p>
+                            <p class="text-xs text-gray-500">18 Articoli</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between py-3">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                <span class="text-sm font-medium text-green-600">L</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Luca Verdi</p>
+                                <p class="text-xs text-gray-500">luca.verdi@email.com</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">2 QR Code</p>
+                            <p class="text-xs text-gray-500">12 Articoli</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Health -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Stato Sistema</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                            <span class="text-sm font-medium text-gray-700">Database</span>
+                        </div>
+                        <span class="text-sm text-green-600 font-medium">Operativo</span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                            <span class="text-sm font-medium text-gray-700">Cloudinary</span>
+                        </div>
+                        <span class="text-sm text-green-600 font-medium">Connesso</span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
+                            <span class="text-sm font-medium text-gray-700">Storage</span>
+                        </div>
+                        <span class="text-sm text-yellow-600 font-medium">78% Utilizzato</span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                            <span class="text-sm font-medium text-gray-700">Performance</span>
+                        </div>
+                        <span class="text-sm text-green-600 font-medium">Ottima</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                    <div class="flex items-start">
+                        <i data-lucide="info" class="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0"></i>
+                        <div class="text-sm">
+                            <h4 class="font-medium text-blue-900 mb-1">Piano Gratuito</h4>
+                            <p class="text-blue-800">
+                                Render: 500 ore/mese<br>
+                                Cloudinary: 15GB utilizzati su 25GB disponibili
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

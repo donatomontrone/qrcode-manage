@@ -5,7 +5,6 @@ import com.example.qrapp.model.User;
 import com.example.qrapp.repository.QrCodeRepository;
 import com.example.qrapp.util.QrCodeGenerator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

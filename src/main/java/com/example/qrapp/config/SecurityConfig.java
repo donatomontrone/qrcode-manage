@@ -2,7 +2,6 @@ package com.example.qrapp.config;
 
 import com.example.qrapp.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,11 +16,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity()
-@RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
-    private final UserService userService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {

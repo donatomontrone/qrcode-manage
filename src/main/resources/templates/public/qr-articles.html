@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${qrCode.description + ' - QR Manager'}">Articoli QR Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-4xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                        <i data-lucide="qr-code" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-xl font-bold text-gray-900" th:text="${qrCode.description}">Collezione di Mario</h1>
+                        <p class="text-sm text-gray-500">Proprietario: <span th:text="${qrCode.owner.fullName}">Mario Rossi</span></p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-600" th:text="${qrCode.articles.size() + '/' + qrCode.maxArticles + ' articoli'}">3/10 articoli</p>
+                    <p class="text-xs" th:classappend="${qrCode.isExpired()} ? 'text-red-600' : 'text-green-600'">
+                        <span th:if="${!qrCode.isExpired()}">Scade il </span>
+                        <span th:if="${qrCode.isExpired()}">Scaduto il </span>
+                        <span th:text="${#temporals.format(qrCode.expiryDate, 'dd/MM/yyyy')}">31/12/2025</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Status Alert -->
+        <div th:if="${qrCode.isExpired()}" class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+            <div class="flex items-center">
+                <i data-lucide="alert-circle" class="w-5 h-5 text-red-600 mr-3"></i>
+                <div>
+                    <h3 class="text-sm font-medium text-red-800">QR Code Scaduto</h3>
+                    <p class="text-sm text-red-700">Questo QR code è scaduto. Non è possibile aggiungere o modificare articoli.</p>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${!qrCode.isExpired() && qrCode.hasReachedMaxArticles()}" class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
+            <div class="flex items-center">
+                <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-600 mr-3"></i>
+                <div>
+                    <h3 class="text-sm font-medium text-yellow-800">Limite Raggiunto</h3>
+                    <p class="text-sm text-yellow-700">Hai raggiunto il numero massimo di articoli per questo QR code.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Article Button -->
+        <div th:if="${qrCode.canAddArticle()}" class="mb-6">
+            <a href="#add-article" onclick="showAddForm()" 
+               class="inline-flex items-center bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-6 py-3 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200">
+                <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
+                Aggiungi Articolo
+            </a>
+        </div>
+
+        <!-- Add Article Form (Hidden by default) -->
+        <div id="add-article-form" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6 hidden">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Nuovo Articolo</h2>
+            <form th:action="@{'/qr/' + ${qrCode.qrId} + '/articles'}" method="post" enctype="multipart/form-data" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nome Articolo</label>
+                    <input type="text" name="name" required 
+                           class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                           placeholder="Es: Vinile Beatles - Abbey Road">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Descrizione</label>
+                    <textarea name="description" rows="3" 
+                              class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                              placeholder="Descrizione dettagliata dell'articolo..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Foto (opzionale)</label>
+                    <div class="flex items-center justify-center w-full">
+                        <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <i data-lucide="upload-cloud" class="w-8 h-8 text-gray-400 mb-2"></i>
+                                <p class="text-sm text-gray-500">Clicca per caricare o trascina qui</p>
+                                <p class="text-xs text-gray-400">PNG, JPG fino a 10MB</p>
+                            </div>
+                            <input type="file" name="image" accept="image/*" class="hidden">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex space-x-4 pt-4">
+                    <button type="submit" 
+                            class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-4 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200">
+                        <i data-lucide="plus" class="w-5 h-5 mr-2 inline"></i>
+                        Aggiungi Articolo
+                    </button>
+                    <button type="button" onclick="hideAddForm()" 
+                            class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                        Annulla
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Articles Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Article Card Template -->
+            <div th:each="article : ${articles}" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+                <div th:if="${article.imageUrl}" class="aspect-w-16 aspect-h-9">
+                    <img th:src="${article.imageUrl}" th:alt="${article.name}" 
+                         class="w-full h-48 object-cover">
+                </div>
+                <div th:if="${!article.imageUrl}" class="h-48 bg-gray-100 flex items-center justify-center">
+                    <i data-lucide="image" class="w-12 h-12 text-gray-400"></i>
+                </div>
+
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2" th:text="${article.name}">Nome Articolo</h3>
+                    <p class="text-sm text-gray-600 mb-3" th:text="${article.description}">Descrizione dell'articolo</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span th:text="'Aggiunto il ' + ${#temporals.format(article.createdAt, 'dd/MM/yyyy')}">Aggiunto il 16/01/2025</span>
+                        <div th:if="${!qrCode.isExpired()}" class="flex space-x-2">
+                            <button class="text-blue-600 hover:text-blue-800" title="Modifica">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                            <button class="text-red-600 hover:text-red-800" title="Elimina">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Articles when no articles exist -->
+            <div th:if="${#lists.isEmpty(articles)}" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+                <div class="h-48 bg-gray-100 flex items-center justify-center">
+                    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=200&fit=crop" 
+                         alt="Vinile Beatles" class="w-full h-48 object-cover">
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-2">Vinile Beatles - Abbey Road</h3>
+                    <p class="text-sm text-gray-600 mb-3">Edizione originale del 1969 in ottime condizioni. Copertina perfetta senza graffi.</p>
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span>Aggiunto il 16/01/2025</span>
+                        <div class="flex space-x-2">
+                            <button class="text-blue-600 hover:text-blue-800" title="Modifica">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                            <button class="text-red-600 hover:text-red-800" title="Elimina">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty state if no articles -->
+            <div th:if="${#lists.isEmpty(articles)}" class="col-span-full">
+                <div class="text-center py-12">
+                    <i data-lucide="package-open" class="w-16 h-16 text-gray-300 mx-auto mb-4"></i>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Nessun articolo presente</h3>
+                    <p class="text-gray-600 mb-6">Inizia aggiungendo il tuo primo articolo a questa collezione.</p>
+                    <button th:if="${qrCode.canAddArticle()}" onclick="showAddForm()" 
+                            class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-6 py-2 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200">
+                        Aggiungi Primo Articolo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function showAddForm() {
+            document.getElementById('add-article-form').classList.remove('hidden');
+            document.querySelector('input[name="name"]').focus();
+        }
+
+        function hideAddForm() {
+            document.getElementById('add-article-form').classList.add('hidden');
+        }
+
+        // File upload preview
+        document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Could add preview functionality here
+                    console.log('File selected:', file.name);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

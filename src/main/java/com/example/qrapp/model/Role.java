@@ -3,9 +3,7 @@ package com.example.qrapp.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +14,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+@ToString
 public class Role {
 
     public static final String ADMIN = "ADMIN";
@@ -33,8 +33,9 @@ public class Role {
     @Size(max = 255)
     private String description;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Set<User> users = new HashSet<>();
 
     public Role(String name) {
         this.name = name;
@@ -44,5 +45,7 @@ public class Role {
         this.name = name;
         this.description = description;
     }
+
+
 
 }
