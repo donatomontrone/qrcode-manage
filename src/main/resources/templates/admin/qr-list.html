@@ -40,7 +40,7 @@
                     </select>
                 </div>
                 <div class="flex-1 min-w-64">
-                    <input name="search" type="text" placeholder="Cerca per proprietario o descrizione..."
+                    <input name="search" type="text" placeholder="Cerca per cognome proprietario o descrizione..."
                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
                            th:value="${search}">
                 </div>
@@ -59,10 +59,10 @@
                 <thead class="bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">QR Code</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proprietario</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Descrizione</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Articoli</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Stato</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Proprietario</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Descrizione</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Articoli</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Stato</th>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Scadenza</th>
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Azioni</th>
                 </tr>
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                                 <span class="text-sm font-medium text-blue-600" th:text="${#strings.toUpperCase(#strings.substring(qr.getOwner().getFirstName(), 0, 1))}">M</span>
@@ -91,11 +91,11 @@
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4">
+                    <td class="hidden md:table-cell px-6 py-4">
                         <p class="text-sm text-gray-900" th:text="${qr.getDescription()}"></p>
                         <p class="text-xs text-gray-500" th:text="'Creato il ' + ${#temporals.format(qr.getCreatedAt(), 'dd/MM/yyyy')}"></p>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             <div class="w-full bg-gray-200 rounded-full h-2 mr-2">
                                 <div class="bg-green-500 h-2 rounded-full" th:style="'width:' + (${#lists.size(qr.articles)} * 100 / ${qr.maxArticles}) + '%'" th:classappend="${(#lists.size(qr.articles) * 100 / qr.maxArticles) <= 40 ? ' bg-green-500'
@@ -105,7 +105,7 @@
                             <span class="text-sm text-gray-600" th:text="${#lists.size(qr.getArticles())} + '/' + ${qr.getMaxArticles()}"></span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
                               th:if="${#lists.size(qr.articles) == qr.maxArticles}">
                             Limite Raggiunto
@@ -202,7 +202,16 @@
         </div>
     </div>
 
-
+</div>
+<script>
+    tailwind.config = {
+        darkMode: 'class', // <--- fondamentale
+        theme: {
+            extend: {},
+        }
+    }
+</script>
+    <script th:src="@{/js/app.js}"></script>
 <script>
     lucide.createIcons();
 </script>

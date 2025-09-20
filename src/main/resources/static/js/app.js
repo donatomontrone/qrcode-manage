@@ -1,326 +1,415 @@
-// QR Manager - JavaScript Application
+// QR Manager - Main JavaScript File
+// Gestisce tutti gli eventi dell'interfaccia utente
 
-// Global app object
-const QRManager = {
-    // Configuration
-    config: {
-        apiBaseUrl: '/api',
-        toastDuration: 3000,
-        confirmDelay: 300
-    },
+class QRManager {
+    constructor() {
+        this.init();
+    }
 
-    // Initialize application
-    init: function() {
-        this.initLucideIcons();
-        this.initTooltips();
-        this.initModals();
-        this.initForms();
-        this.initFileUploads();
-        console.log('QR Manager initialized');
-    },
+    init() {
+        // Aspetta che il DOM sia completamente caricato
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.initializeApp());
+        } else {
+            this.initializeApp();
+        }
+    }
 
-    // Initialize Lucide icons
-    initLucideIcons: function() {
+    initializeApp() {
+        console.log('🚀 QR Manager initialized');
+
+        // Inizializza tutte le funzionalità
+        this.initializeLucideIcons();
+        this.initializeMobileMenu();
+        this.initializeUserDropdown();
+        this.initializeDarkMode();
+        this.initializeActiveNavigation();
+        this.initializeTooltips();
+        this.initializeFormValidation();
+        this.initializeImagePreview();
+        this.initializeQRCodeGeneration();
+    }
+
+    // ========================================
+    // INIZIALIZZAZIONE ICONE LUCIDE
+    // ========================================
+    initializeLucideIcons() {
         if (typeof lucide !== 'undefined') {
             lucide.createIcons();
+            console.log('✅ Lucide icons loaded');
+        } else {
+            console.warn('⚠️ Lucide not found, loading from CDN...');
+            this.loadLucideFromCDN();
         }
-    },
+    }
 
-    // Initialize tooltips
-    initTooltips: function() {
-        const tooltips = document.querySelectorAll('[title]');
-        tooltips.forEach(element => {
-            element.addEventListener('mouseenter', this.showTooltip.bind(this));
-            element.addEventListener('mouseleave', this.hideTooltip.bind(this));
+    loadLucideFromCDN() {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js';
+        script.onload = () => {
+            lucide.createIcons();
+            console.log('✅ Lucide icons loaded from CDN');
+        };
+        document.head.appendChild(script);
+    }
+
+    // ========================================
+    // MENU MOBILE HAMBURGER
+    // ========================================
+    initializeMobileMenu() {
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+
+        if (!mobileMenuButton || !mobileMenu) {
+            console.warn('⚠️ Mobile menu elements not found');
+            return;
+        }
+
+        let isOpen = false;
+
+        mobileMenuButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            isOpen = !isOpen;
+
+            if (isOpen) {
+                // Apri menu
+                mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+                mobileMenu.classList.remove('max-h-0');
+                menuIcon?.setAttribute('data-lucide', 'x');
+            } else {
+                // Chiudi menu
+                mobileMenu.style.maxHeight = '0';
+                mobileMenu.classList.add('max-h-0');
+                menuIcon?.setAttribute('data-lucide', 'menu');
+            }
+
+            // Ricarica icone
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            console.log(`📱 Mobile menu ${isOpen ? 'opened' : 'closed'}`);
         });
-    },
 
-    // Show tooltip
-    showTooltip: function(event) {
-        const element = event.target;
-        const title = element.getAttribute('title');
-        if (!title) return;
+        // Chiudi menu quando si clicca su un link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                isOpen = false;
+                mobileMenu.style.maxHeight = '0';
+                mobileMenu.classList.add('max-h-0');
+                menuIcon?.setAttribute('data-lucide', 'menu');
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            });
+        });
+    }
 
+    // ========================================
+    // DROPDOWN UTENTE
+    // ========================================
+    initializeUserDropdown() {
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userDropdown = document.getElementById('userDropdown');
+
+        if (!userMenuButton || !userDropdown) {
+            console.warn('⚠️ User dropdown elements not found');
+            return;
+        }
+
+        let isOpen = false;
+
+        userMenuButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            isOpen = !isOpen;
+
+            if (isOpen) {
+                // Apri dropdown
+                userDropdown.classList.remove('opacity-0', 'invisible');
+                userDropdown.classList.add('opacity-100', 'visible');
+            } else {
+                // Chiudi dropdown
+                userDropdown.classList.add('opacity-0', 'invisible');
+                userDropdown.classList.remove('opacity-100', 'visible');
+            }
+
+            console.log(`👤 User dropdown ${isOpen ? 'opened' : 'closed'}`);
+        });
+
+        // Chiudi dropdown cliccando fuori
+        document.addEventListener('click', (e) => {
+            if (!userMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
+                if (isOpen) {
+                    isOpen = false;
+                    userDropdown.classList.add('opacity-0', 'invisible');
+                    userDropdown.classList.remove('opacity-100', 'visible');
+                }
+            }
+        });
+    }
+
+    // ========================================
+    // MODALITÀ SCURA
+    // ========================================
+    initializeDarkMode() {
+        const darkModeToggle = document.getElementById('darkModeToggle');
+
+        if (!darkModeToggle) {
+            console.warn('⚠️ Dark mode toggle not found');
+            return;
+        }
+
+        // Carica preferenza salvata
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.documentElement.classList.add('dark');
+            this.updateDarkModeIcon(true);
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDark);
+            this.updateDarkModeIcon(isDark);
+
+            console.log(`🌓 Dark mode ${isDark ? 'enabled' : 'disabled'}`);
+        });
+    }
+
+    updateDarkModeIcon(isDark) {
+        const icon = document.querySelector('#darkModeToggle i');
+        if (icon) {
+            icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+    }
+
+    // ========================================
+    // NAVIGAZIONE ATTIVA
+    // ========================================
+    initializeActiveNavigation() {
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (currentPath === href || 
+                (href === '/admin/dashboard' && currentPath === '/') ||
+                (href !== '/admin/dashboard' && currentPath.startsWith(href))) {
+                link.classList.add('text-teal-600', 'font-medium');
+                link.classList.remove('text-gray-600');
+            }
+        });
+    }
+
+    // ========================================
+    // TOOLTIP
+    // ========================================
+    initializeTooltips() {
+        const tooltipElements = document.querySelectorAll('[data-tooltip]');
+
+        tooltipElements.forEach(element => {
+            element.addEventListener('mouseenter', (e) => {
+                this.showTooltip(e.target, e.target.dataset.tooltip);
+            });
+
+            element.addEventListener('mouseleave', () => {
+                this.hideTooltip();
+            });
+        });
+    }
+
+    showTooltip(element, text) {
         const tooltip = document.createElement('div');
-        tooltip.className = 'absolute z-50 px-2 py-1 text-xs bg-gray-900 text-white rounded shadow-lg';
-        tooltip.textContent = title;
-        tooltip.style.top = (element.offsetTop - 30) + 'px';
-        tooltip.style.left = element.offsetLeft + 'px';
+        tooltip.className = 'fixed z-50 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg pointer-events-none';
+        tooltip.textContent = text;
+        tooltip.id = 'tooltip';
 
         document.body.appendChild(tooltip);
-        element.setAttribute('data-tooltip-id', Date.now());
-    },
 
-    // Hide tooltip
-    hideTooltip: function(event) {
-        const tooltips = document.querySelectorAll('.absolute.z-50');
-        tooltips.forEach(tooltip => tooltip.remove());
-    },
+        const rect = element.getBoundingClientRect();
+        tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+        tooltip.style.top = rect.bottom + 5 + 'px';
+    }
 
-    // Initialize modals
-    initModals: function() {
-        const modals = document.querySelectorAll('[data-modal]');
-        modals.forEach(modal => {
-            const trigger = document.querySelector(`[data-modal-trigger="${modal.id}"]`);
-            const close = modal.querySelector('[data-modal-close]');
-
-            if (trigger) {
-                trigger.addEventListener('click', () => this.showModal(modal.id));
-            }
-
-            if (close) {
-                close.addEventListener('click', () => this.hideModal(modal.id));
-            }
-        });
-    },
-
-    // Show modal
-    showModal: function(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
+    hideTooltip() {
+        const tooltip = document.getElementById('tooltip');
+        if (tooltip) {
+            tooltip.remove();
         }
-    },
+    }
 
-    // Hide modal
-    hideModal: function(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.body.style.overflow = 'auto';
-        }
-    },
+    // ========================================
+    // VALIDAZIONE FORM
+    // ========================================
+    initializeFormValidation() {
+        const forms = document.querySelectorAll('form[data-validate]');
 
-    // Initialize forms
-    initForms: function() {
-        const forms = document.querySelectorAll('form');
         forms.forEach(form => {
-            form.addEventListener('submit', this.handleFormSubmit.bind(this));
+            form.addEventListener('submit', (e) => {
+                if (!this.validateForm(form)) {
+                    e.preventDefault();
+                }
+            });
         });
+    }
 
-        // Initialize form validation
-        this.initFormValidation();
-    },
+    validateForm(form) {
+        let isValid = true;
+        const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
 
-    // Handle form submission
-    handleFormSubmit: function(event) {
-        const form = event.target;
-        const submitBtn = form.querySelector('button[type="submit"]');
-
-        if (submitBtn) {
-            const originalText = submitBtn.textContent;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<div class="spinner mr-2"></div>Elaborazione...';
-
-            // Re-enable after 5 seconds as fallback
-            setTimeout(() => {
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-            }, 5000);
-        }
-    },
-
-    // Initialize form validation
-    initFormValidation: function() {
-        const inputs = document.querySelectorAll('input, textarea, select');
         inputs.forEach(input => {
-            input.addEventListener('blur', this.validateField.bind(this));
-            input.addEventListener('input', this.clearFieldError.bind(this));
-        });
-    },
-
-    // Validate single field
-    validateField: function(event) {
-        const field = event.target;
-        const value = field.value.trim();
-
-        // Remove existing error
-        this.clearFieldError(event);
-
-        // Required field validation
-        if (field.hasAttribute('required') && !value) {
-            this.showFieldError(field, 'Questo campo è obbligatorio');
-            return false;
-        }
-
-        // Email validation
-        if (field.type === 'email' && value) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(value)) {
-                this.showFieldError(field, 'Inserisci un indirizzo email valido');
-                return false;
+            if (!input.value.trim()) {
+                this.showFieldError(input, 'Questo campo è obbligatorio');
+                isValid = false;
+            } else {
+                this.clearFieldError(input);
             }
-        }
-
-        // Password validation
-        if (field.type === 'password' && value) {
-            if (value.length < 6) {
-                this.showFieldError(field, 'La password deve essere di almeno 6 caratteri');
-                return false;
-            }
-        }
-
-        return true;
-    },
-
-    // Show field error
-    showFieldError: function(field, message) {
-        field.classList.add('border-red-300');
-
-        let errorDiv = field.parentNode.querySelector('.field-error');
-        if (!errorDiv) {
-            errorDiv = document.createElement('div');
-            errorDiv.className = 'field-error text-red-600 text-sm mt-1';
-            field.parentNode.appendChild(errorDiv);
-        }
-
-        errorDiv.textContent = message;
-    },
-
-    // Clear field error
-    clearFieldError: function(event) {
-        const field = event.target;
-        field.classList.remove('border-red-300');
-
-        const errorDiv = field.parentNode.querySelector('.field-error');
-        if (errorDiv) {
-            errorDiv.remove();
-        }
-    },
-
-    // Initialize file uploads
-    initFileUploads: function() {
-        const fileInputs = document.querySelectorAll('input[type="file"]');
-        fileInputs.forEach(input => {
-            input.addEventListener('change', this.handleFileUpload.bind(this));
         });
-    },
 
-    // Handle file upload
-    handleFileUpload: function(event) {
-        const input = event.target;
+        return isValid;
+    }
+
+    showFieldError(input, message) {
+        input.classList.add('border-red-500');
+
+        let errorElement = input.parentNode.querySelector('.error-message');
+        if (!errorElement) {
+            errorElement = document.createElement('div');
+            errorElement.className = 'error-message text-red-500 text-sm mt-1';
+            input.parentNode.appendChild(errorElement);
+        }
+        errorElement.textContent = message;
+    }
+
+    clearFieldError(input) {
+        input.classList.remove('border-red-500');
+        const errorElement = input.parentNode.querySelector('.error-message');
+        if (errorElement) {
+            errorElement.remove();
+        }
+    }
+
+    // ========================================
+    // PREVIEW IMMAGINI
+    // ========================================
+    initializeImagePreview() {
+        const imageInputs = document.querySelectorAll('input[type="file"][accept*="image"]');
+
+        imageInputs.forEach(input => {
+            input.addEventListener('change', (e) => {
+                this.handleImagePreview(e.target);
+            });
+        });
+    }
+
+    handleImagePreview(input) {
         const file = input.files[0];
-
         if (!file) return;
 
-        // Validate file size (10MB max)
-        const maxSize = 10 * 1024 * 1024;
-        if (file.size > maxSize) {
-            this.showToast('File troppo grande. Massimo 10MB consentiti.', 'error');
+        // Validazione tipo file
+        if (!file.type.startsWith('image/')) {
+            alert('Per favore seleziona un file immagine valido.');
             input.value = '';
             return;
         }
 
-        // Validate file type (images only)
-        if (input.accept && !input.accept.split(',').some(type => 
-            file.type.match(type.trim()))) {
-            this.showToast('Tipo di file non supportato.', 'error');
+        // Validazione dimensione (10MB max)
+        if (file.size > 10 * 1024 * 1024) {
+            alert('Il file è troppo grande. Dimensione massima: 10MB');
             input.value = '';
             return;
         }
 
-        // Show preview if image
-        if (file.type.startsWith('image/')) {
-            this.showImagePreview(input, file);
-        }
-    },
-
-    // Show image preview
-    showImagePreview: function(input, file) {
+        // Mostra preview
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = (e) => {
             let preview = input.parentNode.querySelector('.image-preview');
             if (!preview) {
                 preview = document.createElement('img');
-                preview.className = 'image-preview w-32 h-32 object-cover rounded-lg mt-2';
+                preview.className = 'image-preview mt-2 h-32 w-32 object-cover rounded-lg border';
                 input.parentNode.appendChild(preview);
             }
             preview.src = e.target.result;
         };
         reader.readAsDataURL(file);
-    },
+    }
 
-    // Show toast notification
-    showToast: function(message, type = 'info') {
-        const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white max-w-sm ${
-            type === 'error' ? 'bg-red-600' : 
-            type === 'success' ? 'bg-green-600' : 
-            type === 'warning' ? 'bg-yellow-600' : 'bg-blue-600'
-        }`;
+    // ========================================
+    // GENERAZIONE QR CODE (placeholder)
+    // ========================================
+    initializeQRCodeGeneration() {
+        const qrButtons = document.querySelectorAll('[data-qr-generate]');
 
-        toast.innerHTML = `
-            <div class="flex items-center">
-                <span class="mr-2">${message}</span>
-                <button onclick="this.parentElement.parentElement.remove()" class="ml-auto">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            </div>
-        `;
+        qrButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const qrData = button.dataset.qrGenerate;
+                this.generateQRCode(qrData);
+            });
+        });
+    }
 
-        document.body.appendChild(toast);
+    generateQRCode(data) {
+        // Implementazione generazione QR code
+        console.log('🎯 Generating QR code for:', data);
+        // Verrà implementata nella parte 3
+    }
 
-        // Auto-remove after duration
+    // ========================================
+    // UTILITY METHODS
+    // ========================================
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        const bgColor = {
+            'success': 'bg-green-500',
+            'error': 'bg-red-500',
+            'warning': 'bg-yellow-500',
+            'info': 'bg-blue-500'
+        }[type] || 'bg-blue-500';
+
+        notification.className = `fixed top-4 right-4 z-50 px-4 py-2 text-white rounded-lg shadow-lg ${bgColor}`;
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
         setTimeout(() => {
-            if (toast.parentNode) {
-                toast.remove();
-            }
-        }, this.config.toastDuration);
-
-        // Re-initialize icons for the toast
-        this.initLucideIcons();
-    },
-
-    // Confirm action
-    confirm: function(message, callback) {
-        if (window.confirm(message)) {
-            setTimeout(callback, this.config.confirmDelay);
-        }
-    },
-
-    // Format date
-    formatDate: function(date) {
-        return new Date(date).toLocaleDateString('it-IT');
-    },
-
-    // Format file size
-    formatFileSize: function(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            notification.classList.add('opacity-0', 'transition-opacity');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     }
-};
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    QRManager.init();
-});
-
-// Global utility functions
-window.showAddForm = function() {
-    const form = document.getElementById('add-article-form');
-    if (form) {
-        form.classList.remove('hidden');
-        const nameInput = form.querySelector('input[name="name"]');
-        if (nameInput) nameInput.focus();
+    formatDate(date) {
+        return new Intl.DateTimeFormat('it-IT', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(new Date(date));
     }
-};
 
-window.hideAddForm = function() {
-    const form = document.getElementById('add-article-form');
-    if (form) {
-        form.classList.add('hidden');
-        form.reset();
-        // Clear any previews
-        const previews = form.querySelectorAll('.image-preview');
-        previews.forEach(preview => preview.remove());
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
     }
-};
+}
 
-// Export for use in other scripts
-window.QRManager = QRManager;
+// Inizializza l'applicazione
+const qrManager = new QRManager();
+
+// Esponi globalmente per debugging
+window.QRManager = qrManager;
