@@ -11,12 +11,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -30,6 +34,8 @@ public class AdminController {
     private final UserService userService;
 
     private final ArticleService articleService;
+
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, Principal principal) {
@@ -47,8 +53,8 @@ public class AdminController {
         model.addAttribute("activeQrCodes", activeQrCodes);
         model.addAttribute("expiredQrCodes", expiredQrCodes);
         model.addAttribute("totalUsers", totalUsers);
-        model.addAttribute("totalArticles", totalArticles);
         model.addAttribute("recentQrCodes", recentQrCodes);
+        model.addAttribute("totalArticles", totalArticles);
 
         return "admin/dashboard";
     }
@@ -68,6 +74,7 @@ public class AdminController {
         model.addAttribute("totalPages", qrCodesPage.getTotalPages());
         model.addAttribute("lastPage", qrCodesPage.getTotalPages() - 1);
         model.addAttribute("totalElements", qrCodesPage.getTotalElements());
+        model.addAttribute("currentPage", page);
         model.addAttribute("filter", filter);
         model.addAttribute("search", search);
         System.out.println(pageable);
@@ -115,15 +122,5 @@ public class AdminController {
         model.addAttribute("totalAdmin", countAdmins);
 
         return "admin/users";
-    }
-
-    @GetMapping("/reports")
-    public String reports(Model model) {
-        // Report e statistiche avanzate
-        model.addAttribute("totalQrCodes", qrCodeService.countAll());
-        model.addAttribute("activeQrCodes", qrCodeService.countActive());
-        model.addAttribute("expiredQrCodes", qrCodeService.countExpired());
-
-        return "admin/reports";
     }
 }

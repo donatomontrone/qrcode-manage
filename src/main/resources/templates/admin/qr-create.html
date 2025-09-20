@@ -6,181 +6,199 @@
     <title>Crea QR Code - QR Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        }
+    </script>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <div th:replace="~{fragments/header :: header}"></div>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+<!-- Header -->
+<div th:replace="~{fragments/header :: header}"></div>
+<!-- Main Content -->
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Crea Nuovo QR Code</h1>
+        <p class="text-gray-600 dark:text-gray-400">Genera un QR code personalizzato per un utente</p>
+    </div>
 
-    <!-- Main Content -->
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Page Header -->
-        <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Crea Nuovo QR Code</h1>
-            <p class="text-gray-600">Genera un QR code personalizzato per un utente</p>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Form Section -->
+        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+            <form th:action="@{/admin/qr/create}" method="post" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Email Proprietario
+                    </label>
+                    <input type="email" name="ownerEmail" required
+                           class="w-full px-4 py-3 border border-gray-200 dark:border-gray-700
+                                      bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                      rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                           placeholder="mario.rossi@email.com">
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">L'utente deve essere già registrato nel sistema</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Descrizione
+                    </label>
+                    <input type="text" name="description" required
+                           class="w-full px-4 py-3 border border-gray-200 dark:border-gray-700
+                                      bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                      rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                           placeholder="Collezione vintage di Mario">
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Una breve descrizione del QR code</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Data di Scadenza
+                    </label>
+                    <input type="date" name="expiryDate" required
+                           class="w-full px-4 py-3 border border-gray-200 dark:border-gray-700
+                                      bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                      rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                           th:value="${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}">
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Dopo questa data il QR code non sarà più modificabile</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Numero Massimo Articoli
+                    </label>
+                    <div class="relative">
+                        <input type="number" name="maxArticles" min="1" max="100" value="20" required
+                               class="w-full px-4 py-3 border border-gray-200 dark:border-gray-700
+                                          bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                          rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                            <i data-lucide="package" class="w-5 h-5 text-gray-400"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Limite massimo di articoli associabili al QR code</p>
+                </div>
+
+                <div class="flex space-x-4 pt-4">
+                    <button type="submit"
+                            class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 flex items-center justify-center">
+                        <i data-lucide="qr-code" class="w-5 h-5 mr-2"></i>
+                        Genera QR Code
+                    </button>
+                    <a href="/admin/qr/list"
+                       class="px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-lg
+                                  text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center">
+                        <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
+                        Annulla
+                    </a>
+                </div>
+            </form>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Form Section -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <form th:action="@{/admin/qr/create}" method="post" class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Email Proprietario
-                        </label>
-                        <input type="email" name="ownerEmail" required 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                               placeholder="mario.rossi@email.com">
-                        <p class="text-sm text-gray-500 mt-1">L'utente deve essere già registrato nel sistema</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Descrizione
-                        </label>
-                        <input type="text" name="description" required 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                               placeholder="Collezione vintage di Mario">
-                        <p class="text-sm text-gray-500 mt-1">Una breve descrizione del QR code</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Data di Scadenza
-                        </label>
-                        <input type="date" name="expiryDate" required 
-                               class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                               th:value="${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}">
-                        <p class="text-sm text-gray-500 mt-1">Dopo questa data il QR code non sarà più modificabile</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Numero Massimo Articoli
-                        </label>
-                        <div class="relative">
-                            <input type="number" name="maxArticles" min="1" max="100" value="20" required 
-                                   class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                <i data-lucide="package" class="w-5 h-5 text-gray-400"></i>
-                            </div>
+        <!-- Preview Section -->
+        <div class="space-y-6">
+            <!-- QR Code Preview -->
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Anteprima QR Code</h3>
+                <div class="flex flex-col items-center">
+                    <div class="w-48 h-48 bg-gray-100 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg flex items-center justify-center mb-4">
+                        <div class="text-center">
+                            <i data-lucide="qr-code" class="w-16 h-16 text-gray-400 mx-auto mb-2"></i>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">Il QR code apparirà qui</p>
                         </div>
-                        <p class="text-sm text-gray-500 mt-1">Limite massimo di articoli associabili al QR code</p>
                     </div>
-
-                    <div class="flex space-x-4 pt-4">
-                        <button type="submit" 
-                                class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 flex items-center justify-center">
-                            <i data-lucide="qr-code" class="w-5 h-5 mr-2"></i>
-                            Genera QR Code
-                        </button>
-                        <a href="/admin/qr/list" 
-                           class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center">
-                            <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
-                            Annulla
-                        </a>
-                    </div>
-                </form>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                        Il QR code sarà generato dopo la creazione e punterà a:<br>
+                        <code class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs">https://yourapp.com/qr/[ID]</code>
+                    </p>
+                </div>
             </div>
 
-            <!-- Preview Section -->
-            <div class="space-y-6">
-                <!-- QR Code Preview -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Anteprima QR Code</h3>
-                    <div class="flex flex-col items-center">
-                        <div class="w-48 h-48 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center mb-4">
-                            <div class="text-center">
-                                <i data-lucide="qr-code" class="w-16 h-16 text-gray-400 mx-auto mb-2"></i>
-                                <p class="text-gray-500 text-sm">Il QR code apparirà qui</p>
-                            </div>
-                        </div>
-                        <p class="text-sm text-gray-600 text-center">
-                            Il QR code sarà generato dopo la creazione e punterà a:<br>
-                            <code class="bg-gray-100 px-2 py-1 rounded text-xs">https://yourapp.com/qr/[ID]</code>
-                        </p>
+            <!-- Instructions -->
+            <div class="bg-blue-50 dark:bg-blue-900 rounded-xl border border-blue-200 dark:border-blue-800 p-6">
+                <div class="flex items-start">
+                    <i data-lucide="info" class="w-5 h-5 text-blue-600 dark:text-blue-300 mt-0.5 mr-3 flex-shrink-0"></i>
+                    <div>
+                        <h4 class="font-semibold text-blue-900 dark:text-blue-200 mb-2">Come funziona</h4>
+                        <ul class="text-sm text-blue-800 dark:text-blue-300 space-y-1">
+                            <li>• L'utente deve essere già registrato nel sistema</li>
+                            <li>• Il QR code sarà associato all'email specificata</li>
+                            <li>• L'utente potrà aggiungere articoli fino alla scadenza</li>
+                            <li>• Una volta scaduto, il QR code diventa read-only</li>
+                        </ul>
                     </div>
                 </div>
+            </div>
 
-                <!-- Instructions -->
-                <div class="bg-blue-50 rounded-xl border border-blue-200 p-6">
-                    <div class="flex items-start">
-                        <i data-lucide="info" class="w-5 h-5 text-blue-600 mt-0.5 mr-3 flex-shrink-0"></i>
-                        <div>
-                            <h4 class="font-semibold text-blue-900 mb-2">Come funziona</h4>
-                            <ul class="text-sm text-blue-800 space-y-1">
-                                <li>• L'utente deve essere già registrato nel sistema</li>
-                                <li>• Il QR code sarà associato all'email specificata</li>
-                                <li>• L'utente potrà aggiungere articoli fino alla scadenza</li>
-                                <li>• Una volta scaduto, il QR code diventa read-only</li>
-                            </ul>
+            <!-- Recent Users -->
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Utenti Recenti</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <span class="text-sm font-medium text-blue-600">M</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Mario Rossi</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">mario.rossi@email.com</p>
+                            </div>
                         </div>
+                        <button class="text-teal-600 hover:text-teal-700 text-xs">Seleziona</button>
                     </div>
-                </div>
-
-                <!-- Recent Users -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Utenti Recenti</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <span class="text-sm font-medium text-blue-600">M</span>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm font-medium text-gray-900">Mario Rossi</p>
-                                    <p class="text-xs text-gray-500">mario.rossi@email.com</p>
-                                </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
+                                <span class="text-sm font-medium text-pink-600">G</span>
                             </div>
-                            <button class="text-teal-600 hover:text-teal-700 text-xs">
-                                Seleziona
-                            </button>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
-                                    <span class="text-sm font-medium text-pink-600">G</span>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm font-medium text-gray-900">Giulia Bianchi</p>
-                                    <p class="text-xs text-gray-500">giulia.bianchi@email.com</p>
-                                </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Giulia Bianchi</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">giulia.bianchi@email.com</p>
                             </div>
-                            <button class="text-teal-600 hover:text-teal-700 text-xs">
-                                Seleziona
-                            </button>
                         </div>
+                        <button class="text-teal-600 hover:text-teal-700 text-xs">Seleziona</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        tailwind.config = {
-            darkMode: 'class', // <--- fondamentale
-            theme: {
-                extend: {},
-            }
-        }
-    </script>
-    <script th:src="@{/js/app.js}"></script>
-    <script>
-        lucide.createIcons();
+</div>
 
-        // Auto-populate today's date + 1 year for expiry
-        const expiryInput = document.querySelector('input[name="expiryDate"]');
-        if (expiryInput) {
-            const nextYear = new Date();
-            nextYear.setFullYear(nextYear.getFullYear() + 1);
-            expiryInput.value = nextYear.toISOString().split('T')[0];
-        }
+<script th:src="@{/js/app.js}"></script>
+<script>
+    lucide.createIcons();
 
-        // Click handlers for user selection
-        document.querySelectorAll('.cursor-pointer').forEach(item => {
-            item.addEventListener('click', function() {
-                const email = this.querySelector('.text-xs.text-gray-500').textContent;
-                document.querySelector('input[name="ownerEmail"]').value = email;
-            });
+    // Dark mode toggle
+    const toggle = document.getElementById('darkModeToggle');
+    const root = document.documentElement;
+    if (localStorage.getItem('theme') === 'dark') {
+        root.classList.add('dark');
+    }
+    toggle.addEventListener('click', () => {
+        root.classList.toggle('dark');
+        if (root.classList.contains('dark')) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    // Auto-populate expiry
+    const expiryInput = document.querySelector('input[name="expiryDate"]');
+    if (expiryInput) {
+        const nextYear = new Date();
+        nextYear.setFullYear(nextYear.getFullYear() + 1);
+        expiryInput.value = nextYear.toISOString().split('T')[0];
+    }
+
+    // Click handlers for user selection
+    document.querySelectorAll('.cursor-pointer').forEach(item => {
+        item.addEventListener('click', function() {
+            const email = this.querySelector('.text-xs').textContent;
+            document.querySelector('input[name="ownerEmail"]').value = email;
         });
-    </script>
+    });
+</script>
 </body>
 </html>

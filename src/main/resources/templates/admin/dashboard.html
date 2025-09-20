@@ -6,8 +6,16 @@
     <title>Dashboard Admin - QR Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
 <!-- Header -->
 <div th:replace="~{fragments/header :: header}"></div>
 
@@ -15,72 +23,72 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Welcome Section -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p class="text-gray-600">Pannello di controllo QR Manager</p>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+        <p class="text-gray-600 dark:text-gray-300">Pannello di controllo QR Manager</p>
     </div>
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors duration-300">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="qr-code" class="w-6 h-6 text-blue-600"></i>
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+                        <i data-lucide="qr-code" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">QR Code Totali</p>
-                    <p class="text-2xl font-bold text-gray-900" th:text="${totalQrCodes ?: 24}">24</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">QR Code Totali</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${totalQrCodes ?: 24}">24</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors duration-300">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="check-circle" class="w-6 h-6 text-green-600"></i>
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+                        <i data-lucide="check-circle" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">QR Code Attivi</p>
-                    <p class="text-2xl font-bold text-gray-900" th:text="${activeQrCodes ?: 18}">18</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">QR Code Attivi</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${activeQrCodes ?: 18}">18</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors duration-300">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="package" class="w-6 h-6 text-purple-600"></i>
+                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+                        <i data-lucide="package" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Articoli Totali</p>
-                    <p class="text-2xl font-bold text-gray-900" th:text="${totalArticles ?: 67}">67</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Articoli Totali</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${totalArticles ?: 67}">67</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors duration-300">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                        <i data-lucide="users" class="w-6 h-6 text-orange-600"></i>
+                    <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
+                        <i data-lucide="users" class="w-6 h-6 text-orange-600 dark:text-orange-400"></i>
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Utenti</p>
-                    <p class="text-2xl font-bold text-gray-900" th:text="${totalUsers ?: 15}">15</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Utenti</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${totalUsers ?: 15}">15</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Quick Actions -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Azioni Rapide</h2>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-8 transition-colors duration-300">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Azioni Rapide</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <a href="/admin/qr/create" class="flex items-center p-4 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-200">
                 <i data-lucide="plus-circle" class="w-6 h-6 mr-3"></i>
@@ -111,17 +119,9 @@
     </div>
 </div>
 
-<script>
-tailwind.config = {
-darkMode: 'class', // <--- fondamentale
-theme: {
-extend: {},
-}
-}
-</script>
 <script th:src="@{/js/app.js}"></script>
 <script>
-    // Initialize Lucide icons
+    // Inizializza icone lucide
     lucide.createIcons();
 </script>
 </body>

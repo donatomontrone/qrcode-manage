@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND + email));
     }
 
-    public User registerUser(String firstName, String lastName, String email, String password) {
+    public void registerUser(String firstName, String lastName, String email, String password) {
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException(EMAIL_ALREADY_EXISTS + email);
         }
@@ -52,7 +52,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new RuntimeException(INIT_ROLE_USER_NOT_FOUND.getValue()));
         user.setRoles(Set.of(userRole));
 
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public User createAdminUser(String firstName, String lastName, String email, String password) {
@@ -118,5 +118,9 @@ public class UserService implements UserDetailsService {
 
     public Long countAdmins() {
         return userRepository.countAdmins();
+    }
+
+    public boolean isEmailUnique(String email) {
+        return userRepository.isEmailUnique(email);
     }
 }

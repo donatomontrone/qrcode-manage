@@ -23,12 +23,12 @@
                 <p class="mb-4">Si è verificato un errore imprevisto durante l'elaborazione della tua richiesta.</p>
 
                 <!-- Error Details (if available) -->
-                <div th:if="${errorMessage}" class="bg-red-50 border border-red-200 rounded-lg p-4 text-left">
+                <div th:if="${message}" class="bg-red-50 border border-red-200 rounded-lg p-4 text-left">
                     <div class="flex items-start">
                         <i data-lucide="info" class="w-5 h-5 text-red-600 mt-0.5 mr-2 flex-shrink-0"></i>
                         <div>
                             <h3 class="font-medium text-red-900 text-sm mb-1">Dettagli errore:</h3>
-                            <p class="text-sm text-red-700" th:text="${errorMessage}">Messaggio di errore dettagliato</p>
+                            <p class="text-sm text-red-700" th:text="${message}">Messaggio di errore dettagliato</p>
                         </div>
                     </div>
                 </div>

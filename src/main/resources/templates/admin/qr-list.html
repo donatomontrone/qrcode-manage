@@ -4,10 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista QR Code - QR Manager</title>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {} }
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
 <!-- Header -->
 <div th:replace="~{fragments/header :: header}"></div>
 
@@ -16,8 +22,8 @@
     <!-- Page Header -->
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">QR Code Manager</h1>
-            <p class="text-gray-600">Gestisci tutti i QR Code</p>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">QR Code Manager</h1>
+            <p class="text-gray-600 dark:text-gray-300">Gestisci tutti i QR Code</p>
         </div>
         <a href="/admin/qr/create"
            class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-6 py-3 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 flex items-center">
@@ -27,48 +33,47 @@
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-        <div class="flex flex-wrap gap-4 items-center">
-            <form method="get" th:action="@{/admin/qr/list}" class="mb-4 flex flex-wrap gap-4 items-center">
-                <div class="flex items-center space-x-2">
-                    <label class="text-sm font-medium text-gray-700">Filtro:</label>
-                    <select name="filter" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                        <option value="" th:selected="${filter == null or #strings.isEmpty(filter)}">Tutti</option>
-                        <option value="active" th:selected="${filter == 'active'}">Attivi</option>
-                        <option value="expired" th:selected="${filter == 'expired'}">Scaduti</option>
-                        <option value="full" th:selected="${filter == 'full'}">Limite Raggiunto</option>
-                    </select>
-                </div>
-                <div class="flex-1 min-w-64">
-                    <input name="search" type="text" placeholder="Cerca per cognome proprietario o descrizione..."
-                           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                           th:value="${search}">
-                </div>
-                <button type="submit" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    <i data-lucide="search" class="w-4 h-4"></i>
-                </button>
-            </form>
-
-        </div>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
+        <form method="get" th:action="@{/admin/qr/list}" class="mb-4 flex flex-wrap gap-4 items-center">
+            <div class="flex items-center space-x-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Filtro:</label>
+                <select name="filter"
+                        class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    <option value="" th:selected="${filter == null or #strings.isEmpty(filter)}">Tutti</option>
+                    <option value="active" th:selected="${filter == 'active'}">Attivi</option>
+                    <option value="expired" th:selected="${filter == 'expired'}">Scaduti</option>
+                    <option value="full" th:selected="${filter == 'full'}">Limite Raggiunto</option>
+                </select>
+            </div>
+            <div class="flex-1 min-w-64">
+                <input name="search" type="text" placeholder="Cerca..."
+                       class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                       th:value="${search}">
+            </div>
+            <button type="submit"
+                    class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                <i data-lucide="search" class="w-4 h-4"></i>
+            </button>
+        </form>
     </div>
 
     <!-- QR Code Table -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">QR Code</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Proprietario</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Descrizione</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Articoli</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Stato</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Scadenza</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Azioni</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">QR Code</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell">Proprietario</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell">Descrizione</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell">Articoli</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider hidden md:table-cell">Stato</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Scadenza</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Azioni</th>
                 </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                <tr class="hover:bg-gray-50" th:each="qr : ${qrCodes}" th:if="${qrCodes}">
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700" th:each="qr : ${qrCodes}" th:if="${qrCodes}">
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
@@ -137,8 +142,8 @@
                         </button>
                     </td>
                 </tr>
-                <tr class="hover:gray-50" th:if="${#lists.isEmpty(qrCodes)}">
-                    <td colspan="7" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                <tr th:if="${#lists.isEmpty(qrCodes)}">
+                    <td colspan="7" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-400">
                         Nessun QR Code trovato.
                     </td>
                 </tr>
@@ -149,19 +154,12 @@
 
     <!-- Pagination -->
     <div th:if="${totalPages > 1}" class="mt-6 flex items-center justify-between">
-        <!-- Info risultati -->
         <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-        <span class="font-medium">
-            Mostrando
-            <span th:text="${currentPage * 20 + 1}">1</span> -
+            Mostrando <span th:text="${currentPage * 20 + 1}">1</span> -
             <span th:text="${(currentPage + 1) * 20 > totalElements ? totalElements : (currentPage + 1) * 20}">20</span>
             di <span th:text="${totalElements}">100</span> risultati
-        </span>
         </div>
-
-        <!-- Controlli paginazione -->
         <div class="flex space-x-2">
-            <!-- Pulsante Precedente -->
             <a th:if="${currentPage > 0}"
                th:href="@{/admin/qr/list(page=${currentPage - 1}, size=20, filter=${filter}, search=${search})}"
                class="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
@@ -201,19 +199,9 @@
         </span>
         </div>
     </div>
-
 </div>
-<script>
-    tailwind.config = {
-        darkMode: 'class', // <--- fondamentale
-        theme: {
-            extend: {},
-        }
-    }
-</script>
-    <script th:src="@{/js/app.js}"></script>
-<script>
-    lucide.createIcons();
-</script>
+
+<script th:src="@{/js/app.js}"></script>
+<script>lucide.createIcons();</script>
 </body>
 </html>
