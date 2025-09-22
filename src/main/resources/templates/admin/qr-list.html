@@ -13,7 +13,7 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
 <!-- Header -->
 <div th:replace="~{fragments/header :: header}"></div>
 
@@ -22,7 +22,7 @@
     <!-- Page Header -->
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">QR Code Manager</h1>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-200">QR Code Manager</h1>
             <p class="text-gray-600 dark:text-gray-300">Gestisci tutti i QR Code</p>
         </div>
         <a href="/admin/qr/create"
@@ -80,8 +80,8 @@
                                 <i data-lucide="qr-code" class="w-5 h-5 text-gray-600"></i>
                             </div>
                             <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900" th:text="${qr.getQrId()}"></p>
-                                <p class="text-xs text-gray-500" th:text="${qr.getQrId()}"></p>
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-200" th:text="${qr.getQrId()}"></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400" th:text="${qr.getQrId()}"></p>
                             </div>
                         </div>
                     </td>
@@ -91,14 +91,14 @@
                                 <span class="text-sm font-medium text-blue-600" th:text="${#strings.toUpperCase(#strings.substring(qr.getOwner().getFirstName(), 0, 1))}">M</span>
                             </div>
                             <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900" th:text="${qr.getOwner().getFirstName() + ' ' + qr.getOwner().getLastName()}"></p>
-                                <p class="text-xs text-gray-500" th:text="${qr.getOwner().getEmail()}"></p>
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-200" th:text="${qr.getOwner().getFirstName() + ' ' + qr.getOwner().getLastName()}"></p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400" th:text="${qr.getOwner().getEmail()}"></p>
                             </div>
                         </div>
                     </td>
                     <td class="hidden md:table-cell px-6 py-4">
-                        <p class="text-sm text-gray-900" th:text="${qr.getDescription()}"></p>
-                        <p class="text-xs text-gray-500" th:text="'Creato il ' + ${#temporals.format(qr.getCreatedAt(), 'dd/MM/yyyy')}"></p>
+                        <p class="text-sm text-gray-900 dark:text-gray-200" th:text="${qr.getDescription()}"></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400" th:text="'Creato il ' + ${#temporals.format(qr.getCreatedAt(), 'dd/MM/yyyy')}"></p>
                     </td>
                     <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
@@ -107,7 +107,7 @@
                      : ((#lists.size(qr.articles) * 100 / qr.maxArticles) <= 70 ? ' bg-yellow-500'
                      : ' bg-red-500')}"></div>
                             </div>
-                            <span class="text-sm text-gray-600" th:text="${#lists.size(qr.getArticles())} + '/' + ${qr.getMaxArticles()}"></span>
+                            <span class="text-sm text-gray-600 dark:text-gray-400" th:text="${#lists.size(qr.getArticles())} + '/' + ${qr.getMaxArticles()}"></span>
                         </div>
                     </td>
                     <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">
@@ -124,7 +124,7 @@
                             Attivo
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600" th:text="${#temporals.format(qr.getExpiryDate(), 'dd/MM/yyyy')}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-200" th:text="${#temporals.format(qr.getExpiryDate(), 'dd/MM/yyyy')}">
 
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
@@ -205,3 +205,4 @@
 <script>lucide.createIcons();</script>
 </body>
 </html>
+
