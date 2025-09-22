@@ -89,8 +89,7 @@ public class AdminController {
     @GetMapping("/qr/create")
     public String qrCreateForm(Model model) {
         Pageable pageable = PageRequest.of(0, 10);
-        List<User> recentUsers = userService.findAll(pageable).getContent();
-
+        List<User> recentUsers = userService.findAllUsersRegisteredToday(pageable).getContent();
         model.addAttribute("recentUsers", recentUsers);
         return "admin/qr-create";
     }

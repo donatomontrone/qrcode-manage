@@ -126,7 +126,7 @@
                                 <span class="text-sm font-medium text-white" th:text="${user.firstName?.substring(0,1) + user.lastName?.substring(0,1)}">MR</span>
                             </div>
                             <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" th:text="${user.fullName}">Mario Rossi</p>
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" th:text="${user.getFirstName() + ' ' + user.getLastName()}">Mario Rossi</p>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">ID: <span th:text="${user.id}">1</span></p>
                             </div>
                         </div>

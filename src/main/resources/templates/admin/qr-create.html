@@ -26,16 +26,14 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Form Section -->
-        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <form th:action="@{/admin/qr/create}" method="post" class="space-y-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Email Proprietario
                     </label>
                     <input type="email" name="ownerEmail" required
-                           class="w-full px-4 py-3 border border-gray-200 dark:border-gray-700
-                                      bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                      rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                           class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                            placeholder="mario.rossi@email.com">
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">L'utente deve essere già registrato nel sistema</p>
                 </div>
@@ -45,9 +43,7 @@
                         Descrizione
                     </label>
                     <input type="text" name="description" required
-                           class="w-full px-4 py-3 border border-gray-200 dark:border-gray-700
-                                      bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                      rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                           class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                            placeholder="Collezione vintage di Mario">
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Una breve descrizione del QR code</p>
                 </div>
@@ -57,10 +53,8 @@
                         Data di Scadenza
                     </label>
                     <input type="date" name="expiryDate" required
-                           class="w-full px-4 py-3 border border-gray-200 dark:border-gray-700
-                                      bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                      rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                           th:value="${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}">
+                           class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            th:value="${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}">
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Dopo questa data il QR code non sarà più modificabile</p>
                 </div>
 
@@ -70,9 +64,8 @@
                     </label>
                     <div class="relative">
                         <input type="number" name="maxArticles" min="1" max="100" value="20" required
-                               class="w-full px-4 py-3 border border-gray-200 dark:border-gray-700
-                                          bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                          rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                               class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                        >
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                             <i data-lucide="package" class="w-5 h-5 text-gray-400"></i>
                         </div>
@@ -99,7 +92,7 @@
         <!-- Preview Section -->
         <div class="space-y-6">
             <!-- QR Code Preview -->
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Anteprima QR Code</h3>
                 <div class="flex flex-col items-center">
                     <div class="w-48 h-48 bg-gray-100 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg flex items-center justify-center mb-4">
@@ -135,29 +128,25 @@
             <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Utenti Recenti</h3>
                 <div class="space-y-3">
-                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" th:each="user : ${recentUsers}" th:if="${recentUsers != null or #lists.size(recentUsers) <= 3}">
                         <div class="flex items-center">
                             <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                <span class="text-sm font-medium text-blue-600">M</span>
+                                <span class="text-sm font-medium text-blue-600" th:text="${#strings.toUpperCase(#strings.substring(user.getFirstName(), 0, 1))}">M</span>
                             </div>
                             <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Mario Rossi</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">mario.rossi@email.com</p>
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" th:text="${user.getFirstName() + ' ' + user.getLastName()}">Mario Rossi</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400" th:text="${user.getEmail()}">mario.rossi@email.com</p>
                             </div>
                         </div>
                         <button class="text-teal-600 hover:text-teal-700 text-xs">Seleziona</button>
                     </div>
-                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" th:if="${#lists.size(recentUsers)} > 3">
                         <div class="flex items-center">
-                            <div class="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
-                                <span class="text-sm font-medium text-pink-600">G</span>
-                            </div>
                             <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Giulia Bianchi</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">giulia.bianchi@email.com</p>
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" th:text="'Ci sono ' + ${#lists.size(recentUsers)} + ' nuovi utenti'">Mario Rossi</p>
                             </div>
                         </div>
-                        <button class="text-teal-600 hover:text-teal-700 text-xs">Seleziona</button>
+                        <button class="text-teal-600 hover:text-teal-700 text-xs">Vai</button>
                     </div>
                 </div>
             </div>

@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -113,7 +115,17 @@ public class UserService implements UserDetailsService {
     }
 
     public Long countRegistrationsToday() {
-        return userRepository.countRegistrationToday();
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay().minusNanos(1);
+        return userRepository.countRegistrationToday(startOfDay, endOfDay);
+    }
+
+    public Page<User> findAllUsersRegisteredToday(Pageable pageable) {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay().minusNanos(1);
+        return userRepository.findAllUserRegisteredToday(startOfDay, endOfDay, pageable);
     }
 
     public Long countAdmins() {
