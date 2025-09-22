@@ -1,0 +1,18 @@
+// Aggiornare la grafica del login come dashboard
+//Aggiornare grafica registrazione come dashboard
+//Aggiornare grafica utenti come la qr list
+//Controllare paginazione per i qr code
+//Controllare paginazione per gli utenti
+//Controller dei filtri per gli utenti
+//Implementazione del th:each per gli utenti
+//Nel profilo utente controllare gli input come per qrlist cerca
+//Nel profilo utente adattare il bottone annulla al tasto annulla.
+//vedere se si può implementare il currentUser == user nella create così da reindirizzare al profilo interessato
+
+
+STEP 1 DOPO QUESTE MIGLORIE
+Gestire completamente gli utenti
+
+STEP 2
+Gestione completa dei QR code
+Tralasciare gli articoli momentaneamente, da considerare però che l'admin vede solo i qr non sa se sono associati ad articoli o meno
