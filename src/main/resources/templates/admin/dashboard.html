@@ -15,21 +15,21 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
 <!-- Header -->
 <div th:replace="~{fragments/header :: header}"></div>
 
 <!-- Main Content -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Welcome Section -->
+    <!-- Welcome, Section -->
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-200">Dashboard</h1>
         <p class="text-gray-600 dark:text-gray-300">Pannello di controllo QR Manager</p>
     </div>
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
@@ -37,13 +37,13 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">QR Code Totali</p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-gray-200">QR Code Totali</p>
                     <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${totalQrCodes ?: 24}">24</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
@@ -51,13 +51,13 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">QR Code Attivi</p>
-                    <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${activeQrCodes ?: 18}">18</p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-gray-200">QR Code Attivi</p>
+                    <p class="text-2xl font-bold text-gray-600 dark:text-gray-300" th:text="${activeQrCodes ?: 18}">18</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
@@ -65,13 +65,13 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Articoli Totali</p>
-                    <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${totalArticles ?: 67}">67</p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-gray-200">Articoli Totali</p>
+                    <p class="text-2xl font-bold text-gray-600 dark:text-gray-300" th:text="${totalArticles ?: 67}">67</p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
             <div class="flex items-center">
                 <div class="flex-shrink-0">
                     <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
@@ -79,22 +79,22 @@
                     </div>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Utenti</p>
-                    <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${totalUsers ?: 15}">15</p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-gray-200">Utenti</p>
+                    <p class="text-2xl font-bold text-gray-600 dark:text-gray-300" th:text="${totalUsers ?: 15}">15</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Quick Actions -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-8 transition-colors">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Azioni Rapide</h2>
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-200 mb-4">Azioni Rapide</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <a href="/admin/qr/create" class="flex items-center p-4 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-lg hover:from-teal-600 hover:to-cyan-600 transition-all duration-200">
                 <i data-lucide="plus-circle" class="w-6 h-6 mr-3"></i>
                 <div>
-                    <p class="font-semibold">Nuovo QR Code</p>
-                    <p class="text-sm opacity-90">Crea un nuovo QR personalizzato</p>
+                    <p class="font-semibold text-gray-900 dark:text-gray-200">Nuovo QR Code</p>
+                    <p class="text-sm opacity-90 text-gray-600 dark:text-gray-300">Crea un nuovo QR personalizzato</p>
                 </div>
             </a>
 
@@ -102,8 +102,8 @@
                class="flex items-center p-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all duration-200">
                 <i data-lucide="list" class="w-6 h-6 mr-3"></i>
                 <div>
-                    <p class="font-semibold">Gestisci QR</p>
-                    <p class="text-sm opacity-90">Visualizza e modifica QR esistenti</p>
+                    <p class="font-semibold text-gray-900 dark:text-gray-200">Gestisci QR</p>
+                    <p class="text-sm opacity-90 text-gray-600 dark:text-gray-300">Visualizza e modifica QR esistenti</p>
                 </div>
             </a>
 
@@ -111,8 +111,8 @@
                class="flex items-center p-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200">
                 <i data-lucide="user-round-check" class="w-6 h-6 mr-3"></i>
                 <div>
-                    <p class="font-semibold">Utenti</p>
-                    <p class="text-sm opacity-90">Visualizza gli utenti registrati</p>
+                    <p class="font-semibold text-gray-900 dark:text-gray-200">Utenti</p>
+                    <p class="text-sm opacity-90 text-gray-600 dark:text-gray-300">Visualizza gli utenti registrati</p>
                 </div>
             </a>
         </div>
