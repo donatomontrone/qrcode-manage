@@ -131,11 +131,11 @@
                     <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" th:each="user, x : ${recentUsers}" th:if="${recentUsers != null or #lists.size(recentUsers) <= 3}">
                         <div class="flex items-center">
                             <div class="w-8 h-8 rounded-full flex items-center justify-center" th:classappend="' bg-'+${colors[x.index]}+'-100'">
-                                <span class="text-sm font-medium" th:classappend="' text-'+${colors[x.index]}+'-600'" th:text="${#strings.toUpperCase(#strings.substring(user.getFirstName(), 0, 1))}">M</span>
+                                <span class="text-sm font-medium" th:classappend="' text-'+${colors[x.index]}+'-600'" th:text="${#strings.toUpperCase(#strings.substring(user.getFirstName(), 0, 1))}">T</span>
                             </div>
                             <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-gray-200" th:text="${user.getFirstName() + ' ' + user.getLastName()}">Mario Rossi</p>
-                                <p class="text-xs text-gray-600 dark:text-gray-300" th:text="${user.getEmail()}">mario.rossi@email.com</p>
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-200" th:text="${user.getFirstName() + ' ' + user.getLastName()}">Sample Test</p>
+                                <p class="text-xs text-gray-600 dark:text-gray-300" th:text="${user.getEmail()}">sample.test@email.com</p>
                             </div>
                         </div>
                         <button class="text-teal-600 hover:text-teal-700 text-xs">Seleziona</button>
@@ -143,7 +143,7 @@
                     <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" th:if="${#lists.size(recentUsers)} > 3">
                         <div class="flex items-center">
                             <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-gray-200" th:text="'Ci sono ' + ${#lists.size(recentUsers)} + ' nuovi utenti'">Mario Rossi</p>
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-200" th:text="'Ci sono ' + ${#lists.size(recentUsers)} + ' nuovi utenti'">Ci sono 0 nuovi utenti</p>
                             </div>
                         </div>
                         <button class="text-teal-600 hover:text-teal-700 text-xs">Vai</button>

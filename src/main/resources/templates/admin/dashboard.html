@@ -38,7 +38,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-900 dark:text-gray-200">QR Code Totali</p>
-                    <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${totalQrCodes ?: 24}">24</p>
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${totalQrCodes ?: 0}">0</p>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-900 dark:text-gray-200">QR Code Attivi</p>
-                    <p class="text-2xl font-bold text-gray-600 dark:text-gray-300" th:text="${activeQrCodes ?: 18}">18</p>
+                    <p class="text-2xl font-bold text-gray-600 dark:text-gray-300" th:text="${activeQrCodes ?: 0}">0</p>
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-900 dark:text-gray-200">Articoli Totali</p>
-                    <p class="text-2xl font-bold text-gray-600 dark:text-gray-300" th:text="${totalArticles ?: 67}">67</p>
+                    <p class="text-2xl font-bold text-gray-600 dark:text-gray-300" th:text="${totalArticles ?: 0}">0</p>
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-900 dark:text-gray-200">Utenti</p>
-                    <p class="text-2xl font-bold text-gray-600 dark:text-gray-300" th:text="${totalUsers ?: 15}">15</p>
+                    <p class="text-2xl font-bold text-gray-600 dark:text-gray-300" th:text="${totalUsers ?: 0}">0</p>
                 </div>
             </div>
         </div>

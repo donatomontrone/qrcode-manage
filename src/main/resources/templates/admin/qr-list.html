@@ -107,7 +107,7 @@
                      : ((#lists.size(qr.articles) * 100 / qr.maxArticles) <= 70 ? ' bg-yellow-500'
                      : ' bg-red-500')}"></div>
                             </div>
-                            <span class="text-sm text-gray-600 dark:text-gray-400" th:text="${#lists.size(qr.getArticles())} + '/' + ${qr.getMaxArticles()}"></span>
+                            <span class="text-sm text-gray-600 dark:text-gray-400" th:text="${#lists.size(qr.getArticles())} + '/' + ${qr.getMaxArticles()}">0/0</span>
                         </div>
                     </td>
                     <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">
@@ -125,7 +125,7 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-200" th:text="${#temporals.format(qr.getExpiryDate(), 'dd/MM/yyyy')}">
-
+                        01/01/2001
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                         <button class="text-blue-600 hover:text-blue-800" title="Visualizza">
