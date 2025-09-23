@@ -49,7 +49,6 @@ public class UserService implements UserDetailsService {
 
         User user = new User(firstName, lastName, email, passwordEncoder.encode(password));
 
-        // Assign default USER role
         Role userRole = roleRepository.findByName(Role.USER)
                 .orElseThrow(() -> new RuntimeException(INIT_ROLE_USER_NOT_FOUND.getValue()));
         user.setRoles(Set.of(userRole));

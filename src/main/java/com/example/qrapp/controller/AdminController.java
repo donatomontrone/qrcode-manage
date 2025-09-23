@@ -41,7 +41,7 @@ public class AdminController {
             "red", "blue", "green", "yellow", "purple", "orange", "teal", "pink", "brown");
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model, Principal principal) {
+    public String dashboard(Model model) {
         long totalQrCodes = qrCodeService.countAll();
         long activeQrCodes = qrCodeService.countActive();
         long expiredQrCodes = qrCodeService.countExpired();

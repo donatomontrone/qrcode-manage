@@ -3,59 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrazione - QR Manager</title>
+    <title>Registra Admin - QR Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#0f766e',
-                        secondary: '#14b8a6'
-                    }
-                }
-            }
+            theme: { extend: {} }
         }
     </script>
-    <script>
-        // Gestione dark mode con persistenza
-        document.addEventListener("DOMContentLoaded", () => {
-            const toggle = document.getElementById("darkModeToggle");
-            const html = document.documentElement;
-
-            if (localStorage.getItem("theme") === "dark") {
-                html.classList.add("dark");
-                toggle.checked = true;
-            }
-
-            toggle.addEventListener("change", () => {
-                if (toggle.checked) {
-                    html.classList.add("dark");
-                    localStorage.setItem("theme", "dark");
-                } else {
-                    html.classList.remove("dark");
-                    localStorage.setItem("theme", "light");
-                }
-            });
-        });
-    </script>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50
-             dark:from-gray-900 dark:via-gray-800 dark:to-gray-900
-             flex items-center justify-center p-4 transition-colors">
-
-<div class="w-full max-w-md relative">
-    <!-- Toggle dark mode -->
-    <div class="absolute top-4 right-4">
-        <label class="inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="darkModeToggle" class="sr-only">
-            <div class="w-10 h-5 bg-gray-300 dark:bg-gray-600 rounded-full relative transition">
-                <div class="dot absolute left-1 top-1 w-3 h-3 bg-white rounded-full transition
-                                dark:translate-x-5"></div>
-            </div>
-        </label>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
+<!-- Header -->
+<div th:replace="~{fragments/header :: header}"></div>
+<!-- Main Content -->
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-200">Nuovo Amministratore</h1>
+        <p class="text-gray-600 dark:text-gray-300">Registrazione di un nuovo utente amministratore</p>
     </div>
+
 
     <div class="bg-white/80 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl shadow-xl border
                     border-white/20 dark:border-gray-700 p-8 transition-colors">
@@ -69,10 +37,10 @@
             <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent dark:text-white">
                 Registrazione
             </h1>
-            <p class="text-gray-600 dark:text-gray-300 mt-2">Crea il tuo account</p>
+            <p class="text-gray-600 dark:text-gray-300 mt-2">Crea account</p>
         </div>
 
-        <form th:action="@{/register-user}" method="post" class="space-y-6">
+        <form th:action="@{/register-admin}" method="post" class="space-y-6">
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nome</label>
@@ -120,13 +88,11 @@
                 Crea Account
             </button>
         </form>
-
-        <div class="mt-6 text-center">
-            <p class="text-gray-600 dark:text-gray-400">Hai già un account?
-                <a href="/login" class="text-purple-600 hover:text-purple-700 font-medium">Accedi qui</a>
-            </p>
-        </div>
     </div>
 </div>
+<script th:src="@{/js/app.js}"></script>
+<script>
+    lucide.createIcons();
+</script>
 </body>
 </html>

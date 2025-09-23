@@ -23,14 +23,18 @@ public class AuthController {
 
     @GetMapping("/")
     public String home(Principal principal) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
         User user = userService.findByEmail(principal.getName()).orElse(null);
+        System.out.println(principal);
         if (user == null) {
             return "redirect:/login";
         } else {
             if (userService.isAdmin(user)) {
                 return "redirect:/admin/dashboard";
             } else {
-                return "redirect:/dashboard";
+                return "redirect:/user/dashboard";
             }
         }
     }
@@ -54,13 +58,16 @@ public class AuthController {
     }
 
     @GetMapping("/register")
-    public String registerForm(Model model) {
+    public String registerFormUser(Model model, Principal principal) {
         model.addAttribute("user", new User());
-        return "auth/register";
+        if (principal == null) {
+            return "auth/register";
+        }
+        return "auth/register-admin";
     }
 
-    @PostMapping("/register")
-    public String register(@ModelAttribute User user,
+    @PostMapping("/register-user")
+    public String registerUser(@ModelAttribute User user,
                           BindingResult result,
                           @RequestParam String confirmPassword,
                           RedirectAttributes redirectAttributes) {
@@ -77,6 +84,31 @@ public class AuthController {
                                    user.getEmail(), user.getPassword());
             redirectAttributes.addFlashAttribute("successMessage", 
                 "Registrazione completata! Puoi ora effettuare il login.");
+            return "redirect:/login";
+        } catch (RuntimeException e) {
+            result.rejectValue("email", "error.email", e.getMessage());
+            return "auth/register";
+        }
+    }
+
+    @PostMapping("/register-admin")
+    public String registerAdmin(@ModelAttribute User user,
+                           BindingResult result,
+                           @RequestParam String confirmPassword,
+                           RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            return "auth/register";
+        }
+        if (!user.getPassword().equals(confirmPassword)) {
+            result.rejectValue("password", "error.password", "Le password non coincidono");
+            return "redirect:/register";
+        }
+        try {
+            userService.createAdminUser(user.getFirstName(), user.getLastName(),
+                    user.getEmail(), user.getPassword());
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Registrazione completata! Puoi ora effettuare il login.");
             return "redirect:/login";
         } catch (RuntimeException e) {
             result.rejectValue("email", "error.email", e.getMessage());
