@@ -36,7 +36,6 @@ public class ProfileController {
                                 BindingResult bindingResult,
                                 @RequestParam("newPassword") String newPassword,
                                 @RequestParam("confirmPassword") String confirmPassword,
-                                Model model,
                                 Principal principal,
                                 RedirectAttributes redirectAttrs) {
 
@@ -44,7 +43,6 @@ public class ProfileController {
 
         if (user.isPresent()) {
             User currentUser = user.get();
-            // Email univoca
             if (!userService.isEmailUnique(userForm.getEmail())) {
                 bindingResult.rejectValue("email", "error.user", "Email già utilizzata.");
             }
@@ -68,7 +66,6 @@ public class ProfileController {
             }
 
             userService.updateUser(currentUser);
-
             redirectAttrs.addFlashAttribute("successMessage", "Profilo aggiornato con successo.");
         }
         redirectAttrs.addFlashAttribute("errorMessage", "Profilo non aggiornato.");

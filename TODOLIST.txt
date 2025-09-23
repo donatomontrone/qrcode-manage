@@ -1,4 +1,4 @@
-// Aggiornare la grafica del login come dashboard
+//Aggiornare la grafica del login come dashboard
 //Aggiornare grafica registrazione come dashboard
 //Aggiornare grafica utenti come la qr list
 //Controllare paginazione per i qr code

@@ -37,6 +37,9 @@ public class AdminController {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final List<String> colors = List.of(
+            "red", "blue", "green", "yellow", "purple", "orange", "teal", "pink", "brown");
+
     @GetMapping("/dashboard")
     public String dashboard(Model model, Principal principal) {
         long totalQrCodes = qrCodeService.countAll();
@@ -44,8 +47,6 @@ public class AdminController {
         long expiredQrCodes = qrCodeService.countExpired();
         long totalUsers = userService.countAll();
         long totalArticles = articleService.countAll();
-
-        // QR code recenti per visualizzazione
         Pageable pageable = PageRequest.of(0, 5);
         Page<QrCode> recentQrCodes = qrCodeService.findAll(pageable, null, null);
 
@@ -55,7 +56,6 @@ public class AdminController {
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("recentQrCodes", recentQrCodes);
         model.addAttribute("totalArticles", totalArticles);
-
         return "admin/dashboard";
     }
 
@@ -65,10 +65,9 @@ public class AdminController {
                          @RequestParam(required = false) String filter,
                          @RequestParam(required = false) String search,
                          Model model) {
-
         Pageable pageable = PageRequest.of(page, size);
         Page<QrCode> qrCodesPage = qrCodeService.findAll(pageable, filter, search);
-
+        model.addAttribute("colors", colors);
         model.addAttribute("qrCodes", qrCodesPage.getContent());
         model.addAttribute("page", pageable);
         model.addAttribute("totalPages", qrCodesPage.getTotalPages());
@@ -77,10 +76,6 @@ public class AdminController {
         model.addAttribute("currentPage", page);
         model.addAttribute("filter", filter);
         model.addAttribute("search", search);
-        System.out.println(pageable);
-        System.out.println(qrCodesPage.getTotalPages());
-        System.out.println(qrCodesPage.getTotalElements());
-        System.out.println(qrCodesPage.getTotalPages() - 1);
         return "admin/qr-list";
     }
 
@@ -90,6 +85,8 @@ public class AdminController {
     public String qrCreateForm(Model model) {
         Pageable pageable = PageRequest.of(0, 10);
         List<User> recentUsers = userService.findAllUsersRegisteredToday(pageable).getContent();
+
+        model.addAttribute("colors", colors);
         model.addAttribute("recentUsers", recentUsers);
         return "admin/qr-create";
     }
@@ -113,13 +110,13 @@ public class AdminController {
         Long todayRegistrations = userService.countRegistrationsToday();
         Long countAdmins = userService.countAdmins();
 
+        model.addAttribute("colors", colors);
         model.addAttribute("users", usersPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", usersPage.getTotalPages());
         model.addAttribute("totalElements", usersPage.getTotalElements());
         model.addAttribute("todayRegistrations", todayRegistrations);
         model.addAttribute("totalAdmin", countAdmins);
-
         return "admin/users";
     }
 }

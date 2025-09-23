@@ -38,11 +38,9 @@ public class QrCodeController {
                               @RequestParam Integer maxArticles,
                               RedirectAttributes redirectAttributes) {
         try {
-            // Trova l'utente proprietario
             User owner = userService.findByEmail(ownerEmail)
                     .orElseThrow(() -> new RuntimeException("Utente non trovato con email: " + ownerEmail));
-
-            // Crea il QR code
+            
             QrCode qrCode = qrCodeService.createQrCode(description, owner, expiryDate, maxArticles);
 
             redirectAttributes.addFlashAttribute("successMessage", 

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -20,8 +22,17 @@ public class AuthController {
     private final UserService userService;
 
     @GetMapping("/")
-    public String home() {
-        return "redirect:/admin/dashboard";
+    public String home(Principal principal) {
+        User user = userService.findByEmail(principal.getName()).orElse(null);
+        if (user == null) {
+            return "redirect:/login";
+        } else {
+            if (userService.isAdmin(user)) {
+                return "redirect:/admin/dashboard";
+            } else {
+                return "redirect:/dashboard";
+            }
+        }
     }
 
     @GetMapping("/login")
@@ -57,13 +68,10 @@ public class AuthController {
         if (result.hasErrors()) {
             return "auth/register";
         }
-
-        // Verifica password match
         if (!user.getPassword().equals(confirmPassword)) {
             result.rejectValue("password", "error.password", "Le password non coincidono");
             return "auth/register";
         }
-
         try {
             userService.registerUser(user.getFirstName(), user.getLastName(), 
                                    user.getEmail(), user.getPassword());
