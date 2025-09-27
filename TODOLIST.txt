@@ -18,5 +18,5 @@ Gestione completa dei QR code
 Tralasciare gli articoli momentaneamente, da considerare però che l'admin vede solo i qr non sa se sono associati ad articoli o meno
 
 
-//TODO TUTTO SISTEMATO PER IL MIO TASK, MANCA SOLO DA CONTROLLARE COLLEGAMENTO NUOVO DB, LISTA DI UTENTI (COME SI VISUALIZZA)
+//TODO TUTTO SISTEMATO PER IL MIO TASK, MANCA SOLO DA CONTROLLARE LISTA DI UTENTI (COME SI VISUALIZZA)
 // E COME MAI IL FILTRO PER RUOLO ADMIN NON FUNZIONA.
