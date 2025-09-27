@@ -1,6 +1,6 @@
 QR-001 //Aggiornare la grafica del login come dashboard
-QR-00//Aggiornare grafica registrazione come dashboard
-QR-00//Aggiornare grafica utenti come la qr list
+QR-001//Aggiornare grafica registrazione come dashboard
+QR-001//Aggiornare grafica utenti come la qr list
 QR-00//Controllare paginazione per i qr code
 QR-00//Controllare paginazione per gli utenti
 QR-00//Controller dei filtri per gli utenti
@@ -10,9 +10,12 @@ QR-00//Nel profilo utente adattare il bottone annulla al tasto annulla.
 QR-00//vedere se si può implementare il currentUser == user nella create così da reindirizzare al profilo interessato
 
 
-STEP 1 DOPO QUESTE MIGLORIE
+STEP 1 QR001
 Gestire completamente gli utenti
 
 STEP 2
 Gestione completa dei QR code
 Tralasciare gli articoli momentaneamente, da considerare però che l'admin vede solo i qr non sa se sono associati ad articoli o meno
+
+
+sistemare i colori nella registrazione admin, nella login e nella lista degli utenti
