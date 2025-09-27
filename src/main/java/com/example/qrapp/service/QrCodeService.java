@@ -67,15 +67,6 @@ public class QrCodeService {
     @Transactional(readOnly = true)
     public Page<QrCode> findAll(Pageable pageable, String filter, String search) {
         Page<QrCode> qrCodesPage;
-        if (filter != null && !filter.isEmpty()) {
-            if (filter.equalsIgnoreCase("active")) {
-                qrCodesPage = findActive(pageable);
-            } else if (filter.equalsIgnoreCase("expired")) {
-                qrCodesPage = findExpired(pageable);
-            } else if (filter.equalsIgnoreCase("full")) {
-                qrCodesPage = findFull(pageable);
-            }
-        }
 
         qrCodesPage = switch (filter != null ? filter.toLowerCase() : "") {
             case "active" -> findActive(pageable);

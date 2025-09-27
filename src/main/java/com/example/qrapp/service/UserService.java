@@ -1,11 +1,13 @@
 package com.example.qrapp.service;
 
+import com.example.qrapp.model.QrCode;
 import com.example.qrapp.model.Role;
 import com.example.qrapp.model.User;
 import com.example.qrapp.repository.RoleRepository;
 import com.example.qrapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,10 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import static com.example.qrapp.constants.Constant.ADMIN;
+import static com.example.qrapp.constants.Constant.USER;
 import static com.example.qrapp.constants.Message.*;
 
 @Service
@@ -84,6 +90,33 @@ public class UserService implements UserDetailsService {
     public Page<User> findAll(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
+
+    @Transactional(readOnly = true)
+    public Page<User> findAll(Pageable pageable, String filter, String search) {
+        Page<User> usersPage;
+
+        usersPage = switch (filter != null ? filter.toLowerCase() : "") {
+            case "user" -> findAllUserByRole(USER.name().toLowerCase(), pageable);
+            case "admin" -> findAllUserByRole(ADMIN.name().toLowerCase(), pageable);
+            default -> userRepository.findAll(pageable);
+        };
+
+        if (search != null && !search.trim().isEmpty()) {
+            List<User> filteredList = usersPage.getContent().stream()
+                    .filter(user -> user.getLastName().toLowerCase().contains(search.toLowerCase()) ||
+                            user.getFirstName().toLowerCase().contains(search.toLowerCase()) ||
+                            user.getEmail().toLowerCase().contains(search.toLowerCase()))
+                    .collect(Collectors.toList());
+            return new PageImpl<>(filteredList, pageable, usersPage.getTotalElements());
+        }
+        return usersPage;
+    }
+
+    @Transactional
+    public Page<User> findAllUserByRole(String role, Pageable pageable) {
+        return userRepository.findAllUserByRole(role, pageable);
+    }
+
 
     public User updateUser(User user) {
         return userRepository.save(user);

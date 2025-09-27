@@ -133,8 +133,12 @@
                             <div class="w-8 h-8 rounded-full flex items-center justify-center" th:classappend="' bg-'+${colors[x.index]}+'-100'">
                                 <span class="text-sm font-medium" th:classappend="' text-'+${colors[x.index]}+'-600'" th:text="${#strings.toUpperCase(#strings.substring(user.getFirstName(), 0, 1))}">T</span>
                             </div>
-                            <div class="ml-3">
+                            <div class="ml-3" th:unless="${user.getAuthorities() == principal.getAuthorities()}">
                                 <p class="text-sm font-medium text-gray-900 dark:text-gray-200" th:text="${user.getFirstName() + ' ' + user.getLastName()}">Sample Test</p>
+                                <p class="text-xs text-gray-600 dark:text-gray-300" th:text="${user.getEmail()}">sample.test@email.com</p>
+                            </div>
+                            <div class="ml-3" th:if="${user.getAuthorities() == principal.getAuthorities()}">
+                                <p class="text-sm font-medium text-gray-900 dark:text-gray-200">Tu</p>
                                 <p class="text-xs text-gray-600 dark:text-gray-300" th:text="${user.getEmail()}">sample.test@email.com</p>
                             </div>
                         </div>
