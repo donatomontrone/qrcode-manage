@@ -82,12 +82,13 @@ public class AdminController {
 
 
     @GetMapping("/qr/create")
-    public String qrCreateForm(Model model) {
+    public String qrCreateForm(Model model, Principal principal) {
         Pageable pageable = PageRequest.of(0, 10);
         List<User> recentUsers = userService.findAllUsersRegisteredToday(pageable).getContent();
 
         model.addAttribute("colors", colors);
         model.addAttribute("recentUsers", recentUsers);
+        model.addAttribute("principal", principal);
         return "admin/qr-create";
     }
 
@@ -102,11 +103,13 @@ public class AdminController {
 
     @GetMapping("/users")
     public String users(@RequestParam(defaultValue = "0") int page,
-                       @RequestParam(defaultValue = "20") int size,
-                       Model model) {
+                        @RequestParam(defaultValue = "20") int size,
+                        @RequestParam(required = false) String filter,
+                        @RequestParam(required = false) String search,
+                        Model model, Principal principal) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<User> usersPage = userService.findAll(pageable);
+        Page<User> usersPage = userService.findAll(pageable, filter, search);
         Long todayRegistrations = userService.countRegistrationsToday();
         Long countAdmins = userService.countAdmins();
 
@@ -117,6 +120,9 @@ public class AdminController {
         model.addAttribute("totalElements", usersPage.getTotalElements());
         model.addAttribute("todayRegistrations", todayRegistrations);
         model.addAttribute("totalAdmin", countAdmins);
+        model.addAttribute("filter", filter);
+        model.addAttribute("search", search);
+        model.addAttribute("principal", principal);
         return "admin/users";
     }
 }

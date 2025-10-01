@@ -36,4 +36,7 @@ public interface QrCodeRepository extends JpaRepository<QrCode, UUID> {
 
     @Query("SELECT q FROM QrCode q WHERE q.owner = ?1 AND q.expiryDate > ?2")
     List<QrCode> findActiveQrCodesByOwner(User owner, LocalDateTime currentDate);
+
+    @Query("SELECT COUNT(qr) FROM QrCode qr")
+    long countAll();
 }

@@ -111,15 +111,21 @@ public class DataInitializer implements CommandLineRunner {
 
     private void initializeQRCodes(User user) {
         List<QrCode> existingQRCodes = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            QrCode qrCode = new QrCode();
-            qrCode.setQrId("QR" + (i + 1));
-            qrCode.setMaxArticles(new Random().nextInt(5,11));
-            qrCode.setDescription("Test " + (i + 1));
-            qrCode.setExpiryDate(LocalDateTime.now().plusYears(1));
-            qrCode.setOwner(user);
-            existingQRCodes.add(qrCode);
+        logger.info("Inizio caricamento QR per l'amministratore: {}", adminEmail);
+        if (qrCodeRepository.countAll() == 0) {
+            for (int i = 0; i < 5; i++) {
+                QrCode qrCode = new QrCode();
+                qrCode.setQrId("QR" + (i + 1));
+                qrCode.setMaxArticles(new Random().nextInt(5, 11));
+                qrCode.setDescription("Test " + (i + 1));
+                qrCode.setExpiryDate(LocalDateTime.now().plusYears(1));
+                qrCode.setOwner(user);
+                existingQRCodes.add(qrCode);
+            }
+            logger.info("Caricamento di {} QR per l'amministratore di sistema", existingQRCodes.size());
+            qrCodeRepository.saveAll(existingQRCodes);
+            return;
         }
-        qrCodeRepository.saveAll(existingQRCodes);
+        logger.info("QR già presenti per l'amministratore: {}", adminEmail);
     }
 }
