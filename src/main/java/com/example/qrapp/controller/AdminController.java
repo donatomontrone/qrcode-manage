@@ -103,7 +103,7 @@ public class AdminController {
 
     @GetMapping("/users")
     public String users(@RequestParam(defaultValue = "0") int page,
-                        @RequestParam(defaultValue = "20") int size,
+                        @RequestParam(defaultValue = "5") int size,
                         @RequestParam(required = false) String filter,
                         @RequestParam(required = false) String search,
                         Model model, Principal principal) {
@@ -116,6 +116,7 @@ public class AdminController {
         model.addAttribute("colors", colors);
         model.addAttribute("users", usersPage.getContent());
         model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
         model.addAttribute("totalPages", usersPage.getTotalPages());
         model.addAttribute("totalElements", usersPage.getTotalElements());
         model.addAttribute("todayRegistrations", todayRegistrations);

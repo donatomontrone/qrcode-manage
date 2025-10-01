@@ -59,6 +59,7 @@ public class AuthController {
 
     @GetMapping("/register")
     public String registerFormUser(Model model, Principal principal) {
+
         model.addAttribute("user", new User());
         if (principal == null) {
             return "auth/register";

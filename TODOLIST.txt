@@ -9,18 +9,18 @@ QR-00//Nel profilo utente controllare gli input come per qrlist cerca
 QR-00//Nel profilo utente adattare il bottone annulla al tasto annulla.
 QR-00//vedere se si può implementare il currentUser == user nella create così da reindirizzare al profilo interessato
 
-
-STEP 1 QR001
 Gestire completamente gli utenti
-QR-001 - Registrazione utente e admin
-QR-002 - Gestione e visualizzazione errori durante la registrazione e la login
-QR-003 - Profilo utente con tasto che se admin mostrare registrazione admin
+QR-001 - Registrazione utente e admin e relativa visualizzazione
+QR-002 - Gestione interfaccia profilo utente come aggiornamento UI e registrazione nuovo utente
+        (l'admin può creare un admin, l'utente si deve solo poter registrare come utente)
+QR-003 - Modale per la visualizzazione/modifica rapida delle informazioni di un utente
 QR-004 - Implementare eliminazione utente da parte di admin
+QR-005 - Gestione e visualizzazione errori durante la registrazione e la login
 
+
+//todo rapido controllare utenti... oppure brasare db e farli generare dal sistema
 STEP 2
 Gestione completa dei QR code
 Tralasciare gli articoli momentaneamente, da considerare però che l'admin vede solo i qr non sa se sono associati ad articoli o meno
 
 
-//TODO TUTTO SISTEMATO PER IL MIO TASK, MANCA SOLO DA CONTROLLARE LISTA DI UTENTI (COME SI VISUALIZZA)
-// E COME MAI IL FILTRO PER RUOLO ADMIN NON FUNZIONA.
