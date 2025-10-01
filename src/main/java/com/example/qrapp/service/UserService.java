@@ -96,8 +96,8 @@ public class UserService implements UserDetailsService {
         Page<User> usersPage;
 
         usersPage = switch (filter != null ? filter.toLowerCase() : "") {
-            case "user" -> findAllUserByRole(USER.name().toLowerCase(), pageable);
-            case "admin" -> findAllUserByRole(ADMIN.name().toLowerCase(), pageable);
+            case "user" -> findAllUserByRole(USER.name(), pageable);
+            case "admin" -> findAllUserByRole(ADMIN.name(), pageable);
             default -> userRepository.findAll(pageable);
         };
 
