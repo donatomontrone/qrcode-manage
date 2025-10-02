@@ -59,51 +59,42 @@ class QRManager {
     initializeMobileMenu() {
         const mobileMenuButton = document.getElementById('mobileMenuButton');
         const mobileMenu = document.getElementById('mobileMenu');
-        const menuIcon = document.getElementById('menuIcon');
+        const menuIconOpen = document.getElementById('menuIconOpen');
+        const menuIconClose = document.getElementById('menuIconClose');
 
-        if (!mobileMenuButton || !mobileMenu) {
-            console.warn('⚠️ Mobile menu elements not found');
-            return;
-        }
+        if (!mobileMenuButton || !mobileMenu) return;
 
         let isOpen = false;
 
-        mobileMenuButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
+        // Toggle apertura/chiusura
+        mobileMenuButton.addEventListener('click', () => {
             isOpen = !isOpen;
-
             if (isOpen) {
-                // Apri menu
                 mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
                 mobileMenu.classList.remove('max-h-0');
-                menuIcon?.setAttribute('data-lucide', 'x');
+
+                // icona X visibile, hamburger nascosto
+                menuIconOpen.classList.add('hidden');
+                menuIconClose.classList.remove('hidden');
             } else {
-                // Chiudi menu
                 mobileMenu.style.maxHeight = '0';
                 mobileMenu.classList.add('max-h-0');
-                menuIcon?.setAttribute('data-lucide', 'menu');
-            }
 
-            // Ricarica icone
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
+                // hamburger visibile, icona X nascosta
+                menuIconClose.classList.add('hidden');
+                menuIconOpen.classList.remove('hidden');
             }
-
-            console.log(`📱 Mobile menu ${isOpen ? 'opened' : 'closed'}`);
         });
 
-        // Chiudi menu quando si clicca su un link
+        // Chiudi menu quando clicchi un link
         mobileMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 isOpen = false;
                 mobileMenu.style.maxHeight = '0';
                 mobileMenu.classList.add('max-h-0');
-                menuIcon?.setAttribute('data-lucide', 'menu');
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
+
+                menuIconClose.classList.add('hidden');
+                menuIconOpen.classList.remove('hidden');
             });
         });
     }
@@ -158,7 +149,7 @@ class QRManager {
     // ========================================
     initializeDarkMode() {
         const darkModeToggle = document.getElementById('darkModeToggle');
-
+        const darkModeToggle2 = document.getElementById('darkModeToggle2');
         if (!darkModeToggle) {
             console.warn('⚠️ Dark mode toggle not found');
             return;
@@ -172,6 +163,13 @@ class QRManager {
         }
 
         darkModeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', isDark);
+            this.updateDarkModeIcon(isDark);
+
+            console.log(`🌓 Dark mode ${isDark ? 'enabled' : 'disabled'}`);
+        });
+        darkModeToggle2.addEventListener('click', () => {
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('darkMode', isDark);
             this.updateDarkModeIcon(isDark);

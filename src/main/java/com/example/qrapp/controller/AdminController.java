@@ -89,6 +89,7 @@ public class AdminController {
         model.addAttribute("colors", colors);
         model.addAttribute("recentUsers", recentUsers);
         model.addAttribute("currentUser", principal.getName());
+        System.out.println(recentUsers);
         return "admin/qr-create";
     }
 
