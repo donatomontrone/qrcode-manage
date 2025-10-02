@@ -9,19 +9,23 @@ QR-00//Nel profilo utente controllare gli input come per qrlist cerca
 QR-00//Nel profilo utente adattare il bottone annulla al tasto annulla.
 QR-00//vedere se si può implementare il currentUser == user nella create così da reindirizzare al profilo interessato
 
-Gestire completamente gli utenti
-QR-001 - Registrazione utente e admin e relativa visualizzazione
+SPRINT 1 - Gestire completamente gli utenti
+
+FEATURE
+QR-001 - Registrazione utente e admin e relativa visualizzazione DONE
 QR-002 - Gestione interfaccia profilo utente come aggiornamento UI e registrazione nuovo utente
-        (l'admin può creare un admin, l'utente si deve solo poter registrare come utente)
+        (admin può creare un admin, l'utente si deve solo poter registrare come utente)
 QR-003 - Modale per la visualizzazione/modifica rapida delle informazioni di un utente
 QR-004 - Far si che nella creazione del QR se gli utenti recenti sono più di 3 tramite bottone aprire una modale che mostra tutti i nuovi utenti in una lista non paginata.
          Valutare anche di inserire una ricerca tramite dell'utente.
 QR-005 - Implementare eliminazione utente da parte di admin
 QR-006 - Gestione e visualizzazione errori durante la registrazione e la login
 
-
+BUG
 QRB-001 - Bug paginazione dei QR code
-STEP 2
+
+
+SPRINT 2
 Gestione completa dei QR code
 Tralasciare gli articoli momentaneamente, da considerare però che l'admin vede solo i qr non sa se sono associati ad articoli o meno
 
