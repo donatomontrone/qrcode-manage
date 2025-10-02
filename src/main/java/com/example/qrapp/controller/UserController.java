@@ -2,10 +2,15 @@ package com.example.qrapp.controller;
 
 import com.example.qrapp.model.User;
 import com.example.qrapp.service.UserService;
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +27,8 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+
+    private final PasswordEncoder passwordEncoder;
 
 
   @GetMapping("/elimina/{id}")
@@ -52,4 +59,51 @@ public class UserController {
     return "redirect:/admin/users";
   }
 
+
+  @GetMapping("/{id}")
+  public String viewUser(@PathVariable UUID id, Model model) {
+    User user = userService.findById(id)
+        .orElseThrow(() -> new RuntimeException("Utente non trovato con id: " + id));
+    model.addAttribute("user", user);
+    return "admin/edit-user";
+  }
+
+  @PostMapping("/{id}")
+  public String updateUser(@PathVariable UUID id,
+                           BindingResult bindingResult,
+                           @RequestParam("newPassword") String newPassword,
+                           @RequestParam("confirmPassword") String confirmPassword,
+                           @ModelAttribute User user, RedirectAttributes attributes) {
+    Optional<User> userOpt = userService.findById(id);
+
+    if (userOpt.isPresent()) {
+      User currentUser = userOpt.get();
+      if (!userService.isEmailUnique(user.getEmail())) {
+        bindingResult.rejectValue("email", "error.user", "Email già utilizzata.");
+      }
+
+      if (newPassword != null && !newPassword.isEmpty()) {
+        if (!newPassword.equals(confirmPassword)) {
+          bindingResult.rejectValue("password", "error.user", "Le password non coincidono.");
+        }
+      }
+
+      if (bindingResult.hasErrors()) {
+        return "admin/edit-user";
+      }
+
+      currentUser.setFirstName(user.getFirstName() != null ? user.getFirstName() : currentUser.getFirstName());
+      currentUser.setLastName(user.getLastName()  != null ? user.getLastName() : currentUser.getLastName());
+      currentUser.setEmail(user.getEmail()  != null ? user.getEmail() : currentUser.getEmail());
+
+      if (newPassword != null && !newPassword.isEmpty()) {
+        currentUser.setPassword(passwordEncoder.encode(newPassword));
+      }
+
+      userService.updateUser(currentUser);
+      attributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo.");
+    }
+    attributes.addFlashAttribute("errorMessage", "Profilo non aggiornato.");
+    return "redirect:/admin/users/";
+  }
 }

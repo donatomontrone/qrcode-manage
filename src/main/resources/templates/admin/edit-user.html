@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profilo - QR Manager</title>
+    <title>Gestisci utente - QR Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
     <script>
@@ -19,21 +19,13 @@
 <!-- Main Content -->
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Page Header -->
-    <div class="flex justify-between items-center mb-8">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-200">Profilo personale</h1>
-            <p class="text-gray-600 dark:text-gray-300">Visualizza e modifica il tuo profilo</p>
-        </div>
-        <a href="/register"
-           class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-6 py-3 rounded-lg font-medium
-           hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 flex items-center">
-            <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
-            Nuovo Amministratore
-        </a>
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-200" th:text="${user.getFirstName() + ' ' + user.getLastName()}"></h1>
+        <p class="text-gray-600 dark:text-gray-300" th:text="${user.getId()}">Visualizza e modifica il tuo profilo</p>
     </div>
     <!-- Form Section -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-    <form th:action="@{/profile}" method="post" class="space-y-6" th:object="${userForm}">
+    <form th:action="@{'/admin/users/{id}'(id=${user.id})}" method="post" class="space-y-6" th:object="${user}">
         <div>
             <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Nome</label>
             <input type="text" id="firstName" name="firstName" th:field="*{firstName}" required
@@ -82,9 +74,9 @@
                     class="flex bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:from-teal-700
                     hover:to-cyan-700 transition-all duration-200 flex items-center justify-center">
                 <i data-lucide="user-pen" class="w-5 h-5 mr-2"></i>
-                Salva Modifiche
+                Aggiorna Utente
             </button>
-            <a th:href="@{/}"
+            <a th:href="@{/admin/users}"
                class="px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-lg
                                   text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center">
                 <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
