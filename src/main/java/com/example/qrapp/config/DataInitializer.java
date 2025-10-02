@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,8 +20,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import static com.example.qrapp.constants.Constant.ADMIN;
-import static com.example.qrapp.constants.Constant.USER;
 import static com.example.qrapp.constants.Message.*;
 
 @Configuration
@@ -53,6 +50,7 @@ public class DataInitializer implements CommandLineRunner {
             initializeRoles();
             User user = initializeAdminUser();
             initializeQRCodes(user);
+            initializeUsers();
             logger.info(INIT_COMPLETED.getValue());
         } catch (Exception e) {
             logger.error(INIT_ERROR.getValue(), e);
@@ -127,5 +125,30 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
         logger.info("QR già presenti per l'amministratore: {}", adminEmail);
+    }
+
+    private void initializeUsers() {
+        List<User> users = new ArrayList<>();
+
+        Role adminRole = roleRepository.findByName(Role.ADMIN)
+                .orElseThrow(() -> new RuntimeException(INIT_ROLE_ADMIN_NOT_FOUND.getValue()));
+        Role userRole = roleRepository.findByName(Role.USER)
+                .orElseThrow(() -> new RuntimeException(INIT_ROLE_USER_NOT_FOUND.getValue()));
+        Role[] roles = new Role[]{adminRole, userRole};
+        logger.info("Inizio Caricamento Utenti nel sistema");
+        if (userRepository.count() == 1) {
+            for (int i = 0; i < 20; i++) {
+                User user = new User();
+                user.setFirstName("NomeTest" + (i + 1));
+                user.setLastName("CognomeTest" + (i + 1));
+                user.setEmail(String.format("test%d@test.com", i + 1));
+                user.setPassword(passwordEncoder.encode("112233"));
+                user.setRoles(Set.of(roles[new Random().nextInt(roles.length)]));
+                users.add(user);
+            }
+            logger.info("Caricamento di {} utenti random nel sistema", users.size());
+            userRepository.saveAll(users);
+        }
+        logger.info("Utenti già presenti nel sistema");
     }
 }

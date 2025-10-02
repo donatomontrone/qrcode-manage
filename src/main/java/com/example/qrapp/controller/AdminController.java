@@ -88,7 +88,7 @@ public class AdminController {
 
         model.addAttribute("colors", colors);
         model.addAttribute("recentUsers", recentUsers);
-        model.addAttribute("principal", principal);
+        model.addAttribute("currentUser", principal.getName());
         return "admin/qr-create";
     }
 
@@ -123,7 +123,7 @@ public class AdminController {
         model.addAttribute("totalAdmin", countAdmins);
         model.addAttribute("filter", filter);
         model.addAttribute("search", search);
-        model.addAttribute("principal", principal);
+        model.addAttribute("currentUser", principal.getName());
         return "admin/users";
     }
 }

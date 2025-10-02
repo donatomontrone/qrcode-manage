@@ -123,36 +123,33 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                                <span class="text-sm font-medium text-white"
-                                      th:text="${user.firstName?.substring(0,1) + user.lastName?.substring(0,1)}">MR</span>
+<span class="text-sm font-medium text-white"
+      th:text="${user.firstName?.substring(0,1) + user.lastName?.substring(0,1)}">MR</span>
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm font-medium text-gray-900 dark:text-gray-100"
-                                   th:if="${principal.getAuthorities() == user.getAuthorities()}"
-                                >Tu</p>
+                                   th:if="${user.getEmail() == currentUser}">Tu</p>
                                 <p class="text-sm font-medium text-gray-900 dark:text-gray-100"
-                                   th:unless="${principal.getAuthorities() == user.getAuthorities()}"
+                                   th:unless="${user.getEmail() == currentUser}"
                                    th:text="${user.getFirstName() + ' ' + user.getLastName()}">Mario Rossi</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">ID: <span
-                                        th:text="${user.id}">1</span></p>
                             </div>
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <p class="text-sm text-gray-900 dark:text-gray-100" th:text="${user.email}">
+                        <p class="text-sm text-gray-900 dark:text-gray-100" th:text="${user.getEmail()}">
                             mario.rossi@email.com</p>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                              th:each="role : ${user.roles}"
-                              th:classappend="${role.name == 'ADMIN'} ? 'bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200' : 'bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200'"
-                              th:text="${role.name}">
-                        USER
-                        </span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+      th:each="role : ${user.roles}"
+      th:classappend="${role.getName() == 'ADMIN'} ? 'bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200' : 'bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200'"
+      th:text="${role.getName()}">
+USER
+</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-sm text-gray-600 dark:text-gray-400"
-                              th:text="${user.qrCodes?.size() ?: 0}">3</span>
+<span class="text-sm text-gray-600 dark:text-gray-400"
+      th:text="${user.qrCodes?.size() ?: 0}">3</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                         <span th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">15/01/2025</span>
@@ -184,29 +181,33 @@
 
     <!-- Pagination -->
     <div class="flex justify-center mt-6 space-x-2">
+<span>
+<a th:if="${currentPage > 0}"
+   th:href="@{|/admin/users?page=${currentPage - 1}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
+   class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+&laquo;
+</a>
 
-        <!-- Bottone PRECEDENTE -->
-        <a th:if="${currentPage > 0}"
-           th:href="@{|/admin/users?page=${currentPage - 1}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
-           class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-            &laquo;
-        </a>
+</span>
 
         <!-- Numeri di pagina -->
         <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-        <a th:href="@{|/admin/users?page=${i}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
-           th:text="${i + 1}"
-           class="px-3 py-1 rounded transition"
-           th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'">
-        </a>
-    </span>
+<a th:href="@{|/admin/users?page=${i}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
+   th:text="${i + 1}"
+   class="px-3 py-1 rounded transition"
+   th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'">
+</a>
+</span>
 
         <!-- Bottone SUCCESSIVO -->
-        <a th:if="${currentPage + 1 < totalPages}"
-           th:href="@{|/admin/users?page=${currentPage + 1}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
-           class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-            &raquo;
-        </a>
+        <span>
+<a th:if="${currentPage + 1 < totalPages}"
+   th:href="@{|/admin/users?page=${currentPage + 1}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
+   class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+&raquo;
+</a>
+</span>
+
 
     </div>
 

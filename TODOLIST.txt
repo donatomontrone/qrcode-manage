@@ -14,11 +14,12 @@ QR-001 - Registrazione utente e admin e relativa visualizzazione
 QR-002 - Gestione interfaccia profilo utente come aggiornamento UI e registrazione nuovo utente
         (l'admin può creare un admin, l'utente si deve solo poter registrare come utente)
 QR-003 - Modale per la visualizzazione/modifica rapida delle informazioni di un utente
-QR-004 - Implementare eliminazione utente da parte di admin
-QR-005 - Gestione e visualizzazione errori durante la registrazione e la login
+QR-004 - Far si che nella creazione del QR se gli utenti recenti sono più di 3 tramite bottone aprire una modale che mostra tutti i nuovi utenti in una lista non paginata.
+         Valutare anche di inserire una ricerca tramite dell'utente.
+QR-005 - Implementare eliminazione utente da parte di admin
+QR-006 - Gestione e visualizzazione errori durante la registrazione e la login
 
 
-//todo rapido controllare utenti... oppure brasare db e farli generare dal sistema
 STEP 2
 Gestione completa dei QR code
 Tralasciare gli articoli momentaneamente, da considerare però che l'admin vede solo i qr non sa se sono associati ad articoli o meno
