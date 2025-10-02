@@ -20,6 +20,7 @@ QR-005 - Implementare eliminazione utente da parte di admin
 QR-006 - Gestione e visualizzazione errori durante la registrazione e la login
 
 
+QRB-001 - Bug paginazione dei QR code
 STEP 2
 Gestione completa dei QR code
 Tralasciare gli articoli momentaneamente, da considerare però che l'admin vede solo i qr non sa se sono associati ad articoli o meno
