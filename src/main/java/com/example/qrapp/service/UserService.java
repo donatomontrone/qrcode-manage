@@ -1,11 +1,10 @@
 package com.example.qrapp.service;
 
-import com.example.qrapp.model.QrCode;
 import com.example.qrapp.model.Role;
 import com.example.qrapp.model.User;
 import com.example.qrapp.repository.RoleRepository;
 import com.example.qrapp.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,16 +29,15 @@ import static com.example.qrapp.constants.Message.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -153,18 +151,19 @@ public class UserService implements UserDetailsService {
         return userRepository.countRegistrationToday(startOfDay, endOfDay);
     }
 
-    public Page<User> findAllUsersRegisteredToday(Pageable pageable) {
-        LocalDate today = LocalDate.now();
-        LocalDateTime startOfDay = today.atStartOfDay();
-        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay().minusNanos(1);
-        return userRepository.findAllUserRegisteredToday(startOfDay, endOfDay, pageable);
-    }
-
     public Long countAdmins() {
         return userRepository.countAdmins();
     }
 
     public boolean isEmailUnique(String email) {
-        return userRepository.isEmailUnique(email);
+        return !userRepository.isEmailUnique(email);
+    }
+
+    public List<User> findRecentUsers() {
+      return userRepository.findRecentUser();
+    }
+
+    public User findSuperAdmin() {
+      return userRepository.findSuperAdmin();
     }
 }

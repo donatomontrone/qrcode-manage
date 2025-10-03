@@ -1,197 +1,200 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crea QR Code - QR Manager</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Crea QR Code - QR Manager</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
-    <link th:href="@{/css/style.css}" rel="stylesheet" />
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {extend: {}}
-        }
-    </script>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
-<!-- Header -->
-<div th:replace="~{fragments/header :: header}"></div>
-<!-- Main Content -->
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Page Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-200">Crea Nuovo QR Code</h1>
-        <p class="text-gray-600 dark:text-gray-300">Genera un QR code personalizzato per un utente</p>
-    </div>
+        <link th:href="@{/css/style.css}" rel="stylesheet" />
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {extend: {}}
+            }
+        </script>
+    </head>
+    <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
+        <!-- Header -->
+        <div th:replace="~{fragments/header :: header}"></div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Form Section -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-            <form th:action="@{/admin/qr/create}" method="post" class="space-y-6">
-                <div>
-                    <label for="ownerEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                        Email Proprietario
-                    </label>
-                    <input id="ownerEmail" type="email" name="ownerEmail" required
-                           class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
-                           text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                           focus:ring-teal-500 focus:border-transparent"
-                           placeholder="mario.rossi@email.com">
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">L'utente deve essere già registrato nel sistema</p>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                        Descrizione
-                    </label>
-                    <input type="text" name="description" required
-                           class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                           placeholder="Collezione vintage di Mario">
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Una breve descrizione del QR code</p>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                        Data di Scadenza
-                    </label>
-                    <div class="relative">
-                        <input datepicker datepicker-format="yyyy-mm-dd" type="text" name="expiryDate" required class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                th:value="${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}"
-                                placeholder="Seleziona data">
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                            <i data-lucide="calendar" class="w-5 h-5 text-gray-400"></i>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Data di scadenza iniziale del QR code</p>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                        Numero Massimo Articoli
-                    </label>
-                    <div class="relative">
-                        <input type="number" name="maxArticles" min="1" max="100" value="20" required
-                               class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 appearance-none py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                        >
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                            <i data-lucide="package" class="w-5 h-5 text-gray-400"></i>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Limite massimo di articoli associabili al QR code</p>
-                </div>
-
-                <div class="flex space-x-4 pt-4">
-                    <button type="submit"
-                            class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 flex items-center justify-center">
-                        <i data-lucide="qr-code" class="w-5 h-5 mr-2"></i>
-                        Genera QR Code
-                    </button>
-                    <a href="/admin/qr/list"
-                       class="px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-lg
-                                  text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center">
-                        <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
-                        Annulla
-                    </a>
-                </div>
-            </form>
-        </div>
-
-        <!-- Preview Section -->
-        <div class="space-y-6">
-            <!-- QR Code Preview -->
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Anteprima QR Code</h3>
-                <div class="flex flex-col items-center">
-                    <div class="w-48 h-48 bg-gray-100 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg flex items-center justify-center mb-4">
-                        <div class="text-center">
-                            <i data-lucide="qr-code" class="w-16 h-16 text-gray-400 mx-auto mb-2"></i>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm">Il QR code apparirà qui</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
-                        Il QR code sarà generato dopo la creazione e punterà a:<br>
-                        <code class="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-xs">https://yourapp.com/qr/[ID]</code>
-                    </p>
-                </div>
+        <!-- Main Content -->
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Page Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-200">Crea Nuovo QR Code</h1>
+                <p class="text-gray-600 dark:text-gray-300">Genera un QR code personalizzato per un utente</p>
             </div>
 
-            <!-- Instructions -->
-            <div class="bg-blue-50 dark:bg-blue-900 rounded-xl border border-blue-200 dark:border-blue-800 p-6">
-                <div class="flex items-start">
-                    <i data-lucide="info" class="w-5 h-5 text-blue-600 dark:text-blue-300 mt-0.5 mr-3 flex-shrink-0"></i>
-                    <div>
-                        <h4 class="font-semibold text-blue-900 dark:text-blue-200 mb-2">Come funziona</h4>
-                        <ul class="text-sm text-blue-800 dark:text-blue-300 space-y-1">
-                            <li>• L'utente deve essere già registrato nel sistema</li>
-                            <li>• Il QR code sarà associato all'email specificata</li>
-                            <li>• L'utente potrà aggiungere articoli fino alla scadenza</li>
-                            <li>• Una volta scaduto, il QR code diventa read-only</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Users -->
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Utenti Recenti</h3>
-                <div class="space-y-3">
-                    <div th:if="${#lists.size(recentUsers) <= 3}">
-                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                             th:each="user, x : ${recentUsers}">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full flex items-center justify-center" th:classappend="' bg-'+${colors[x.index]}+'-100'">
-                                    <span class="text-sm font-medium" th:classappend="' text-'+${colors[x.index]}+'-600'"
-                                          th:text="${#strings.toUpperCase(#strings.substring(user.getFirstName(), 0, 1))}">T</span>
-                                </div>
-                                <div class="ml-3" th:unless="${user.getEmail() == currentUser}">
-                                    <p class="text-sm font-medium text-gray-900 dark:text-gray-200" th:text="${user.getFirstName() + ' ' + user.getLastName()}">Sample Test</p>
-                                    <p class="text-xs text-gray-600 dark:text-gray-300" th:text="${user.getEmail()}">sample.test@email.com</p>
-                                </div>
-                                <div class="ml-3" th:if="${user.getEmail() == currentUser}">
-                                    <p class="text-sm font-medium text-gray-900 dark:text-gray-200">Tu</p>
-                                    <p class="text-xs text-gray-600 dark:text-gray-300" th:text="${user.getEmail()}">sample.test@email.com</p>
-                                </div>
+            <!-- Layout Colonne -->
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- Colonna sinistra -->
+                <div class="flex-1 flex flex-col space-y-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                        <form th:action="@{/admin/qr/create}" method="post" class="space-y-6">
+                            <div>
+                                <label for="ownerEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                                    Email Proprietario
+                                </label>
+                                <input id="ownerEmail" type="email" name="ownerEmail" required
+                                       class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
+                               text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
+                               focus:ring-teal-500 focus:border-transparent"
+                                       placeholder="mario.rossi@email.com">
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">L'utente deve essere già registrato nel sistema</p>
                             </div>
-                            <button class="text-teal-600 hover:text-teal-700 text-xs">Seleziona</button>
-                        </div>
+
+                            <div>
+                                <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                                    Descrizione
+                                </label>
+                                <input id="description" type="text" name="description" required
+                                       class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                       placeholder="Collezione vintage di Mario">
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Una breve descrizione del QR code</p>
+                            </div>
+
+                            <div>
+                                <label for="expiryDate" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                                    Data di Scadenza
+                                </label>
+                                <div class="relative">
+                                    <input id="expiryDate" datepicker datepicker-format="yyyy-mm-dd" type="text" name="expiryDate" required class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                           th:value="${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}"
+                                           placeholder="Seleziona data">
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <i data-lucide="calendar" class="w-5 h-5 text-gray-400"></i>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Data di scadenza iniziale del QR code</p>
+                            </div>
+
+                            <div>
+                                <label for="maxArticles" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                                    Numero Massimo Articoli
+                                </label>
+                                <div class="relative">
+                                    <input id="maxArticles" type="number" name="maxArticles" min="1" max="100" value="20" required
+                                           class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 appearance-none py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                    >
+                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <i data-lucide="package" class="w-5 h-5 text-gray-400"></i>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Limite massimo di articoli associabili al QR code</p>
+                            </div>
+
+                            <div class="flex space-x-4 pt-4">
+                                <button type="submit"
+                                        class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 flex items-center justify-center">
+                                    <i data-lucide="qr-code" class="w-5 h-5 mr-2"></i>
+                                    Genera QR Code
+                                </button>
+                                <a href="/admin/qr/list"
+                                   class="px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-lg
+                                      text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center">
+                                    <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
+                                    Annulla
+                                </a>
+                            </div>
+                        </form>
                     </div>
-                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                         th:unless="${#lists.size(recentUsers)} <= 3">
-                        <div class="flex items-center">
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-gray-200" th:text="'Ci sono ' + ${#lists.size(recentUsers)} + ' nuovi utenti'">Ci sono 0 nuovi utenti</p>
+
+                    <div class="bg-yellow-50 dark:bg-yellow-900 rounded-xl border border-yellow-200 dark:border-yellow-800 py-14 px-6">
+                        <div class="flex items-start">
+                            <i data-lucide="triangle-alert" class="w-5 h-5 text-yellow-600 dark:text-yellow-300 mt-0.5 mr-3 flex-shrink-0"></i>
+                            <div>
+                                <h4 class="font-semibold text-yellow-900 dark:text-yellow-200 mb-2">Attenzione!</h4>
+                                <ul class="text-sm text-yellow-800 dark:text-yellow-300 space-y-1">
+                                    <li>• È possibile in un secondo momento riattivare il QR code</li>
+                                    <li>• È possibile in un secondo momento aumentare il numero di articoli</li>
+                                </ul>
                             </div>
                         </div>
-                        <button class="text-teal-600 hover:text-teal-700 text-xs">Vai</button>
+                    </div>
+                </div>
+
+                <!-- Colonna destra -->
+                <div class="flex-1 flex flex-col gap-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Anteprima QR Code</h3>
+                        <div class="flex flex-col items-center">
+                            <div class="w-48 h-48 bg-gray-100 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg flex items-center justify-center mb-4">
+                                <div class="text-center">
+                                    <i data-lucide="qr-code" class="w-16 h-16 text-gray-400 mx-auto mb-2"></i>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm">Il QR code apparirà qui</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 text-center">
+                                Il QR code sarà generato dopo la creazione e punterà a un indirizzo personale per utente
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 dark:bg-blue-900 rounded-xl border border-blue-200 dark:border-blue-800 p-6">
+                        <div class="flex items-start">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-600 dark:text-blue-300 mt-0.5 mr-3 flex-shrink-0"></i>
+                            <div>
+                                <h4 class="font-semibold text-blue-900 dark:text-blue-200 mb-2">Come funziona</h4>
+                                <ul class="text-sm text-blue-800 dark:text-blue-300 space-y-1">
+                                    <li>• Il QR code sarà associato all'email specificata</li>
+                                    <li>• L'utente potrà aggiungere articoli fino alla scadenza</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 flex-1 overflow-auto">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Utenti Recenti</h3>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 "
+                                 th:each="user, x : ${recentUsers}">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full flex items-center justify-center" th:classappend="' bg-'+${colors[x.index]}+'-100'">
+                                        <span class="text-sm font-medium" th:classappend="' text-'+${colors[x.index]}+'-600'"
+                                              th:text="${#strings.toUpperCase(#strings.substring(user.getFirstName(), 0, 1))}">T</span>
+                                    </div>
+                                    <div class="ml-3" th:unless="${user.getEmail() == currentUser}">
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-200" th:text="${user.getFirstName() + ' ' + user.getLastName()}">Sample Test</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-300" th:text="${user.getEmail()}">sample.test@email.com</p>
+                                    </div>
+                                    <div class="ml-3" th:if="${user.getEmail() == currentUser}">
+                                        <p class="text-sm font-medium text-gray-900 dark:text-gray-200">Tu</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-300" th:text="${user.getEmail()}">sample.test@email.com</p>
+                                    </div>
+                                </div>
+                                <a th:href="@{'/admin/users/{id}'(id=${user.id})}" class="text-teal-600 hover:text-teal-700 text-xs cursor-pointer">Mostra</a>
+                            </div>
+                                <a href="/admin/users"
+                                        class="bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:from-teal-700
+                    hover:to-cyan-700 transition-all duration-200 flex items-center justify-center">
+                                    <i data-lucide="users" class="w-5 h-5 mr-2"></i>
+                                    Mostra tutti
+                                </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<script th:src="@{/js/app.js}"></script>
-<script>
-    lucide.createIcons();
+        <script th:src="@{/js/app.js}"></script>
+        <script>
+            lucide.createIcons();
 
-    // Auto-populate expiry
-    const expiryInput = document.querySelector('input[name="expiryDate"]');
-    if (expiryInput) {
-        const nextYear = new Date();
-        nextYear.setFullYear(nextYear.getFullYear() + 1);
-        expiryInput.value = nextYear.toISOString().split('T')[0];
-    }
+            const expiryInput = document.querySelector('input[name="expiryDate"]');
+            if (expiryInput) {
+                const nextYear = new Date();
+                nextYear.setFullYear(nextYear.getFullYear() + 1);
+                expiryInput.value = nextYear.toISOString().split('T')[0];
+            }
 
-    // Click handlers for user selection
-    document.querySelectorAll('.cursor-pointer').forEach(item => {
-        item.addEventListener('click', function () {
-            const email = this.querySelector('.text-xs').textContent;
-            document.querySelector('input[name="ownerEmail"]').value = email;
-        });
-    });
-</script>
-</body>
+            document.querySelectorAll('.cursor-pointer').forEach(item => {
+                item.addEventListener('click', function () {
+                    document.querySelector('input[name="ownerEmail"]').value = this.querySelector('.text-xs').textContent;
+                });
+            });
+        </script>
+    </body>
 </html>

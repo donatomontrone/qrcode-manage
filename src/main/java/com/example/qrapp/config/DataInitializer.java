@@ -96,7 +96,7 @@ public class DataInitializer implements CommandLineRunner {
             adminUser.setEmail(adminEmail);
             adminUser.setPassword(passwordEncoder.encode(adminPassword));
             adminUser.setRoles(Set.of(adminRole));
-
+            adminUser.setSuperAdmin(true);
 
             logger.info("Utente amministratore creato con email: {}", adminEmail);
             logger.info("Password: {} (cambiarla dopo il primo accesso!)", adminPassword);

@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +31,6 @@ public class AdminController {
   private final UserService userService;
 
   private final ArticleService articleService;
-
-  private final PasswordEncoder passwordEncoder;
 
   private final List<String> colors = List.of(
       "red", "blue", "green", "yellow", "purple", "orange", "teal", "pink", "brown", "rose");
@@ -82,12 +79,12 @@ public class AdminController {
   @GetMapping("/qr/create")
   public String qrCreateForm(Model model, Principal principal) {
     Pageable pageable = PageRequest.of(0, 10);
-    List<User> recentUsers = userService.findAllUsersRegisteredToday(pageable).getContent();
+    List<User> recentUsers = userService.findRecentUsers();
 
     model.addAttribute("colors", colors);
     model.addAttribute("recentUsers", recentUsers);
     model.addAttribute("currentUser", principal.getName());
-    System.out.println(recentUsers);
+    model.addAttribute("users", userService.findAll(pageable).getContent());
     return "admin/qr-create";
   }
 

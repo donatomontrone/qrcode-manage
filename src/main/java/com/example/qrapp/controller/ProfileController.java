@@ -43,7 +43,7 @@ public class ProfileController {
 
         if (user.isPresent()) {
             User currentUser = user.get();
-            if (!userService.isEmailUnique(userForm.getEmail())) {
+            if (userService.isEmailUnique(userForm.getEmail())) {
                 bindingResult.rejectValue("email", "error.user", "Email già utilizzata.");
             }
 
@@ -65,8 +65,8 @@ public class ProfileController {
                 currentUser.setPassword(passwordEncoder.encode(newPassword));
             }
 
-            userService.updateUser(currentUser);
-            redirectAttrs.addFlashAttribute("successMessage", "Profilo aggiornato con successo.");
+            User updated = userService.updateUser(currentUser);
+            redirectAttrs.addFlashAttribute("successMessage", "Profilo di " + updated.getEmail() + "aggiornato con successo.");
         }
         redirectAttrs.addFlashAttribute("errorMessage", "Profilo non aggiornato.");
         return "redirect:/profile";

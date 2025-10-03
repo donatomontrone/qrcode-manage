@@ -106,10 +106,10 @@ public class AuthController {
             return "redirect:/register";
         }
         try {
-            userService.createAdminUser(user.getFirstName(), user.getLastName(),
+            User newUser = userService.createAdminUser(user.getFirstName(), user.getLastName(),
                     user.getEmail(), user.getPassword());
             redirectAttributes.addFlashAttribute("successMessage",
-                    "Registrazione completata! Puoi ora effettuare il login.");
+                    "Registrazione completata!" + newUser.getEmail() + " può ora effettuare il login.");
             return "redirect:/login";
         } catch (RuntimeException e) {
             result.rejectValue("email", "error.email", e.getMessage());
