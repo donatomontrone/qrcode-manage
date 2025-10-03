@@ -12,24 +12,34 @@
         </script>
     </head>
 
-    <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
+    <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200 mb-20 md:mb-0">
         <!-- Header -->
         <div th:replace="~{fragments/header :: header}"></div>
 
         <!-- Main Content -->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <!-- Page Header -->
-            <div class="flex justify-between items-center mb-8">
+            <div class="flex justify-between items-center mb-6">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Gestione Utenti</h1>
-                    <p class="text-gray-600 dark:text-gray-300">Utenti registrati nel sistema</p>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Gestione Utenti</h1>
+                    <p class="text-sm md:text-base text-gray-600 dark:text-gray-300">Utenti registrati nel sistema</p>
                 </div>
             </div>
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                    <div class="flex items-center">
+            <!-- Stats Cards - Compatte su mobile, normali su desktop -->
+            <div class="grid grid-cols-3 md:grid-cols-3 gap-3 md:gap-6 mb-6 md:mb-8">
+                <!-- Card Utenti Totali -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 md:p-6">
+                    <!-- Mobile: Solo icona e numero -->
+                    <div class="md:hidden flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-2">
+                            <i data-lucide="users" class="w-5 h-5 text-blue-600 dark:text-blue-300"></i>
+                        </div>
+                        <p class="text-xl font-bold text-gray-900 dark:text-white" th:text="${totalElements ?: 15}">15</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">Totali</p>
+                    </div>
+                    <!-- Desktop: Layout completo -->
+                    <div class="hidden md:flex items-center">
                         <div class="flex-shrink-0">
                             <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
                                 <i data-lucide="users" class="w-6 h-6 text-blue-600 dark:text-blue-300"></i>
@@ -37,17 +47,25 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-500 dark:text-gray-200">Utenti Totali</p>
-                            <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${totalElements ?: 15}">15
-                            </p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${totalElements ?: 15}">15</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                    <div class="flex items-center">
+                <!-- Card Amministratori -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 md:p-6">
+                    <!-- Mobile: Solo icona e numero -->
+                    <div class="md:hidden flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 bg-purple-100 dark:bg-purple-800 rounded-lg flex items-center justify-center mb-2">
+                            <i data-lucide="crown" class="w-5 h-5 text-purple-600 dark:text-purple-300"></i>
+                        </div>
+                        <p class="text-xl font-bold text-gray-900 dark:text-white" th:text="${totalAdmin ?: 1}">1</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">Admin</p>
+                    </div>
+                    <!-- Desktop: Layout completo -->
+                    <div class="hidden md:flex items-center">
                         <div class="flex-shrink-0">
-                            <div
-                                    class="w-12 h-12 bg-purple-100 dark:bg-purple-800 rounded-lg flex items-center justify-center">
+                            <div class="w-12 h-12 bg-purple-100 dark:bg-purple-800 rounded-lg flex items-center justify-center">
                                 <i data-lucide="crown" class="w-6 h-6 text-purple-600 dark:text-purple-300"></i>
                             </div>
                         </div>
@@ -58,79 +76,107 @@
                     </div>
                 </div>
 
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                    <div class="flex items-center">
+                <!-- Card Nuovi Oggi -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 md:p-6">
+                    <!-- Mobile: Solo icona e numero -->
+                    <div class="md:hidden flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 bg-orange-100 dark:bg-orange-800 rounded-lg flex items-center justify-center mb-2">
+                            <i data-lucide="calendar" class="w-5 h-5 text-orange-600 dark:text-orange-300"></i>
+                        </div>
+                        <p class="text-xl font-bold text-gray-900 dark:text-white" th:text="${todayRegistrations ?: 1}">1</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-1">Oggi</p>
+                    </div>
+                    <!-- Desktop: Layout completo -->
+                    <div class="hidden md:flex items-center">
                         <div class="flex-shrink-0">
-                            <div
-                                    class="w-12 h-12 bg-orange-100 dark:bg-orange-800 rounded-lg flex items-center justify-center">
+                            <div class="w-12 h-12 bg-orange-100 dark:bg-orange-800 rounded-lg flex items-center justify-center">
                                 <i data-lucide="calendar" class="w-6 h-6 text-orange-600 dark:text-orange-300"></i>
                             </div>
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-500 dark:text-gray-200">Nuovi Oggi</p>
-                            <p class="text-2xl font-bold text-gray-900 dark:text-white"
-                               th:text="${todayRegistrations ?: 1}">
-                                1</p>
+                            <p class="text-2xl font-bold text-gray-900 dark:text-white" th:text="${todayRegistrations ?: 1}">1</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Filters -->
-            <div
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
-                <form method="get" th:action="@{/admin/users}" class="mb-4 flex flex-wrap gap-4 items-center">
-                    <div class="flex items-center space-x-2">
-                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300" for="roles">Ruolo:</label>
-                        <select id="roles" name="filter"
-                                class="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                            <option value="" th:selected="${filter == null or #strings.isEmpty(filter)}">Tutti i Ruoli
-                            </option>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 md:p-6 mb-6">
+                <form method="get" th:action="@{/admin/users}">
+                    <!-- Desktop View -->
+                    <div class="hidden md:flex flex-wrap gap-4 items-center">
+                        <div class="flex items-center space-x-2">
+                            <label class="text-sm font-medium text-gray-700 dark:text-gray-300" for="roles">Ruolo:</label>
+                            <select id="roles" name="filter"
+                                    class="border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                <option value="" th:selected="${filter == null or #strings.isEmpty(filter)}">Tutti i Ruoli</option>
+                                <option value="admin" th:selected="${filter == 'admin'}">Amministratori</option>
+                                <option value="user" th:selected="${filter == 'user'}">Utenti Standard</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-64">
+                            <input type="text" placeholder="Cerca per nome, cognome o email..." name="search"
+                                   th:value="${search}"
+                                   class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                        </div>
+                        <button type="submit"
+                                class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-4 rounded-lg text-sm font-medium transition-colors">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <!-- Mobile View -->
+                    <div class="md:hidden space-y-3">
+                        <!-- Search bar con lente sulla stessa riga -->
+                        <div class="flex gap-2">
+                            <input type="text" placeholder="Cerca utente..." name="search"
+                                   th:value="${search}"
+                                   class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                            <button type="submit"
+                                    class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 px-3 py-2 rounded-lg transition-colors">
+                                <i data-lucide="search" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <!-- Filtro sotto -->
+                        <select name="filter" id="rolesMobile"
+                                class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                            <option value="" th:selected="${filter == null or #strings.isEmpty(filter)}">Tutti i Ruoli</option>
                             <option value="admin" th:selected="${filter == 'admin'}">Amministratori</option>
                             <option value="user" th:selected="${filter == 'user'}">Utenti Standard</option>
                         </select>
                     </div>
-                    <div class="flex-1 min-w-64">
-                        <input type="text" placeholder="Cerca per nome, cognome o email..." name="search"
-                               th:value="${search}"
-                               class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                    </div>
-                    <button
-                            class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-4 rounded-lg text-sm font-medium transition-colors">
-                        <i data-lucide="search" class="w-4 h-4"></i>
-                    </button>
                 </form>
             </div>
 
             <!-- Users Table -->
-            <div
-                    class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead class="bg-gray-50 dark:bg-gray-800">
                             <tr>
-                                <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <!-- Utente -->
+                                <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     Utente
                                 </th>
-                                <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <!-- Email (solo desktop) -->
+                                <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     Email
                                 </th>
-                                <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <!-- Ruolo (solo desktop) -->
+                                <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     Ruolo
                                 </th>
-                                <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <!-- QR Code (solo desktop) -->
+                                <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     QR Code
                                 </th>
-                                <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <!-- Registrato (solo desktop) -->
+                                <th class="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     Registrato
                                 </th>
-                                <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <!-- Azioni -->
+                                <th class="px-3 md:px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                                     Azioni
                                 </th>
                             </tr>
@@ -138,63 +184,75 @@
                         <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800" th:each="user, status : ${users}"
                                 th:if="${users}">
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <!-- Utente -->
+                                <td class="px-3 md:px-6 py-4">
                                     <div class="flex items-center">
-                                        <div
-                                                class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                                        <span class="text-sm font-medium text-white"
-                                              th:text="${user.firstName?.substring(0,1) + user.lastName?.substring(0,1)}">MR</span>
+                                        <div class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                            <span class="text-xs md:text-sm font-medium text-white"
+                                                  th:text="${user.firstName?.substring(0,1) + user.lastName?.substring(0,1)}">MR</span>
                                         </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100"
+                                        <div class="ml-2 md:ml-3 min-w-0">
+                                            <p class="text-xs md:text-sm font-medium text-gray-900 dark:text-gray-100 truncate"
                                                th:if="${user.getEmail() == currentUser}">Tu</p>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-gray-100"
+                                            <p class="text-xs md:text-sm font-medium text-gray-900 dark:text-gray-100 truncate"
                                                th:unless="${user.getEmail() == currentUser}"
                                                th:text="${user.getFirstName() + ' ' + user.getLastName()}">Mario Rossi</p>
+                                            <!-- Email visibile solo su mobile -->
+                                            <p class="md:hidden text-xs text-gray-500 dark:text-gray-400 truncate" th:text="${user.getEmail()}">
+                                                mario.rossi@email.com</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+
+                                <!-- Email (solo desktop) -->
+                                <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">
                                     <p class="text-sm text-gray-900 dark:text-gray-100" th:text="${user.getEmail()}">
                                         mario.rossi@email.com</p>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                                      th:each="role : ${user.roles}"
-                                      th:classappend="${role.getName() == 'ADMIN'} ? 'bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200' : 'bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200'"
-                                      th:text="${role.getName()}">
-                                    USER
-                                </span>
+
+                                <!-- Ruolo (solo desktop) -->
+                                <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                          th:each="role : ${user.roles}"
+                                          th:classappend="${role.getName() == 'ADMIN'} ? 'bg-purple-100 dark:bg-purple-800 text-purple-800 dark:text-purple-200' : 'bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200'"
+                                          th:text="${role.getName()}">
+                                        USER
+                                    </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="text-sm text-gray-600 dark:text-gray-400"
-                                      th:text="${user.qrCodes?.size() ?: 0}">3</span>
+
+                                <!-- QR Code (solo desktop) -->
+                                <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400"
+                                          th:text="${user.qrCodes?.size() ?: 0}">3</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+
+                                <!-- Registrato (solo desktop) -->
+                                <td class="hidden md:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                                     <span th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">15/01/2025</span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <div th:if="${user.getEmail() != currentUser}" class="flex items-center justify-around">
-                                        <form method="get" th:action="@{'/admin/users/{id}'(id=${user.id})}" class="flex items-center">
-                                            <button
-                                                    class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+
+                                <!-- Azioni -->
+                                <td class="px-3 md:px-6 py-4 whitespace-nowrap">
+                                    <div th:if="${user.getEmail() != currentUser}" class="flex items-center justify-center gap-2 md:gap-3">
+                                        <!-- Visualizza -->
+                                        <form method="get" th:action="@{'/admin/users/{id}'(id=${user.id})}" class="inline">
+                                            <button class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 p-1"
                                                     title="Visualizza">
-                                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                                <i data-lucide="eye" class="w-4 h-4 md:w-5 md:h-5"></i>
                                             </button>
                                         </form>
-
-                                        <button
-                                                class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 delete-user-btn"
+                                        <!-- Elimina -->
+                                        <button class="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 delete-user-btn p-1"
                                                 title="Elimina" th:if="${!#lists.contains(user.roles, 'ADMIN')}"
                                                 th:data-user-id="${user.id}"
                                                 th:data-user-name="${user.firstName + ' ' + user.lastName}">
-                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            <i data-lucide="trash-2" class="w-4 h-4 md:w-5 md:h-5"></i>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(users)}">
-                                <td colspan="7"
+                                <td colspan="6"
                                     class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500 dark:text-gray-400">
                                     Nessun utente trovato.
                                 </td>
@@ -205,28 +263,28 @@
             </div>
 
             <!-- Pagination -->
-            <div class="flex justify-center mt-6 space-x-2">
+            <div class="flex justify-center mt-6 gap-1 md:gap-2 flex-wrap">
                 <span>
                     <a th:if="${currentPage > 0}"
                        th:href="@{|/admin/users?page=${currentPage - 1}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
-                       class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+                       class="px-2 md:px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-sm">
                         &laquo;
                     </a>
                 </span>
 
-                    <!-- Numeri di pagina -->
-                    <span th:each="i : ${#numbers.sequence(0, (totalPages > 0 ? totalPages - 1 : 0))}">
+                <!-- Numeri di pagina -->
+                <span th:each="i : ${#numbers.sequence(0, (totalPages > 0 ? totalPages - 1 : 0))}">
                     <a th:href="@{|/admin/users?page=${i}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
-                       th:text="${i + 1}" class="px-3 py-1 rounded transition"
+                       th:text="${i + 1}" class="px-2 md:px-3 py-1 rounded transition text-sm"
                        th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'">
                     </a>
                 </span>
 
-                    <!-- Bottone SUCCESSIVO -->
-                    <span>
+                <!-- Bottone SUCCESSIVO -->
+                <span>
                     <a th:if="${currentPage + 1 < totalPages}"
                        th:href="@{|/admin/users?page=${currentPage + 1}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
-                       class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+                       class="px-2 md:px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-sm">
                         &raquo;
                     </a>
                 </span>
@@ -236,24 +294,24 @@
         <!-- Modal di Conferma Eliminazione -->
         <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
             <div class="relative top-20 mx-auto p-5 bg-white/80 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl shadow-xl border
-                    border-white/20 dark:border-gray-700 p-8 transition-colors w-96">
+                    border-white/20 dark:border-gray-700 p-8 transition-colors w-96 max-w-[90%]">
                 <div class="mt-3 text-center">
-                    <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-">
-                        <i data-lucide="alert-triangle" class="w-6 h-6 text-red-600 dark:text-red-300"></i>
+                    <div class="w-16 h-16 bg-gradient-to-br from-rose-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="alert-triangle" class="w-8 h-8 text-white"></i>
                     </div>
-                    <h1 class="mt-4 text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent dark:text-white">
+                    <h1 class="mt-4 text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent dark:text-white">
                         Conferma Eliminazione
                     </h1>
-                    <p class="text-gray-600 dark:text-gray-300 mt-2" id="deleteModalText">Sei sicuro di voler eliminare questo utente?</p>
-                    <div class="items-center px-4 py-3 space-x-4 flex justify-center mt-6">
+                    <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 mt-2" id="deleteModalText">Sei sicuro di voler eliminare questo utente?</p>
+                    <div class="items-center px-4 py-3 gap-3 flex justify-center mt-6 flex-col sm:flex-row">
                         <button id="confirmDelete"
-                                class="flex bg-gradient-to-r from-rose-600 to-red-600 text-white py-3 px-6 rounded-lg font-medium hover:from-rose-700
+                                class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-red-600 text-white py-3 px-6 rounded-lg font-medium hover:from-rose-700
                     hover:to-red-700 transition-all duration-200 flex items-center justify-center">
                             <i data-lucide="x" class="w-5 h-5 mr-2"></i>
                             Elimina
                         </button>
                         <button id="cancelDelete"
-                                class="px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-lg
+                                class="w-full sm:w-auto px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-lg
                                   text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center">
                             <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
                             Annulla
@@ -275,53 +333,42 @@
                 const cancelDelete = document.getElementById('cancelDelete');
                 const deleteButtons = document.querySelectorAll('.delete-user-btn');
 
-                let deleteUrl = ''; // Variabile per memorizzare l'URL di eliminazione
+                let deleteUrl = '';
 
-                // Aggiungi event listener a tutti i bottoni di eliminazione
                 deleteButtons.forEach(button => {
                     button.addEventListener('click', function() {
                         const userId = this.getAttribute('data-user-id');
                         const userName = this.getAttribute('data-user-name');
 
                         deleteUrl = `/admin/users/elimina/${userId}`;
-
-                        // Aggiorna il testo della modale
                         deleteModalText.textContent = `Sei sicuro di voler eliminare l'utente ${userName}?`;
-
-                        // Mostra la modale
                         deleteModal.classList.remove('hidden');
-
-                        // Ricrea le icone Lucide dopo aver mostrato la modale
                         lucide.createIcons();
                     });
                 });
 
-                // Conferma eliminazione - redirect GET
                 confirmDelete.addEventListener('click', function() {
                     if (deleteUrl) {
                         window.location.href = deleteUrl;
                     }
                 });
 
-                // Chiudi modale quando si clicca Annulla
                 cancelDelete.addEventListener('click', function() {
                     deleteModal.classList.add('hidden');
-                    deleteUrl = ''; // Reset URL
+                    deleteUrl = '';
                 });
 
-                // Chiudi modale quando si clicca fuori
                 deleteModal.addEventListener('click', function(e) {
                     if (e.target === deleteModal) {
                         deleteModal.classList.add('hidden');
-                        deleteUrl = ''; // Reset URL
+                        deleteUrl = '';
                     }
                 });
 
-                // Chiudi modale con ESC
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && !deleteModal.classList.contains('hidden')) {
                         deleteModal.classList.add('hidden');
-                        deleteUrl = ''; // Reset URL
+                        deleteUrl = '';
                     }
                 });
             });
