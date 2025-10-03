@@ -10,7 +10,7 @@
 | **QR-001** | Registrazione utente e admin e relativa visualizzazione                                                                                                     | ✅ DONE        |
 | **QR-002** | Gestione interfaccia profilo utente<br /> (aggiornamento UI + registrazione nuovo utente)<br>_Note: admin può creare un admin, l’utente solo come utente_ | ✅ DONE        |
 | **QR-003** | Visualizzazione / modifica rapida delle informazioni di un utente                                                                                           | ✅ DONE        |
-| **QR-004** | Creazione QR: visualizzazione utente singola per gli ultimi 3 utenti con possibilitù di andare alla pagina con tutti gli utenti.                           | 🔄 IN PROGRESS |
+| **QR-004** | Creazione QR: visualizzazione utente singola per gli ultimi 3 utenti con possibilitù di andare alla pagina con tutti gli utenti.                           | ✅ DONE |
 | **QR-005** | Implementare eliminazione utente da parte di admin (IN QR-003)                                                                                              | ✅ DONE        |
 | **QR-006** | Gestione e visualizzazione errori durante registrazione e login                                                                                             | ⏳ TODO        |
 
@@ -28,3 +28,10 @@
 - Obiettivo: gestione completa dei QR code
 - Aggiornare la visualizzazione di un utente con i dati dei QR code ad esso associati
 - ⚠️ Nota: tralasciare articoli momentaneamente, ma considerare che l’admin vede solo i QR (non sa se sono associati ad articoli o meno).
+
+
+### Legend
+
+🔄 IN PROGRESS
+✅ DONE
+⏳ TODO  

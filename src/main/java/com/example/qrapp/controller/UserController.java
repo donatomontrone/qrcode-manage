@@ -2,8 +2,6 @@ package com.example.qrapp.controller;
 
 import com.example.qrapp.model.User;
 import com.example.qrapp.service.UserService;
-import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -78,7 +76,7 @@ public class UserController {
 
     if (userOpt.isPresent()) {
       User currentUser = userOpt.get();
-      if (!userService.isEmailUnique(user.getEmail())) {
+      if (userService.isEmailUnique(user.getEmail())) {
         bindingResult.rejectValue("email", "error.user", "Email già utilizzata.");
       }
 
