@@ -63,6 +63,7 @@ public class QrCode {
 
     public QrCode(String description, User owner, LocalDateTime expiryDate, Integer maxArticles) {
         this();
+        generateQrId();
         this.description = description;
         this.owner = owner;
         this.expiryDate = expiryDate;
@@ -91,6 +92,10 @@ public class QrCode {
             return ACTIVE.toString();
         }
     }
+
+  public void generateQrId() {
+    qrId = UUID.randomUUID().toString();
+  }
 
     @PreUpdate
     private void preUpdate() {

@@ -4,6 +4,7 @@ import com.example.qrapp.model.QrCode;
 import com.example.qrapp.model.User;
 import com.example.qrapp.repository.QrCodeRepository;
 import com.example.qrapp.util.QrCodeGenerator;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,9 @@ public class QrCodeService {
 
     @Value("${app.qr.default-max-articles:20}")
     private int defaultMaxArticles;
+
+    @Value("${app.url}")
+    private String appUrl;
 
     private final QrCodeRepository qrCodeRepository;
 
@@ -129,17 +133,13 @@ public class QrCodeService {
         return qrCodeRepository.countByExpiryDateBefore(LocalDateTime.now());
     }
 
-    public byte[] generateQrCodeImage(String qrId, int width, int height) {
+    public String generateQrCodeBase64(String qrId, int width, int height, boolean darkMode) {
         String qrUrl = generateQrUrl(qrId);
-        return qrCodeGenerator.generateQrCodeImage(qrUrl, width, height);
-    }
-
-    public String generateQrCodeBase64(String qrId, int width, int height) {
-        String qrUrl = generateQrUrl(qrId);
-        return qrCodeGenerator.generateQrCodeBase64(qrUrl, width, height);
+        return qrCodeGenerator.generateQrCodeBase64(qrUrl, width, height, darkMode);
     }
 
     private String generateQrUrl(String qrId) {
-        return "https://yourapp.com/qr/" + qrId;
+        return appUrl + qrId;
     }
+
 }

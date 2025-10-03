@@ -150,13 +150,19 @@ class QRManager {
     initializeDarkMode() {
         const darkModeToggle = document.getElementById('darkModeToggle');
         const darkModeToggle2 = document.getElementById('darkModeToggle2');
+        const darkModeInput = document.getElementById('darkModeInput');
         if (!darkModeToggle) {
             console.warn('⚠️ Dark mode toggle not found');
             return;
         }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('darkModeInput').value = document.documentElement.classList.contains('dark');
+        });
+
         // Carica preferenza salvata
         const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
         if (isDarkMode) {
             document.documentElement.classList.add('dark');
             this.updateDarkModeIcon(true);
@@ -165,6 +171,7 @@ class QRManager {
         darkModeToggle.addEventListener('click', () => {
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('darkMode', isDark);
+            darkModeInput.value = isDark;
             this.updateDarkModeIcon(isDark);
 
             console.log(`🌓 Dark mode ${isDark ? 'enabled' : 'disabled'}`);
@@ -172,6 +179,7 @@ class QRManager {
         darkModeToggle2.addEventListener('click', () => {
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('darkMode', isDark);
+            darkModeInput.value = isDark;
             this.updateDarkModeIcon(isDark);
 
             console.log(`🌓 Dark mode ${isDark ? 'enabled' : 'disabled'}`);
