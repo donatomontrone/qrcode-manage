@@ -38,7 +38,7 @@
                                 <label for="ownerEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                                     Email Proprietario
                                 </label>
-                                <input id="ownerEmail" type="email" name="ownerEmail" required
+                                <input id="ownerEmail" type="email" name="ownerEmail"
                                        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                                text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
                                focus:ring-teal-500 focus:border-transparent"
@@ -50,7 +50,7 @@
                                 <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                                     Descrizione
                                 </label>
-                                <input id="description" type="text" name="description" required
+                                <input id="description" type="text" name="description"
                                        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                                        placeholder="Collezione vintage di Mario">
                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Una breve descrizione del QR code</p>
@@ -61,7 +61,7 @@
                                     Data di Scadenza
                                 </label>
                                 <div class="relative">
-                                    <input id="expiryDate" datepicker datepicker-format="yyyy-mm-dd" type="text" name="expiryDate" required class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                    <input id="expiryDate" datepicker datepicker-format="yyyy-mm-dd" type="text" name="expiryDate"  class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                                            th:value="${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}"
                                            placeholder="Seleziona data">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -76,7 +76,7 @@
                                     Numero Massimo Articoli
                                 </label>
                                 <div class="relative">
-                                    <input id="maxArticles" type="number" name="maxArticles" min="1" max="100" value="20" required
+                                    <input id="maxArticles" type="number" name="maxArticles" min="1" max="100" value="20"
                                            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 appearance-none py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                                     >
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-3">
