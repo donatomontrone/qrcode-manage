@@ -83,7 +83,7 @@ public class AuthController {
         try {
             userService.registerUser(user.getFirstName(), user.getLastName(), 
                                    user.getEmail(), user.getPassword());
-            redirectAttributes.addFlashAttribute("successMessage", 
+            redirectAttributes.addFlashAttribute("message",
                 "Registrazione completata! Puoi ora effettuare il login.");
             return "redirect:/login";
         } catch (RuntimeException e) {

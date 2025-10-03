@@ -36,7 +36,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authz -> authz
                 // Public endpoints
-                .requestMatchers("/", "/login", "/register", "/qr/**", 
+                .requestMatchers("/", "/login", "/register", "/register-user", "/qr/**",
                                "/css/**", "/js/**", "/images/**", 
                                "/h2-console/**").permitAll()
 
@@ -77,7 +77,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
         return (request, response, authentication) -> {
-            String targetUrl = "/dashboard"; // Default per USER
+            String targetUrl = "/user/dashboard"; // Default per USER
 
             // Se è ADMIN va alla dashboard admin
             if (authentication.getAuthorities().stream()

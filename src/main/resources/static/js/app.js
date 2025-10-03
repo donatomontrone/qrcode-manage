@@ -22,6 +22,7 @@ class QRManager {
         this.initializeLucideIcons();
         this.initializeMobileMenu();
         this.initializeUserDropdown();
+        this.initializeSettingsDropdown(); // ← AGGIUNTO QUESTA RIGA
         this.initializeDarkMode();
         this.initializeActiveNavigation();
         this.initializeTooltips();
@@ -99,9 +100,9 @@ class QRManager {
         });
     }
 
-    // ========================================
-    // DROPDOWN UTENTE
-    // ========================================
+    // ================================
+    // DROPDOWN UTENTE (Desktop)
+    // ================================
     initializeUserDropdown() {
         const userMenuButton = document.getElementById('userMenuButton');
         const userDropdown = document.getElementById('userDropdown');
@@ -116,15 +117,13 @@ class QRManager {
         userMenuButton.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-
+            this.closeAllDropdowns('userDropdown');
             isOpen = !isOpen;
 
             if (isOpen) {
-                // Apri dropdown
                 userDropdown.classList.remove('opacity-0', 'invisible');
                 userDropdown.classList.add('opacity-100', 'visible');
             } else {
-                // Chiudi dropdown
                 userDropdown.classList.add('opacity-0', 'invisible');
                 userDropdown.classList.remove('opacity-100', 'visible');
             }
@@ -144,21 +143,96 @@ class QRManager {
         });
     }
 
+    // ================================
+    // DROPDOWN IMPOSTAZIONI (Mobile)
+    // ================================
+    initializeSettingsDropdown() {
+        const settingsButton = document.getElementById('mobileSettingsButton');
+        const settingsDropdown = document.getElementById('mobileSettingsDropdown');
+
+        console.log('🔧 Settings button:', settingsButton);
+        console.log('🔧 Settings dropdown:', settingsDropdown);
+
+        if (!settingsButton || !settingsDropdown) {
+            console.warn('⚠️ Settings dropdown elements not found');
+            return;
+        }
+
+        let isOpen = false;
+
+        settingsButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.closeAllDropdowns('mobileSettingsDropdown');
+            isOpen = !isOpen;
+
+            if (isOpen) {
+                settingsDropdown.classList.remove('opacity-0', 'invisible');
+                settingsDropdown.classList.add('opacity-100', 'visible');
+                console.log('⚙️ Settings dropdown opened');
+            } else {
+                settingsDropdown.classList.add('opacity-0', 'invisible');
+                settingsDropdown.classList.remove('opacity-100', 'visible');
+                console.log('⚙️ Settings dropdown closed');
+            }
+        });
+
+        // Chiudi dropdown cliccando fuori
+        document.addEventListener('click', (e) => {
+            if (!settingsButton.contains(e.target) && !settingsDropdown.contains(e.target)) {
+                if (isOpen) {
+                    isOpen = false;
+                    settingsDropdown.classList.add('opacity-0', 'invisible');
+                    settingsDropdown.classList.remove('opacity-100', 'visible');
+                }
+            }
+        });
+
+        // Dark mode toggle nel dropdown mobile
+        const darkModeToggleMobile = document.getElementById('darkModeToggleMobile');
+        if (darkModeToggleMobile) {
+            darkModeToggleMobile.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('darkMode', isDark);
+                const darkModeInput = document.getElementById('darkModeInput');
+                if (darkModeInput) {
+                    darkModeInput.value = isDark;
+                }
+                this.updateDarkModeIcon(isDark);
+                console.log('🌓 Dark mode toggled from mobile: ' + isDark);
+            });
+        }
+    }
+
+    // ================================
+    // CHIUDI TUTTI I DROPDOWN
+    // ================================
+    closeAllDropdowns(excludeId) {
+        const dropdowns = [
+            { id: 'userDropdown', element: document.getElementById('userDropdown') },
+            { id: 'mobileSettingsDropdown', element: document.getElementById('mobileSettingsDropdown') }
+        ];
+        dropdowns.forEach(({ id, element }) => {
+            if (id !== excludeId && element) {
+                element.classList.add('opacity-0', 'invisible');
+                element.classList.remove('opacity-100', 'visible');
+            }
+        });
+    }
+
     // ========================================
     // MODALITÀ SCURA
     // ========================================
     initializeDarkMode() {
         const darkModeToggle = document.getElementById('darkModeToggle');
-        const darkModeToggle2 = document.getElementById('darkModeToggle2');
         const darkModeInput = document.getElementById('darkModeInput');
+
         if (!darkModeToggle) {
             console.warn('⚠️ Dark mode toggle not found');
             return;
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('darkModeInput').value = document.documentElement.classList.contains('dark');
-        });
 
         // Carica preferenza salvata
         const isDarkMode = localStorage.getItem('darkMode') === 'true';
@@ -168,18 +242,16 @@ class QRManager {
             this.updateDarkModeIcon(true);
         }
 
+        if (darkModeInput) {
+            darkModeInput.value = isDarkMode;
+        }
+
         darkModeToggle.addEventListener('click', () => {
             const isDark = document.documentElement.classList.toggle('dark');
             localStorage.setItem('darkMode', isDark);
-            darkModeInput.value = isDark;
-            this.updateDarkModeIcon(isDark);
-
-            console.log(`🌓 Dark mode ${isDark ? 'enabled' : 'disabled'}`);
-        });
-        darkModeToggle2.addEventListener('click', () => {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('darkMode', isDark);
-            darkModeInput.value = isDark;
+            if (darkModeInput) {
+                darkModeInput.value = isDark;
+            }
             this.updateDarkModeIcon(isDark);
 
             console.log(`🌓 Dark mode ${isDark ? 'enabled' : 'disabled'}`);
@@ -205,7 +277,7 @@ class QRManager {
 
         navLinks.forEach(link => {
             const href = link.getAttribute('href');
-            if (currentPath === href || 
+            if (currentPath === href ||
                 (href === '/admin/dashboard' && currentPath === '/') ||
                 (href !== '/admin/dashboard' && currentPath.startsWith(href))) {
                 link.classList.add('text-teal-600', 'font-medium');
