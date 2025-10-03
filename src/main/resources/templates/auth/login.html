@@ -85,35 +85,36 @@
 </div>
 
 <script src="https://unpkg.com/lucide@latest"></script>
-<script>
-    lucide.createIcons();
+    <script th:src="@{/js/app.js}"></script>
+<!--<script>-->
+<!--    lucide.createIcons();-->
 
-    // imposta tema iniziale
-    if (localStorage.theme === 'dark' ||
-        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-        document.getElementById("darkModeIcon").setAttribute("data-lucide", "sun");
-    } else {
-        document.documentElement.classList.remove('dark');
-        document.getElementById("darkModeIcon").setAttribute("data-lucide", "moon");
-    }
-    lucide.createIcons();
+<!--    // imposta tema iniziale-->
+<!--    if (localStorage.theme === 'dark' ||-->
+<!--        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {-->
+<!--        document.documentElement.classList.add('dark');-->
+<!--        document.getElementById("darkModeIcon").setAttribute("data-lucide", "sun");-->
+<!--    } else {-->
+<!--        document.documentElement.classList.remove('dark');-->
+<!--        document.getElementById("darkModeIcon").setAttribute("data-lucide", "moon");-->
+<!--    }-->
+<!--    lucide.createIcons();-->
 
-    // toggle dark mode
-    document.getElementById("darkModeToggle").addEventListener("click", () => {
-        const html = document.documentElement;
-        const icon = document.getElementById("darkModeIcon");
-        if (html.classList.contains("dark")) {
-            html.classList.remove("dark");
-            localStorage.theme = 'light';
-            icon.setAttribute("data-lucide", "moon");
-        } else {
-            html.classList.add("dark");
-            localStorage.theme = 'dark';
-            icon.setAttribute("data-lucide", "sun");
-        }
-        lucide.createIcons();
-    });
-</script>
+<!--    // toggle dark mode-->
+<!--    document.getElementById("darkModeToggle").addEventListener("click", () => {-->
+<!--        const html = document.documentElement;-->
+<!--        const icon = document.getElementById("darkModeIcon");-->
+<!--        if (html.classList.contains("dark")) {-->
+<!--            html.classList.remove("dark");-->
+<!--            localStorage.theme = 'light';-->
+<!--            icon.setAttribute("data-lucide", "moon");-->
+<!--        } else {-->
+<!--            html.classList.add("dark");-->
+<!--            localStorage.theme = 'dark';-->
+<!--            icon.setAttribute("data-lucide", "sun");-->
+<!--        }-->
+<!--        lucide.createIcons();-->
+<!--    });-->
+<!--</script>-->
 </body>
 </html>

@@ -1,127 +1,225 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrazione - QR Manager</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: { extend: {} }
-        }
-    </script>
-</head>
-<body class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registrazione - QR Manager</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: { extend: {} }
+            }
+        </script>
+    </head>
+    <body class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200
              flex items-center justify-center p-4">
-<div class="absolute top-4 right-4">
-    <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-        <i id="darkModeIcon" data-lucide="moon" class="w-5 h-5 text-gray-700 dark:text-gray-300"></i>
-    </button>
-</div>
-
-<div class="w-full max-w-md">
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-8">
-        <div class="text-center mb-8">
-            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-white" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" fill="none" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                </svg>
-            </div>
-            <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent dark:text-white">
-                Registrazione
-            </h1>
-            <p class="text-gray-600 dark:text-gray-300 mt-2">Crea il tuo account</p>
-        </div>
-
-        <form th:action="@{/register-user}" method="post" class="space-y-6">
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="firstName">Nome</label>
-                    <input type="text" name="firstName"  id="firstName"
-                           class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg
-                                      focus:ring-2 focus:ring-purple-500 focus:border-transparent
-                                      bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="lastName">Cognome</label>
-                    <input type="text" name="lastName"  id="lastName"
-                           class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg
-                                      focus:ring-2 focus:ring-purple-500 focus:border-transparent
-                                      bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200">
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="email">Email</label>
-                <input type="email" name="email"  id="email"
-                       class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg
-                                  focus:ring-2 focus:ring-purple-500 focus:border-transparent
-                                  bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="password">Password</label>
-                <input type="password" name="password"  id="password"
-                       class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg
-                                  focus:ring-2 focus:ring-purple-500 focus:border-transparent
-                                  bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="confirmPassword">Conferma password</label>
-                <input type="password" name="confirmPassword" id="confirmPassword" 
-                       class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg
-                                  focus:ring-2 focus:ring-purple-500 focus:border-transparent
-                                  bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200">
-            </div>
-
-            <button type="submit"
-                    class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-lg font-medium
-                               hover:from-purple-700 hover:to-pink-700 transform hover:scale-[1.02]
-                               transition-all duration-200 shadow-lg">
-                Crea Account
+        <div class="absolute top-4 right-4">
+            <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                <i id="darkModeIcon" data-lucide="moon" class="w-5 h-5 text-gray-700 dark:text-gray-300"></i>
             </button>
-        </form>
-
-        <div class="mt-6 text-center">
-            <p class="text-gray-600 dark:text-gray-400">Hai già un account?
-                <a href="/login" class="text-purple-600 hover:text-purple-700 font-medium">Accedi qui</a>
-            </p>
         </div>
-    </div>
-</div>
 
-<script src="https://unpkg.com/lucide@latest"></script>
-<script>
-    lucide.createIcons();
+        <div class="w-full max-w-md">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-8">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" fill="none" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent dark:text-white">
+                        Registrazione
+                    </h1>
+                    <p class="text-gray-600 dark:text-gray-300 mt-2">Crea il tuo account</p>
+                </div>
 
-    // imposta tema iniziale
-    if (localStorage.theme === 'dark' ||
-        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-        document.getElementById("darkModeIcon").setAttribute("data-lucide", "sun");
-    } else {
-        document.documentElement.classList.remove('dark');
-        document.getElementById("darkModeIcon").setAttribute("data-lucide", "moon");
-    }
-    lucide.createIcons();
+                <form th:action="@{/register-user}" th:object="${user}" method="post" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="firstName">
+                                Nome <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" th:field="*{firstName}" id="firstName"
+                                   class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200"
+                                   th:classappend="${#fields.hasErrors('firstName')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'">
+                            <p th:if="${#fields.hasErrors('firstName')}"
+                               th:errors="*{firstName}"
+                               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium"></p>
+                        </div>
 
-    // toggle dark mode
-    document.getElementById("darkModeToggle").addEventListener("click", () => {
-        const html = document.documentElement;
-        const icon = document.getElementById("darkModeIcon");
-        if (html.classList.contains("dark")) {
-            html.classList.remove("dark");
-            localStorage.theme = 'light';
-            icon.setAttribute("data-lucide", "moon");
-        } else {
-            html.classList.add("dark");
-            localStorage.theme = 'dark';
-            icon.setAttribute("data-lucide", "sun");
-        }
-        lucide.createIcons();
-    });
-</script>
-</body>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="lastName">
+                                Cognome <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" th:field="*{lastName}" id="lastName"
+                                   class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200"
+                                   th:classappend="${#fields.hasErrors('lastName')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'">
+                            <p th:if="${#fields.hasErrors('lastName')}"
+                               th:errors="*{lastName}"
+                               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium"></p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="email">
+                            Email <span class="text-red-500">*</span>
+                        </label>
+                        <input type="email" th:field="*{email}" id="email"
+                               class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200"
+                               th:classappend="${#fields.hasErrors('email')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'">
+                        <p th:if="${#fields.hasErrors('email')}"
+                           th:errors="*{email}"
+                           class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium"></p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="password">
+                            Password <span class="text-red-500">*</span>
+                        </label>
+                        <input type="password" th:field="*{password}" id="password"
+                               class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200"
+                               th:classappend="${#fields.hasErrors('password')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'">
+                        <p th:if="${#fields.hasErrors('password')}"
+                           th:errors="*{password}"
+                           class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium"></p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" for="confirmPassword">
+                            Conferma password <span class="text-red-500">*</span>
+                        </label>
+                        <input type="password" th:field="*{confirmPassword}" id="confirmPassword"
+                               class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200"
+                               th:classappend="${#fields.hasErrors('confirmPassword')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'">
+                        <p th:if="${#fields.hasErrors('confirmPassword')}"
+                           th:errors="*{confirmPassword}"
+                           class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium"></p>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-lg font-medium
+                   hover:from-purple-700 hover:to-pink-700 transform hover:scale-[1.02]
+                   transition-all duration-200 shadow-lg">
+                        Crea Account
+                    </button>
+                </form>
+
+
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600 dark:text-gray-400">Hai già un account?
+                        <a href="/login" class="text-purple-600 hover:text-purple-700 font-medium">Accedi qui</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <script th:src="@{/js/app.js}"></script>
+        <script>
+            // ==========================================
+            // RIMOZIONE ERRORI IN TEMPO REALE
+            // ==========================================
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('form');
+                if (!form) return;
+
+                const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
+
+                inputs.forEach(input => {
+                    input.addEventListener('input', function() {
+                        removeFieldError(this);
+
+                        // Validazione opzionale in tempo reale
+                        if (this.value.trim().length > 0) {
+                            validateField(this);
+                        }
+
+                        updateAlertVisibility();
+                    });
+
+                    // Rimuovi errore anche quando il campo perde il focus (se è valido)
+                    input.addEventListener('blur', function() {
+                        if (this.value.trim().length > 0) {
+                            validateField(this);
+                        }
+                    });
+                });
+
+                function removeFieldError(input) {
+                    // Rimuovi classi errore
+                    input.classList.remove('border-red-500', 'focus:ring-red-500', 'focus:border-red-500');
+
+                    // Aggiungi classi normali
+                    input.classList.add('border-gray-200');
+                    if (document.documentElement.classList.contains('dark')) {
+                        input.classList.add('dark:border-gray-600');
+                    }
+
+                    // Nascondi messaggio errore
+                    const errorMessage = input.parentElement.querySelector('p.text-red-600, p.text-red-400');
+                    if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                    }
+                }
+
+                function validateField(input) {
+                    const inputId = input.id;
+                    const value = input.value.trim();
+                    let isValid = true;
+
+                    // Validazioni base
+                    if (inputId === 'email') {
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        isValid = emailRegex.test(value);
+                    } else if (inputId === 'password') {
+                        isValid = value.length >= 8;
+                    } else if (inputId === 'confirmPassword') {
+                        const password = document.getElementById('password')?.value;
+                        isValid = value === password && value.length > 0;
+                    } else {
+                        isValid = value.length >= 2;
+                    }
+
+                    // Applica stile verde se valido
+                    if (isValid && value.length > 0) {
+                        input.classList.remove('border-gray-200', 'dark:border-gray-600', 'border-red-500');
+                        input.classList.add('border-green-500', 'dark:border-green-500');
+                    }
+                }
+
+                function updateAlertVisibility() {
+                    const visibleErrors = document.querySelectorAll('p.text-red-600:not([style*="display: none"]), p.text-red-400:not([style*="display: none"])');
+                    const alert = document.querySelector('[role="alert"]');
+
+                    if (visibleErrors.length === 0 && alert && alert.style.display !== 'none') {
+                        alert.style.transition = 'opacity 0.3s ease-out';
+                        alert.style.opacity = '0';
+                        setTimeout(() => {
+                            alert.style.display = 'none';
+                        }, 300);
+                    }
+                }
+
+                // Validazione password match in tempo reale
+                const password = document.getElementById('password');
+                const confirmPassword = document.getElementById('confirmPassword');
+
+                if (password && confirmPassword) {
+                    confirmPassword.addEventListener('input', function() {
+                        if (this.value.length > 0) {
+                            validateField(this);
+                        }
+                    });
+
+                    password.addEventListener('input', function() {
+                        if (confirmPassword.value.length > 0) {
+                            validateField(confirmPassword);
+                        }
+                    });
+                }
+            });
+        </script>
+    </body>
 </html>
