@@ -12,10 +12,10 @@ QR-00//vedere se si può implementare il currentUser == user nella create così 
 SPRINT 1 - Gestire completamente gli utenti
 
 FEATURE
-QR-001 - Registrazione utente e admin e relativa visualizzazione DONE
-QR-002 - Gestione interfaccia profilo utente come aggiornamento UI e registrazione nuovo utente
+QR-001 - Registrazione utente e admin e relativa visualizzazione - DONE
+QR-002 - Gestione interfaccia profilo utente come aggiornamento UI e registrazione nuovo utente - DONE
         (admin può creare un admin, l'utente si deve solo poter registrare come utente)
-QR-003 - Modale per la visualizzazione/modifica rapida delle informazioni di un utente
+QR-003 - Visualizzazione/modifica rapida delle informazioni di un utente - DONE
 QR-004 - Far si che nella creazione del QR se gli utenti recenti sono più di 3 tramite bottone aprire una modale che mostra tutti i nuovi utenti in una lista non paginata.
          Valutare anche di inserire una ricerca tramite dell'utente.
 QR-005 - Implementare eliminazione utente da parte di admin
