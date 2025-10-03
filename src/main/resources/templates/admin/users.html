@@ -206,30 +206,30 @@
 
             <!-- Pagination -->
             <div class="flex justify-center mt-6 space-x-2">
-            <span>
-                <a th:if="${currentPage > 0}"
-                   th:href="@{|/admin/users?page=${currentPage - 1}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
-                   class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-                    &laquo;
-                </a>
-            </span>
-
-                <!-- Numeri di pagina -->
-                <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                <a th:href="@{|/admin/users?page=${i}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
-                   th:text="${i + 1}" class="px-3 py-1 rounded transition"
-                   th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'">
-                </a>
-            </span>
-
-                <!-- Bottone SUCCESSIVO -->
                 <span>
-                <a th:if="${currentPage + 1 < totalPages}"
-                   th:href="@{|/admin/users?page=${currentPage + 1}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
-                   class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-                    &raquo;
-                </a>
-            </span>
+                    <a th:if="${currentPage > 0}"
+                       th:href="@{|/admin/users?page=${currentPage - 1}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
+                       class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+                        &laquo;
+                    </a>
+                </span>
+
+                    <!-- Numeri di pagina -->
+                    <span th:each="i : ${#numbers.sequence(0, (totalPages > 0 ? totalPages - 1 : 0))}">
+                    <a th:href="@{|/admin/users?page=${i}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
+                       th:text="${i + 1}" class="px-3 py-1 rounded transition"
+                       th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'">
+                    </a>
+                </span>
+
+                    <!-- Bottone SUCCESSIVO -->
+                    <span>
+                    <a th:if="${currentPage + 1 < totalPages}"
+                       th:href="@{|/admin/users?page=${currentPage + 1}&size=${pageSize}&filter=${filter!=null?filter:''}&search=${search!=null?search:''}|}"
+                       class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+                        &raquo;
+                    </a>
+                </span>
             </div>
         </div>
 

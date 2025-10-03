@@ -82,7 +82,7 @@ public class QrCodeService {
                             qr.getOwner().getFirstName().toLowerCase().contains(search.toLowerCase()))
                     .collect(Collectors.toList());
 
-            return new PageImpl<>(filteredList, pageable, qrCodesPage.getTotalElements());
+            return new PageImpl<>(filteredList, pageable, filteredList.size());
         }
 
         return qrCodesPage;

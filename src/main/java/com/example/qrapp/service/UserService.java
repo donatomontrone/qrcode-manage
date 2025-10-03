@@ -107,7 +107,7 @@ public class UserService implements UserDetailsService {
                             user.getFirstName().toLowerCase().contains(search.toLowerCase()) ||
                             user.getEmail().toLowerCase().contains(search.toLowerCase()))
                     .collect(Collectors.toList());
-            return new PageImpl<>(filteredList, pageable, usersPage.getTotalElements());
+            return new PageImpl<>(filteredList, pageable, filteredList.size());
         }
         return usersPage;
     }

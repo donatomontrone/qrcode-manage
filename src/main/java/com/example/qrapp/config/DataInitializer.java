@@ -49,7 +49,7 @@ public class DataInitializer implements CommandLineRunner {
         try {
             initializeRoles();
             User user = initializeAdminUser();
-            initializeQRCodes(user);
+            if (user != null) initializeQRCodes(user);
             initializeUsers();
             logger.info(INIT_COMPLETED.getValue());
         } catch (Exception e) {
@@ -103,7 +103,7 @@ public class DataInitializer implements CommandLineRunner {
             return userRepository.save(adminUser);
         } else {
             logger.info("Utente amministratore già esistente con email: {}", adminEmail);
-            return null;
+            return userRepository.findByEmail(adminEmail).orElse(null);
         }
     }
 
@@ -111,7 +111,7 @@ public class DataInitializer implements CommandLineRunner {
         List<QrCode> existingQRCodes = new ArrayList<>();
         logger.info("Inizio caricamento QR per l'amministratore: {}", adminEmail);
         if (qrCodeRepository.countAll() == 0) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 13; i++) {
                 QrCode qrCode = new QrCode();
                 qrCode.setQrId("QR" + (i + 1));
                 qrCode.setMaxArticles(new Random().nextInt(5, 11));
