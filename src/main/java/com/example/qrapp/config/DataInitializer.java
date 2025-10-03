@@ -43,7 +43,7 @@ public class DataInitializer implements CommandLineRunner {
     private String adminPassword;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         logger.info(INIT_APP.getValue());
 
         try {
