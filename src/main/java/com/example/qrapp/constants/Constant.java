@@ -32,7 +32,7 @@ public enum Constant {
 
     //Exception
     ERROR_MESSAGE("errorMessage"),
-
+    STATUS("status"),
 
     //Template
     ERROR("error"),
