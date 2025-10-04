@@ -1,0 +1,48 @@
+<div id="toast-interactive" th:fragment="toastFragment(qr)"
+     class="hidden w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow-sm dark:bg-gray-800 dark:text-gray-400"
+     role="alert">
+    <div class="flex">
+        <div
+                class="inline-flex items-center justify-center shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg dark:text-blue-300 dark:bg-blue-900">
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 20">
+                <path stroke="currentColor" stroke-linecap="round" fill="none" stroke-linejoin="round" stroke-width="2"
+                      d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97"/>
+            </svg>
+            <span class="sr-only">Refresh icon</span>
+        </div>
+        <div class="ms-3 text-sm font-normal">
+            <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-white">Download disponibile</span>
+            <div class="mb-2 text-sm font-normal">L'immagine del QR code è disponibile per il download</div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <a th:href="'data:image/png;base64,' + ${qr}"
+                       download="qrcode.png"
+                       class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                        Scarica
+                    </a>
+                </div>
+            </div>
+        </div>
+        <button type="button"
+                class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 p-1.5 inline-flex h-8 w-8 dark:text-gray-500 dark:bg-gray-800 dark:hover:text-white"
+                data-dismiss-target="#toast-interactive" aria-label="Close">
+            <span class="sr-only">Close</span>
+            ✕
+        </button>
+    </div>
+    <script>
+        function showToast() {
+            const toast = document.getElementById("toast-interactive");
+            toast.classList.remove("hidden");
+            setTimeout(() => {
+                toast.classList.add("hidden");
+            }, 5000);
+        }
+        document.querySelectorAll("[data-dismiss-target]").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const target = document.querySelector(this.getAttribute("data-dismiss-target"));
+                if (target) target.classList.add("hidden");
+            });
+        });
+    </script>
+</div>

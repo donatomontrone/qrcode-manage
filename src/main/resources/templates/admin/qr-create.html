@@ -17,8 +17,12 @@
         </script>
     </head>
     <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
+
         <!-- Header -->
         <div th:replace="~{fragments/header :: header}"></div>
+        <div id="toast-container" th:if="${qr != null}" class="fixed top-5 right-5 z-50 space-y-2">
+            <div th:replace="fragments/toast :: toastFragment(${qr})"></div>
+        </div>
 
         <!-- Main Content -->
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -54,7 +58,7 @@
                                        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                                        placeholder="Collezione vintage di Mario">
                                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Una breve descrizione del QR code</p>
-                            </div>
+                            </div>x
 
                             <div>
                                 <label for="expiryDate" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
@@ -136,7 +140,12 @@
                             <p th:if="${qr == null}" class="text-sm text-gray-600 dark:text-gray-400 text-center">
                                 Il QR code sarà generato dopo la creazione e punterà a un indirizzo personale per utente
                             </p>
-                            <a th:href="${url}" th:if="${qr != null}" class="font-medium text-sm text-blue-600 dark:text-blue-500 hover:underline" th:text="${url}"> </a>
+                            <a th:if="${qr != null}"
+                               th:href="@{|mailto:${owner.getEmail()}?subject=Generazione%20spazio%20personale%20-%20QR%20Manager&body=Gentile%20${owner.getLastName() + ' ' + owner.getFirstName()},%0D%0A%0D%0Ati%20inviamo%20il%20link%20per%20accedere%20alla%20tua%20area%20personale.%20All’interno%20potrai%20visualizzare%20il%20tuo%20QR%20Code,%20scaricarlo%20e%20utilizzarlo%20per%20monitorare%20tutti%20gli%20articoli%20che%20desideri.%0D%0A%0D%0AIl%20link%20di%20accesso%20è%20:%20${url}%0D%0A%0D%0ALa%20scadenza%20del%20QR%20Code%20è%20fissata%20a%20un%20anno%20dalla%20sua%20emissione%20e%20potrai%20aggiungere%20fino%20a%2020%20articoli%20per%20QR%20Code.%0D%0A%0D%0ASe%20desideri%20prorogare%20la%20scadenza%20o%20aumentare%20il%20limite%20di%20articoli,%20non%20esitare%20a%20contattarci:%20saremo%20lieti%20di%20assisterti.%0D%0A%0D%0ACordiali%20saluti,%0D%0AIl%20team%20di%20QR%20Manager|}"
+                               class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 flex items-center justify-center">
+                                <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                                <span>Invia <span class="hidden md:inline-flex">Email</span></span>
+                            </a>
                         </div>
                     </div>
 
@@ -202,6 +211,9 @@
                     document.querySelector('input[name="ownerEmail"]').value = this.querySelector('.text-xs').textContent;
                 });
             });
+        </script>
+        <script th:if="${qr != null}">
+            showToast();
         </script>
     </body>
 </html>

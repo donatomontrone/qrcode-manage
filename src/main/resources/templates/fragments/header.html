@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="UTF-8">
     </head>
@@ -46,11 +46,14 @@
                         <div class="hidden md:flex relative">
                             <button id="userMenuButton" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors dark:hover:bg-gray-700">
                                 <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                                    <span class="text-sm font-medium text-white">A</span>
+                                    <span class="text-sm font-medium text-white" th:text="${(#strings.substring(#authentication.principal.firstName,0,1) +
+                  #strings.substring(#authentication.principal.lastName,0,1)).toUpperCase()}">A</span>
                                 </div>
                                 <div class="hidden sm:block text-left">
-                                    <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Admin User</p>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">Amministratore</p>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-gray-100" th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}">Admin User</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400" sec:authorize="hasRole('ADMIN')"
+                                    >Amministratore</p>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400" sec:authorize="hasRole('USER')">Utente</p>
                                 </div>
                                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 dark:text-gray-200"></i>
                             </button>

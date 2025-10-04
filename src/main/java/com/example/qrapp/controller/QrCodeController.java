@@ -58,6 +58,7 @@ public class QrCodeController {
           "QR Code creato con successo! ID: " + qrCode.getQrId());
       redirectAttributes.addFlashAttribute("url",
            appUrl + qrCode.getQrId());
+      redirectAttributes.addFlashAttribute("owner", owner);
       redirectAttributes.addFlashAttribute("qr",
           qrCodeService.generateQrCodeBase64(qrCode.getQrId(), 192, 192, darkMode));
       return "redirect:/admin/qr/create";
