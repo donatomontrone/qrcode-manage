@@ -134,6 +134,12 @@ public class UserService implements UserDetailsService {
         return userRepository.count();
     }
 
+    @Transactional(readOnly = true)
+    public List<User> findAll()  {
+        return userRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public boolean isAdmin(User user) {
         return user.getRoles().stream()
                 .anyMatch(role -> Role.ADMIN.equals(role.getName()));

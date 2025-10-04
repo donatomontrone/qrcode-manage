@@ -1,13 +1,20 @@
 package com.example.qrapp.controller;
 
+import com.example.qrapp.dto.QrCodeDTO;
 import com.example.qrapp.model.QrCode;
 import com.example.qrapp.model.User;
+import com.example.qrapp.service.ArticleService;
 import com.example.qrapp.service.QrCodeService;
 import com.example.qrapp.service.UserService;
+
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,11 +25,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -31,90 +35,94 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class QrCodeController {
 
-  private final QrCodeService qrCodeService;
+    private final QrCodeService qrCodeService;
 
-  private final UserService userService;
+    private final UserService userService;
+    private final List<String> colors = List.of(
+            "red", "blue", "green", "yellow", "purple", "orange", "teal", "pink", "brown", "rose");
 
-  @Value("${app.url}")
-  private  String appUrl;
+    @Value("${app.url}")
+    private String appUrl;
 
-  @PostMapping("/create")
-  public String createQrCode(@RequestParam String ownerEmail,
-                             @RequestParam String description,
-                             @RequestParam String expiryDate,
-                             @RequestParam Integer maxArticles,
-                             @RequestParam(required = false, defaultValue = "false") boolean darkMode,
-                             RedirectAttributes redirectAttributes) {
-    try {
-      User owner = userService.findByEmail(ownerEmail)
-          .orElseThrow(() -> new RuntimeException("Utente non trovato con email: " + ownerEmail));
+    @PostMapping("/create")
+    public String createQrCode(
+            @Valid @ModelAttribute("qrCodeDTO") QrCodeDTO qrCodeDTO,
+            BindingResult bindingResult,
+            @RequestParam(required = false, defaultValue = "false") boolean darkMode,
+            RedirectAttributes redirectAttributes, Model model, Principal principal) {
 
-      LocalDate date = LocalDate.parse(expiryDate, DateTimeFormatter.ISO_DATE);
-      LocalDateTime expiryDateTime = date.atStartOfDay();
+        if (!userService.existsByEmail(qrCodeDTO.getOwnerEmail())) {
+            bindingResult.rejectValue("ownerEmail", "email.notregistered",
+                    "Questa email non è presente nel database");
+        }
 
-      QrCode qrCode = qrCodeService.createQrCode(description, owner, expiryDateTime, maxArticles);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("colors", colors);
+            model.addAttribute("recentUsers", userService.findRecentUsers());
+            model.addAttribute("currentUser", principal.getName());
+            model.addAttribute("qrCodeDTO", qrCodeDTO);
+            model.addAttribute("users", userService.findAll());
+            return "admin/qr-create";
+        }
 
-      redirectAttributes.addFlashAttribute("successMessage",
-          "QR Code creato con successo! ID: " + qrCode.getQrId());
-      redirectAttributes.addFlashAttribute("url",
-           appUrl + qrCode.getQrId());
-      redirectAttributes.addFlashAttribute("owner", owner);
-      redirectAttributes.addFlashAttribute("qr",
-          qrCodeService.generateQrCodeBase64(qrCode.getQrId(), 192, 192, darkMode));
-      return "redirect:/admin/qr/create";
+        User owner = userService.findByEmail(qrCodeDTO.getOwnerEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
 
-    } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("errorMessage",
-          "Errore durante la creazione del QR Code: " + e.getMessage());
-      return "redirect:/admin/qr/create";
+        QrCode qrCode = qrCodeService.createQrCode(qrCodeDTO, owner);
+
+        redirectAttributes.addFlashAttribute("url", appUrl + qrCode.getQrId());
+        redirectAttributes.addFlashAttribute("owner", owner);
+        redirectAttributes.addFlashAttribute("qr",
+                qrCodeService.generateQrCodeBase64(qrCode.getQrId(), 192, 192, darkMode));
+        return "redirect:/admin/qr/create";
     }
-  }
 
-  @GetMapping("/{id}/edit")
-  public String editQrCode(@PathVariable UUID id, Model model) {
-    QrCode qrCode = qrCodeService.findById(id)
-        .orElseThrow(() -> new RuntimeException("QR Code non trovato"));
 
-    model.addAttribute("qrCode", qrCode);
-    return "admin/qr-edit";
-  }
+    @GetMapping("/{id}/edit")
+    public String editQrCode(@PathVariable UUID id, Model model) {
+        QrCode qrCode = qrCodeService.findById(id)
+                .orElseThrow(() -> new RuntimeException("QR Code non trovato"));
 
-  @PostMapping("/{id}/edit")
-  public String updateQrCode(@PathVariable UUID id,
-                             @RequestParam String description,
-                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                             LocalDateTime expiryDate,
-                             @RequestParam Integer maxArticles,
-                             RedirectAttributes redirectAttributes) {
-    try {
-      QrCode qrCode = qrCodeService.findById(id)
-          .orElseThrow(() -> new RuntimeException("QR Code non trovato"));
-
-      qrCode.setDescription(description);
-      qrCode.setExpiryDate(expiryDate);
-      qrCode.setMaxArticles(maxArticles);
-
-      qrCodeService.updateQrCode(qrCode);
-
-      redirectAttributes.addFlashAttribute("successMessage", "QR Code aggiornato con successo!");
-      return "redirect:/admin/qr/" + id;
-
-    } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("errorMessage",
-          "Errore durante l'aggiornamento: " + e.getMessage());
-      return "redirect:/admin/qr/" + id + "/edit";
+        model.addAttribute("qrCode", qrCode);
+        return "admin/qr-edit";
     }
-  }
 
-  @PostMapping("/{id}/delete")
-  public String deleteQrCode(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
-    try {
-      qrCodeService.deleteQrCode(id);
-      redirectAttributes.addFlashAttribute("successMessage", "QR Code eliminato con successo!");
-    } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("errorMessage",
-          "Errore durante l'eliminazione: " + e.getMessage());
+    @PostMapping("/{id}/edit")
+    public String updateQrCode(@PathVariable UUID id,
+                               @RequestParam String description,
+                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                               LocalDateTime expiryDate,
+                               @RequestParam Integer maxArticles,
+                               RedirectAttributes redirectAttributes) {
+        try {
+            QrCode qrCode = qrCodeService.findById(id)
+                    .orElseThrow(() -> new RuntimeException("QR Code non trovato"));
+
+            qrCode.setDescription(description);
+            qrCode.setExpiryDate(expiryDate);
+            qrCode.setMaxArticles(maxArticles);
+
+            qrCodeService.updateQrCode(qrCode);
+
+            redirectAttributes.addFlashAttribute("successMessage", "QR Code aggiornato con successo!");
+            return "redirect:/admin/qr/" + id;
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Errore durante l'aggiornamento: " + e.getMessage());
+            return "redirect:/admin/qr/" + id + "/edit";
+        }
     }
-    return "redirect:/admin/qr/list";
-  }
+
+    @PostMapping("/{id}/delete")
+    public String deleteQrCode(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
+        try {
+            qrCodeService.deleteQrCode(id);
+            redirectAttributes.addFlashAttribute("successMessage", "QR Code eliminato con successo!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Errore durante l'eliminazione: " + e.getMessage());
+        }
+        return "redirect:/admin/qr/list";
+    }
 }

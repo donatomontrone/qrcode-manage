@@ -7,8 +7,10 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-
+        <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
         <link th:href="@{/css/style.css}" rel="stylesheet" />
+
         <script>
             tailwind.config = {
                 darkMode: 'class',
@@ -37,17 +39,24 @@
                 <!-- Colonna sinistra -->
                 <div class="flex-1 flex flex-col space-y-6">
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                        <form th:action="@{/admin/qr/create}" method="post" class="space-y-6">
+                        <form th:action="@{/admin/qr/create}" th:object="${qrCodeDTO}" method="post" class="space-y-6">
                             <div>
                                 <label for="ownerEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                                    Email Proprietario
+                                    Email Proprietario *
                                 </label>
-                                <input id="ownerEmail" type="email" name="ownerEmail"
-                                       class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
-                               text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                               focus:ring-teal-500 focus:border-transparent"
-                                       placeholder="mario.rossi@email.com">
-                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">L'utente deve essere già registrato nel sistema</p>
+                                <select id="ownerEmail" name="ownerEmail"
+                                        class="tom-select"
+                                        th:classappend="${#fields.hasErrors('ownerEmail')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : ''"
+                                        th:value="*{ownerEmail}">
+                                    <option value="" disabled th:selected="${qrCodeDTO.ownerEmail == null}">Seleziona un email</option>
+                                    <option th:each="user : ${users}" th:value="${user.email}" th:text="${user.email}" th:selected="${user.email == qrCodeDTO.ownerEmail}"></option>
+                                </select>
+                                <p th:if="${#fields.hasErrors('ownerEmail')}"
+                                   th:errors="*{ownerEmail}"
+                                   class="text-red-600 dark:text-red-400 text-sm mt-1"></p>
+                                <p th:unless="${#fields.hasErrors('ownerEmail')}" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    Seleziona un utente registrato nel sistema
+                                </p>
                             </div>
 
                             <div>
@@ -55,24 +64,41 @@
                                     Descrizione
                                 </label>
                                 <input id="description" type="text" name="description"
-                                       class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                       placeholder="Collezione vintage di Mario">
-                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Una breve descrizione del QR code</p>
-                            </div>x
+                                       class="w-full border rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                      focus:ring-2 focus:ring-teal-500 focus:border-transparent
+                      border-gray-300 dark:border-gray-600"
+                                       placeholder="Collezione vintage di Mario"
+                                       th:classappend="${#fields.hasErrors('description')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : ''"
+                                       th:value="*{description}">
+                                <p th:if="${#fields.hasErrors('description')}"
+                                   th:errors="*{description}"
+                                   class="text-sm mt-1 text-red-600 dark:text-red-400"></p>
+                                <p th:unless="${#fields.hasErrors('description')}" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    Una breve descrizione del QR code
+                                </p>
+                            </div>
 
                             <div>
                                 <label for="expiryDate" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                                    Data di Scadenza
+                                    Data di Scadenza*
                                 </label>
                                 <div class="relative">
-                                    <input id="expiryDate" datepicker datepicker-format="yyyy-mm-dd" type="text" name="expiryDate"  class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                           th:value="${#dates.format(#dates.createToday(), 'yyyy-MM-dd')}"
-                                           placeholder="Seleziona data">
+                                <input id="expiryDate" type="text" name="expiryDate" datepicker datepicker-format="yyyy-mm-dd" datepicker-autohide="true"
+                                       class="w-full border rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                      focus:ring-2 focus:ring-teal-500 focus:border-transparent
+                      border-gray-300 dark:border-gray-600" th:placeholder="${#dates.createToday().setYear(1)}"
+                                       th:classappend="${#fields.hasErrors('expiryDate')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : ''"
+                                       th:value="*{expiryDate}">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                        <i data-lucide="calendar" class="w-5 h-5 text-gray-400"></i>
+                                        <i data-lucide="calendar" class="w-5 h-5" th:classappend="${#fields.hasErrors('expiryDate')} ? 'text-red-400' : 'text-gray-400'"></i>
                                     </div>
                                 </div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Data di scadenza iniziale del QR code</p>
+                                <p th:if="${#fields.hasErrors('expiryDate')}"
+                                   th:errors="*{expiryDate}"
+                                   class="text-red-600 dark:text-red-400 text-sm mt-1"></p>
+                                <p th:unless="${#fields.hasErrors('expiryDate')}" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    Data di scadenza iniziale del QR code (default un anno)
+                                </p>
                             </div>
 
                             <div>
@@ -80,29 +106,29 @@
                                     Numero Massimo Articoli
                                 </label>
                                 <div class="relative">
-                                    <input id="maxArticles" type="number" name="maxArticles" min="1" max="100" value="20"
-                                           class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 appearance-none py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                    >
-                                    <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                        <i data-lucide="package" class="w-5 h-5 text-gray-400"></i>
-                                    </div>
+                                <input id="maxArticles" type="number" name="maxArticles"
+                                       class="w-full border rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                      focus:ring-2 focus:ring-teal-500 focus:border-transparent
+                      border-gray-300 dark:border-gray-600"
+                                       th:classappend="${#fields.hasErrors('maxArticles')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : ''"
+                                       th:value="*{maxArticles}">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <i data-lucide="package" class="w-5 h-5" th:classappend="${#fields.hasErrors('maxArticles')} ? 'text-red-400' : 'text-gray-400'"></i>
                                 </div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Limite massimo di articoli associabili al QR code</p>
+                            </div>
+                                <p th:if="${#fields.hasErrors('maxArticles')}"
+                                   th:errors="*{maxArticles}"
+                                   class="text-red-600 dark:text-red-400 text-sm mt-1"></p>
+                                <p th:unless="${#fields.hasErrors('maxArticles')}" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                    Limite massimo di articoli associabili al QR code (default venti)
+                                </p>
                             </div>
 
-                            <div class="flex space-x-4 pt-4">
-                                <button type="submit"
-                                        class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 flex items-center justify-center">
-                                    <i data-lucide="qr-code" class="w-5 h-5 mr-2"></i>
-                                    <span>Genera <span class="hidden md:inline-flex">QR Code</span></span>
-                                </button>
-                                <a href="/admin/qr/list"
-                                   class="px-6 py-3 border border-gray-300 dark:border-gray-700 rounded-lg
-                                      text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center justify-center">
-                                    <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
-                                    <span class="hidden md:flex">Annulla</span>
-                                </a>
-                            </div>
+                            <button type="submit"
+                                    class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 flex items-center justify-center">
+                                <i data-lucide="qr-code" class="w-5 h-5 mr-2"></i>
+                                Genera QR Code
+                            </button>
                         </form>
                     </div>
 
@@ -196,22 +222,6 @@
         </div>
         <input type="hidden" name="darkMode" id="darkModeInput" value="">
         <script th:src="@{/js/app.js}"></script>
-        <script>
-            lucide.createIcons();
-
-            const expiryInput = document.querySelector('input[name="expiryDate"]');
-            if (expiryInput) {
-                const nextYear = new Date();
-                nextYear.setFullYear(nextYear.getFullYear() + 1);
-                expiryInput.value = nextYear.toISOString().split('T')[0];
-            }
-
-            document.querySelectorAll('.cursor-pointer').forEach(item => {
-                item.addEventListener('click', function () {
-                    document.querySelector('input[name="ownerEmail"]').value = this.querySelector('.text-xs').textContent;
-                });
-            });
-        </script>
         <script th:if="${qr != null}">
             showToast();
         </script>

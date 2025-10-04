@@ -1,15 +1,14 @@
 package com.example.qrapp.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,31 +21,29 @@ import static com.example.qrapp.constants.Constant.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class QrCode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotBlank
     @Column(unique = true)
     private String qrId;
 
-    @NotBlank
-    @Size(max = 255)
+    @Size(max = 255, message = "La descrizione se presente non deve essere superiore ai 255 caratteri")
     private String description;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
-    @NotNull
+    @Future(message = "La data di scadenza del QR code deve essere successiva a oggi")
     @Column(name = "expiry_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime expiryDate;
 
-    @NotNull
-    @Positive
+    @Positive(message = "Il numero di articoli totali deve essere maggiore di ZERO")
     @Column(name = "max_articles")
     private Integer maxArticles;
 
@@ -60,15 +57,6 @@ public class QrCode {
 
     @OneToMany(mappedBy = "qrCode", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Article> articles;
-
-    public QrCode(String description, User owner, LocalDateTime expiryDate, Integer maxArticles) {
-        this();
-        generateQrId();
-        this.description = description;
-        this.owner = owner;
-        this.expiryDate = expiryDate;
-        this.maxArticles = maxArticles;
-    }
 
     // Business methods
     public boolean isExpired() {
@@ -92,10 +80,6 @@ public class QrCode {
             return ACTIVE.toString();
         }
     }
-
-  public void generateQrId() {
-    qrId = UUID.randomUUID().toString();
-  }
 
     @PreUpdate
     private void preUpdate() {

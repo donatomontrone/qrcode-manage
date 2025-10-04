@@ -1,9 +1,12 @@
 package com.example.qrapp.service;
 
+import com.example.qrapp.dto.QrCodeDTO;
 import com.example.qrapp.model.QrCode;
 import com.example.qrapp.model.User;
 import com.example.qrapp.repository.QrCodeRepository;
 import com.example.qrapp.util.QrCodeGenerator;
+
+import java.time.LocalDate;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,21 +40,17 @@ public class QrCodeService {
 
     private final QrCodeGenerator qrCodeGenerator;
 
-    public QrCode createQrCode(String description, User owner, LocalDateTime expiryDate, Integer maxArticles) {
-        if (expiryDate == null) {
-            expiryDate = LocalDateTime.now().plusDays(defaultExpiryDays);
-        }
-        if (maxArticles == null) {
-            maxArticles = defaultMaxArticles;
-        }
-
-        QrCode qrCode = new QrCode(description, owner, expiryDate, maxArticles);
+    public QrCode createQrCode(QrCodeDTO qrCodeDTO, User owner) {
+        QrCode qrCode = QrCode.builder()
+                .qrId(UUID.randomUUID().toString())
+                .expiryDate(qrCodeDTO.getExpiryDate() != null ? qrCodeDTO.getExpiryDate().atStartOfDay().plusDays(defaultExpiryDays) : LocalDate.now().atStartOfDay().plusDays(defaultExpiryDays))
+                .maxArticles(qrCodeDTO.getMaxArticles() != null ? qrCodeDTO.getMaxArticles() : defaultMaxArticles)
+                .owner(owner)
+                .description(qrCodeDTO.getDescription())
+                .build();
         return qrCodeRepository.save(qrCode);
     }
 
-    public QrCode createQrCode(String description, User owner) {
-        return createQrCode(description, owner, null, null);
-    }
 
     @Transactional(readOnly = true)
     public Optional<QrCode> findByQrId(String qrId) {

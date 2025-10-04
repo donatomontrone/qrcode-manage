@@ -22,13 +22,17 @@ class QRManager {
         this.initializeLucideIcons();
         this.initializeMobileMenu();
         this.initializeUserDropdown();
-        this.initializeSettingsDropdown(); // ← AGGIUNTO QUESTA RIGA
+        this.initializeSettingsDropdown();
         this.initializeDarkMode();
         this.initializeActiveNavigation();
         this.initializeTooltips();
         this.initializeFormValidation();
         this.initializeImagePreview();
         this.initializeQRCodeGeneration();
+
+        // Personalizzazioni specifiche
+        this.initializeExpiryDateInput();
+        this.initializeOwnerEmailSelect();
     }
 
     // ========================================
@@ -67,27 +71,23 @@ class QRManager {
 
         let isOpen = false;
 
-        // Toggle apertura/chiusura
         mobileMenuButton.addEventListener('click', () => {
             isOpen = !isOpen;
             if (isOpen) {
                 mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
                 mobileMenu.classList.remove('max-h-0');
 
-                // icona X visibile, hamburger nascosto
                 menuIconOpen.classList.add('hidden');
                 menuIconClose.classList.remove('hidden');
             } else {
                 mobileMenu.style.maxHeight = '0';
                 mobileMenu.classList.add('max-h-0');
 
-                // hamburger visibile, icona X nascosta
                 menuIconClose.classList.add('hidden');
                 menuIconOpen.classList.remove('hidden');
             }
         });
 
-        // Chiudi menu quando clicchi un link
         mobileMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 isOpen = false;
@@ -150,9 +150,6 @@ class QRManager {
         const settingsButton = document.getElementById('mobileSettingsButton');
         const settingsDropdown = document.getElementById('mobileSettingsDropdown');
 
-        console.log('🔧 Settings button:', settingsButton);
-        console.log('🔧 Settings dropdown:', settingsDropdown);
-
         if (!settingsButton || !settingsDropdown) {
             console.warn('⚠️ Settings dropdown elements not found');
             return;
@@ -210,11 +207,11 @@ class QRManager {
     // CHIUDI TUTTI I DROPDOWN
     // ================================
     closeAllDropdowns(excludeId) {
-        const dropdowns = [
-            { id: 'userDropdown', element: document.getElementById('userDropdown') },
-            { id: 'mobileSettingsDropdown', element: document.getElementById('mobileSettingsDropdown') }
-        ];
-        dropdowns.forEach(({ id, element }) => {
+        const dropdowns = [{
+            id: 'userDropdown',
+            element: document.getElementById('userDropdown')
+        }, {id: 'mobileSettingsDropdown', element: document.getElementById('mobileSettingsDropdown')}];
+        dropdowns.forEach(({id, element}) => {
             if (id !== excludeId && element) {
                 element.classList.add('opacity-0', 'invisible');
                 element.classList.remove('opacity-100', 'visible');
@@ -277,9 +274,7 @@ class QRManager {
 
         navLinks.forEach(link => {
             const href = link.getAttribute('href');
-            if (currentPath === href ||
-                (href === '/admin/dashboard' && currentPath === '/') ||
-                (href !== '/admin/dashboard' && currentPath.startsWith(href))) {
+            if (currentPath === href || (href === '/admin/dashboard' && currentPath === '/') || (href !== '/admin/dashboard' && currentPath.startsWith(href))) {
                 link.classList.add('text-teal-600', 'font-medium');
                 link.classList.remove('text-gray-600');
             }
@@ -391,21 +386,18 @@ class QRManager {
         const file = input.files[0];
         if (!file) return;
 
-        // Validazione tipo file
         if (!file.type.startsWith('image/')) {
             alert('Per favore seleziona un file immagine valido.');
             input.value = '';
             return;
         }
 
-        // Validazione dimensione (10MB max)
         if (file.size > 10 * 1024 * 1024) {
             alert('Il file è troppo grande. Dimensione massima: 10MB');
             input.value = '';
             return;
         }
 
-        // Mostra preview
         const reader = new FileReader();
         reader.onload = (e) => {
             let preview = input.parentNode.querySelector('.image-preview');
@@ -441,53 +433,53 @@ class QRManager {
     }
 
     // ========================================
-    // UTILITY METHODS
+    // EXPIRY DATE INPUT INIT
     // ========================================
-    showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        const bgColor = {
-            'success': 'bg-green-500',
-            'error': 'bg-red-500',
-            'warning': 'bg-yellow-500',
-            'info': 'bg-blue-500'
-        }[type] || 'bg-blue-500';
-
-        notification.className = `fixed top-4 right-4 z-50 px-4 py-2 text-white rounded-lg shadow-lg ${bgColor}`;
-        notification.textContent = message;
-
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-            notification.classList.add('opacity-0', 'transition-opacity');
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
+    initializeExpiryDateInput() {
+        const expiryInput = document.querySelector('input[name="expiryDate"]');
+        if (expiryInput) {
+            if (!expiryInput.value) {
+                const nextYear = new Date();
+                nextYear.setFullYear(nextYear.getFullYear() + 1);
+                expiryInput.value = nextYear.toISOString().split('T')[0];
+            }
+        }
     }
 
-    formatDate(date) {
-        return new Intl.DateTimeFormat('it-IT', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        }).format(new Date(date));
+    initializeOwnerEmailSelect() {
+        if (typeof TomSelect === 'undefined') {
+            console.warn('⚠️ TomSelect non caricato: assicurati che CSS e JS siano inclusi');
+            return;
+        }
+        const ownerEmailSelect = document.querySelector('#ownerEmail');
+        if (ownerEmailSelect) {
+            new TomSelect(ownerEmailSelect, {
+                create: false,
+                sortField: {field: "text", direction: "asc"},
+                highlight: true,
+                searchField: ['text'],
+                dropdownClass: 'ts-dropdown',
+                controlClass: 'ts-control',
+                render: {
+                    option: function (data, escape) {
+                        return `<div class="cursor-pointer px-3 py-2 hover:bg-teal-600 hover:text-white dark:hover:bg-teal-500">${escape(data.text)}</div>`;
+                    },
+                    item: function (data, escape) {
+                        // Mostra placeholder correttamente come negli input se nessuna selezione
+                        if (data.value === "") {
+                            return `<span role="presentation">${escape(data.text)}</span>`;
+                        }
+                        return `<span>${escape(data.text)}</span>`;
+                    }
+                }
+            });
+        }
     }
 
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
 }
 
 // Inizializza l'applicazione
 const qrManager = new QRManager();
 
-// Esponi globalmente per debugging
+// Espone per debugging
 window.QRManager = qrManager;

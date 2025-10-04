@@ -1,5 +1,6 @@
 package com.example.qrapp.controller;
 
+import com.example.qrapp.dto.QrCodeDTO;
 import com.example.qrapp.model.QrCode;
 import com.example.qrapp.model.User;
 import com.example.qrapp.service.ArticleService;
@@ -84,7 +85,8 @@ public class AdminController {
     model.addAttribute("colors", colors);
     model.addAttribute("recentUsers", recentUsers);
     model.addAttribute("currentUser", principal.getName());
-    model.addAttribute("users", userService.findAll(pageable).getContent());
+    model.addAttribute("users", userService.findAll());
+    model.addAttribute("qrCodeDTO", new QrCodeDTO());
     return "admin/qr-create";
   }
 

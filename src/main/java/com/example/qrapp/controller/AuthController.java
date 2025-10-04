@@ -73,10 +73,13 @@ public class AuthController {
                              RedirectAttributes redirectAttributes) {
 
 
-    if (!user.getPassword().equals(user.getConfirmPassword())) {
+    if ((!user.getPassword().equals(user.getConfirmPassword())) || (user.getConfirmPassword().isBlank() && user.getPassword().isBlank())) {
       bindingResult.rejectValue("password", "password.mismatch",
           "Le password non coincidono");
+        bindingResult.rejectValue("confirmPassword", "password.mismatch",
+                "Le password non coincidono");
     }
+
 
     if (userService.existsByEmail(user.getEmail())) {
       bindingResult.rejectValue("email", "email.exists",
