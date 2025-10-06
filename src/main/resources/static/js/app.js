@@ -29,10 +29,7 @@ class QRManager {
         this.initializeFormValidation();
         this.initializeImagePreview();
         this.initializeQRCodeGeneration();
-
-        // Personalizzazioni specifiche
         this.initializeExpiryDateInput();
-        this.initializeOwnerEmailSelect();
     }
 
     // ========================================
@@ -445,37 +442,6 @@ class QRManager {
             }
         }
     }
-
-    initializeOwnerEmailSelect() {
-        if (typeof TomSelect === 'undefined') {
-            console.warn('⚠️ TomSelect non caricato: assicurati che CSS e JS siano inclusi');
-            return;
-        }
-        const ownerEmailSelect = document.querySelector('#ownerEmail');
-        if (ownerEmailSelect) {
-            new TomSelect(ownerEmailSelect, {
-                create: false,
-                sortField: {field: "text", direction: "asc"},
-                highlight: true,
-                searchField: ['text'],
-                dropdownClass: 'ts-dropdown',
-                controlClass: 'ts-control',
-                render: {
-                    option: function (data, escape) {
-                        return `<div class="cursor-pointer px-3 py-2 hover:bg-teal-600 hover:text-white dark:hover:bg-teal-500">${escape(data.text)}</div>`;
-                    },
-                    item: function (data, escape) {
-                        // Mostra placeholder correttamente come negli input se nessuna selezione
-                        if (data.value === "") {
-                            return `<span role="presentation">${escape(data.text)}</span>`;
-                        }
-                        return `<span>${escape(data.text)}</span>`;
-                    }
-                }
-            });
-        }
-    }
-
 }
 
 // Inizializza l'applicazione

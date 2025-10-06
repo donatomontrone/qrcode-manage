@@ -61,8 +61,8 @@ public class SecurityConfig {
                 .permitAll()
             )
             .sessionManagement(session -> session
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(false)
+                .maximumSessions(5)
+                .maxSessionsPreventsLogin(true)
             )
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/h2-console/**")

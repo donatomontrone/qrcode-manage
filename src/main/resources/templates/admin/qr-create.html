@@ -6,9 +6,7 @@
         <title>Crea QR Code - QR Manager</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+        <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
         <link th:href="@{/css/style.css}" rel="stylesheet" />
 
         <script>
@@ -40,24 +38,64 @@
                 <div class="flex-1 flex flex-col space-y-6">
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
                         <form th:action="@{/admin/qr/create}" th:object="${qrCodeDTO}" method="post" class="space-y-6">
-                            <div>
-                                <label for="ownerEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                                    Email Proprietario *
-                                </label>
-                                <select id="ownerEmail" name="ownerEmail"
-                                        class="tom-select"
-                                        th:classappend="${#fields.hasErrors('ownerEmail')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : ''"
-                                        th:value="*{ownerEmail}">
-                                    <option value="" disabled th:selected="${qrCodeDTO.ownerEmail == null}">Seleziona un email</option>
-                                    <option th:each="user : ${users}" th:value="${user.email}" th:text="${user.email}" th:selected="${user.email == qrCodeDTO.ownerEmail}"></option>
-                                </select>
-                                <p th:if="${#fields.hasErrors('ownerEmail')}"
-                                   th:errors="*{ownerEmail}"
-                                   class="text-red-600 dark:text-red-400 text-sm mt-1"></p>
-                                <p th:unless="${#fields.hasErrors('ownerEmail')}" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                    Seleziona un utente registrato nel sistema
-                                </p>
-                            </div>
+
+                                    <div x-data="emailSelect()" class="relative">
+                                        <label for="ownerEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+                                            Email Proprietario*
+                                        </label>
+
+                                        <!-- Campo principale -->
+                                        <div x-ref="selectDiv"
+                                             @click="open = !open; if(open) { search=''; $refs.selectDiv.focus(); }"
+                                             @keydown.escape="open = false"
+                                             tabindex="0" id="ownerEmail"
+                                             class="w-full border rounded-lg px-4 py-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300
+                                              dark:border-gray-600 focus:outline-none focus:border-transparent focus:ring-white focus:ring-2 flex justify-between items-center cursor-pointer"
+                                             th:classappend="${#fields.hasErrors('ownerEmail')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : ''">
+        <span x-text="selected || 'Seleziona un\'email'"
+              :class="!selected ? 'text-gray-400' : ''"></span>
+                                            <svg class="w-4 h-4 opacity-70 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                            </svg>
+                                        </div>
+
+                                        <!-- Dropdown -->
+                                        <div x-show="open"
+                                             @click.away="open = false"
+                                             x-transition
+                                             class="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">
+                                            <input type="text"
+                                                   x-model="search"
+                                                   x-ref="searchInput"
+                                                   @click.stop
+                                                   placeholder="Cerca..."
+                                                   class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-600 focus:outline-none text-sm rounded-t-lg">
+
+                                            <ul class="max-h-48 overflow-y-auto">
+                                                <template x-for="email in filteredOptions()" :key="email">
+                                                    <li @click="select(email)"
+                                                        class="px-4 py-2 hover:bg-teal-50 dark:hover:bg-gray-700 cursor-pointer text-sm text-gray-900 dark:text-gray-100"
+                                                        :class="{'bg-teal-100 dark:bg-teal-600 text-teal-800 dark:text-white': email === selected}">
+                                                        <span x-text="email"></span>
+                                                    </li>
+                                                </template>
+                                                <li x-show="filteredOptions().length === 0"
+                                                    class="px-4 py-2 text-gray-400 italic text-sm">
+                                                    Nessun risultato
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <!-- Campo hidden per invio al backend -->
+                                        <input type="hidden" name="ownerEmail" x-model="selected">
+
+                                        <p th:if="${#fields.hasErrors('ownerEmail')}"
+                                           th:errors="*{ownerEmail}"
+                                           class="text-red-600 dark:text-red-400 text-sm mt-1"></p>
+                                        <p th:unless="${#fields.hasErrors('ownerEmail')}" class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                            Seleziona un utente registrato nel sistema
+                                        </p>
+                                    </div>
 
                             <div>
                                 <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
@@ -222,6 +260,25 @@
         </div>
         <input type="hidden" name="darkMode" id="darkModeInput" value="">
         <script th:src="@{/js/app.js}"></script>
+        <script th:inline="javascript">
+            function emailSelect() {
+                return {
+                    open: false,
+                    search: '',
+                    selected: /*[[${qrCodeDTO.ownerEmail}]]*/ '',
+                    options: /*[[${emails}]]*/ [],
+                    filteredOptions() {
+                        if (!this.search) return this.options;
+                        return this.options.filter(o => o.toLowerCase().includes(this.search.toLowerCase()));
+                    },
+                    select(email) {
+                        this.selected = email;
+                        this.open = false;
+                    }
+                }
+            }
+        </script>
+
         <script th:if="${qr != null}">
             showToast();
         </script>

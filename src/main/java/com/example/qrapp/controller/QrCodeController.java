@@ -50,9 +50,8 @@ public class QrCodeController {
             BindingResult bindingResult,
             @RequestParam(required = false, defaultValue = "false") boolean darkMode,
             RedirectAttributes redirectAttributes, Model model, Principal principal) {
-
-        if (!userService.existsByEmail(qrCodeDTO.getOwnerEmail())) {
-            bindingResult.rejectValue("ownerEmail", "email.notregistered",
+        if (!userService.existsByEmail(qrCodeDTO.getOwnerEmail()) && !qrCodeDTO.getOwnerEmail().isBlank()) {
+            bindingResult.rejectValue("ownerEmail", "email.registered",
                     "Questa email non è presente nel database");
         }
 
@@ -62,6 +61,7 @@ public class QrCodeController {
             model.addAttribute("currentUser", principal.getName());
             model.addAttribute("qrCodeDTO", qrCodeDTO);
             model.addAttribute("users", userService.findAll());
+          model.addAttribute("emails", userService.findAll().stream().map(User::getEmail).toList());
             return "admin/qr-create";
         }
 

@@ -86,6 +86,7 @@ public class AdminController {
     model.addAttribute("recentUsers", recentUsers);
     model.addAttribute("currentUser", principal.getName());
     model.addAttribute("users", userService.findAll());
+    model.addAttribute("emails", userService.findAll().stream().map(User::getEmail).toList());
     model.addAttribute("qrCodeDTO", new QrCodeDTO());
     return "admin/qr-create";
   }
