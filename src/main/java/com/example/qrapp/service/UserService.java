@@ -162,7 +162,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean isEmailUnique(String email) {
-        return !userRepository.isEmailUnique(email);
+        return userRepository.isEmailUnique(email);
     }
 
     public List<User> findRecentUsers() {

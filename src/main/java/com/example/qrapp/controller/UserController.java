@@ -2,6 +2,7 @@ package com.example.qrapp.controller;
 
 import com.example.qrapp.model.User;
 import com.example.qrapp.service.UserService;
+import jakarta.validation.Valid;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -67,11 +68,11 @@ public class UserController {
   }
 
   @PostMapping("/{id}")
-  public String updateUser(@PathVariable UUID id,
+  public String updateUser(@PathVariable UUID id, @Valid @ModelAttribute User user,
                            BindingResult bindingResult,
                            @RequestParam("newPassword") String newPassword,
                            @RequestParam("confirmPassword") String confirmPassword,
-                           @ModelAttribute User user, RedirectAttributes attributes) {
+                           RedirectAttributes attributes) {
     Optional<User> userOpt = userService.findById(id);
 
     if (userOpt.isPresent()) {
