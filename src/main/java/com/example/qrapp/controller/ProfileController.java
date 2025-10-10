@@ -43,7 +43,7 @@ public class ProfileController {
 
         if (user.isPresent()) {
             User currentUser = user.get();
-            if (userService.isEmailUnique(userForm.getEmail())) {
+            if (userService.existsEmail(userForm.getEmail())) {
                 bindingResult.rejectValue("email", "error.user", "Email già utilizzata.");
             }
 

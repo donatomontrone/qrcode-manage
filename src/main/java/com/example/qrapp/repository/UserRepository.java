@@ -30,7 +30,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
   Long countAdmins();
 
   @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.email = :email")
-  boolean isEmailUnique(String email);
+  boolean existsEmail(String email);
 
   @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :role")
   Page<User> findAllUserByRole(String role, Pageable pageable);

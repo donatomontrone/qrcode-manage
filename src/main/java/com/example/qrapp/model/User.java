@@ -68,7 +68,6 @@ public class User implements UserDetails {
   @Size(min = 6, max = 100, message = "La password deve avere minimo 6 caratteri")
   private String password;
 
-  @Transient
   private String confirmPassword;
 
   @Column(name = "created_at")

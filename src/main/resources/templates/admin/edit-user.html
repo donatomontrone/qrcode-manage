@@ -31,8 +31,12 @@
             <input type="text" id="firstName" name="firstName" th:field="*{firstName}"
                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                            text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                           focus:ring-teal-500 focus:border-transparent" />
-            <div class="text-red-600 mt-1" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                           focus:ring-teal-500 focus:border-transparent"
+                   th:classappend="${#fields.hasErrors('firstName')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'"
+            />
+            <p th:if="${#fields.hasErrors('firstName')}"
+               th:errors="*{firstName}"
+               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium"></p>
         </div>
 
         <div class="mb-4">
@@ -41,24 +45,36 @@
                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                            text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
                            focus:ring-teal-500 focus:border-transparent" />
-            <div class="text-red-600 mt-1" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+            <p th:if="${#fields.hasErrors('lastName')}"
+               th:errors="*{lastName}"
+               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium"></p>
         </div>
 
         <div class="mb-4">
             <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Email</label>
-            <input type="email" id="email" name="email" th:field="*{email}"
+            <input type="text" id="email" name="email" th:field="*{email}"
                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                            text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                           focus:ring-teal-500 focus:border-transparent" />
-            <div class="text-red-600 mt-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                           focus:ring-teal-500 focus:border-transparent"
+                   th:classappend="${#fields.hasErrors('email')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'">
+
+            <p th:if="${#fields.hasErrors('email')}"
+               th:errors="*{email}"
+               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium"></p>
         </div>
 
         <div class="mb-4">
-            <label for="newPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Nuova Password</label>
-            <input type="password" id="newPassword" name="newPassword" placeholder="Lascia vuoto per non cambiare"
+            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Nuova Password</label>
+            <input type="password" id="password" name="password" placeholder="Lascia vuoto per non cambiare"
                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                            text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                           focus:ring-teal-500 focus:border-transparent" />
+                           focus:ring-teal-500 focus:border-transparent"
+                   th:classappend="${#fields.hasErrors('password')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'">
+
+            <p th:if="${#fields.hasErrors('password')}"
+               th:errors="*{password}"
+               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium"></p>
+        </div>
         </div>
 
         <div class="mb-4">
@@ -66,7 +82,13 @@
             <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Conferma la nuova password"
                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                            text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                           focus:ring-teal-500 focus:border-transparent" />
+                           focus:ring-teal-500 focus:border-transparent"
+                   th:classappend="${#fields.hasErrors('confirmPassword')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'">
+
+            <p th:if="${#fields.hasErrors('confirmPassword')}"
+               th:errors="*{confirmPassword}"
+               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium"></p>
+        </div>
         </div>
 
         <div class="flex space-x-4 pt-4">

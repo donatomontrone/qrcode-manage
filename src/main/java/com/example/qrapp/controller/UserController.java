@@ -1,5 +1,7 @@
 package com.example.qrapp.controller;
 
+import com.example.qrapp.dto.UserEditDTO;
+import com.example.qrapp.mapper.InstanceMapper;
 import com.example.qrapp.model.User;
 import com.example.qrapp.service.UserService;
 import jakarta.validation.Valid;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.UUID;
@@ -28,6 +29,8 @@ public class UserController {
     private final UserService userService;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final InstanceMapper instanceMapper;
 
 
   @GetMapping("/elimina/{id}")
@@ -63,27 +66,26 @@ public class UserController {
   public String viewUser(@PathVariable UUID id, Model model) {
     User user = userService.findById(id)
         .orElseThrow(() -> new RuntimeException("Utente non trovato con id: " + id));
-    model.addAttribute("user", user);
+    model.addAttribute("user", instanceMapper.userToUserEditDTO(user));
     return "admin/edit-user";
   }
 
   @PostMapping("/{id}")
-  public String updateUser(@PathVariable UUID id, @Valid @ModelAttribute User user,
+  public String updateUser(@PathVariable UUID id, @Valid @ModelAttribute UserEditDTO user,
                            BindingResult bindingResult,
-                           @RequestParam("newPassword") String newPassword,
-                           @RequestParam("confirmPassword") String confirmPassword,
                            RedirectAttributes attributes) {
     Optional<User> userOpt = userService.findById(id);
 
     if (userOpt.isPresent()) {
       User currentUser = userOpt.get();
-      if (userService.isEmailUnique(user.getEmail())) {
+      if (userService.existsEmail(user.getEmail())) {
         bindingResult.rejectValue("email", "error.user", "Email già utilizzata.");
       }
 
-      if (newPassword != null && !newPassword.isEmpty()) {
-        if (!newPassword.equals(confirmPassword)) {
+      if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
           bindingResult.rejectValue("password", "error.user", "Le password non coincidono.");
+          bindingResult.rejectValue("confirmPassword", "error.user", "Le password non coincidono.");
         }
       }
 
@@ -95,14 +97,14 @@ public class UserController {
       currentUser.setLastName(user.getLastName()  != null ? user.getLastName() : currentUser.getLastName());
       currentUser.setEmail(user.getEmail()  != null ? user.getEmail() : currentUser.getEmail());
 
-      if (newPassword != null && !newPassword.isEmpty()) {
-        currentUser.setPassword(passwordEncoder.encode(newPassword));
+      if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+        currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
       }
 
       userService.updateUser(currentUser);
       attributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo.");
     }
     attributes.addFlashAttribute("errorMessage", "Profilo non aggiornato.");
-    return "redirect:/admin/users/";
+    return "redirect:/admin/users";
   }
 }

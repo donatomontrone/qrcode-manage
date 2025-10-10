@@ -1,5 +1,6 @@
 package com.example.qrapp.controller;
 
+import com.example.qrapp.dto.UserCreateDTO;
 import com.example.qrapp.model.User;
 import com.example.qrapp.service.UserService;
 import jakarta.validation.Valid;
@@ -68,7 +69,7 @@ public class AuthController {
   }
 
   @PostMapping("/register-user")
-  public String registerUser(@Valid @ModelAttribute User user,
+  public String registerUser(@Valid @ModelAttribute UserCreateDTO user,
                              BindingResult bindingResult,
                              RedirectAttributes redirectAttributes) {
 

@@ -161,8 +161,8 @@ public class UserService implements UserDetailsService {
         return userRepository.countAdmins();
     }
 
-    public boolean isEmailUnique(String email) {
-        return userRepository.isEmailUnique(email);
+    public boolean existsEmail(String email) {
+        return userRepository.existsEmail(email);
     }
 
     public List<User> findRecentUsers() {
