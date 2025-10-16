@@ -5,13 +5,17 @@ import com.example.qrapp.mapper.InstanceMapper;
 import com.example.qrapp.model.User;
 import com.example.qrapp.service.UserService;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,10 +76,9 @@ public class UserController {
 
   @PostMapping("/{id}")
   public String updateUser(@PathVariable UUID id, @Valid @ModelAttribute UserEditDTO user,
-                           BindingResult bindingResult,
+                           BindingResult bindingResult, Model model,
                            RedirectAttributes attributes) {
     Optional<User> userOpt = userService.findById(id);
-
     if (userOpt.isPresent()) {
       User currentUser = userOpt.get();
       if (userService.existsEmail(user.getEmail())) {
@@ -90,6 +93,8 @@ public class UserController {
       }
 
       if (bindingResult.hasErrors()) {
+        model.addAttribute("errors", bindingResult);
+        model.addAttribute("user", user);
         return "admin/edit-user";
       }
 
