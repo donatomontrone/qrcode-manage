@@ -38,12 +38,15 @@
 | **QR-011** | Eliminazione di un QR code da parte dell'admin e valutare se eliminare quando scaduto | ⏳ TODO |
 | **QR-012** | Disabilitare la pagina di visualizzazione per utente quando non è sua e/o è scaduta | ⏳ TODO |
 
+Sistemare i toast per profilo e aggiornamento utente, sistemare i nomidelle variabili per messaggi
+nella login, controllare i messaggi di errore generali duranete aggiornamento utenti. qr-006
+
 ### 🐞 Bug
 
 
-| Codice | Descrizione                                                                                                                                                                                                | Stato   |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| **-**  | Sistemare i toast per profilo e aggiornamento utente, sistemare i nomi<br />delle variabili per messaggi <br />nella login, controllare<br /> i messaggi di errore generali duranete aggiornamento utenti. | ⏳ TODO |
+| Codice      | Descrizione                                                                                                                                      | Stato   |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| **QRB-002** | [PROD] Controllare che il produzioni ci sia una versione stabile e sostituire gli errori <br />con pagine apposite di vietato accesso momentaneo | ⏳ TODO |
 
 ## 🏃 Sprint 3 – Gestione completa dei articoli
 
