@@ -41,9 +41,9 @@
 ### 🐞 Bug
 
 
-| Codice | Descrizione | Stato |
-| ------ | ----------- | ----- |
-| -      | -           | -     |
+| Codice | Descrizione                                                                                                                                                                                                | Stato   |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| **-**  | Sistemare i toast per profilo e aggiornamento utente, sistemare i nomi<br />delle variabili per messaggi <br />nella login, controllare<br /> i messaggi di errore generali duranete aggiornamento utenti. | ⏳ TODO |
 
 ## 🏃 Sprint 3 – Gestione completa dei articoli
 

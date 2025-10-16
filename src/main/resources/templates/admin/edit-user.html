@@ -35,7 +35,7 @@
                    th:classappend="${errors != null && errors.hasFieldErrors('firstName')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'"/>
             <p th:if="${errors != null && errors.hasFieldErrors('firstName')}"
                th:errors="*{firstName}"
-               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium">[[ ${errors.getFieldError('nome').getDefaultMessage()} ]]</p>
+               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium">[[ ${errors.getFieldError('firstName').getDefaultMessage()} ]]</p>
         </div>
 
         <div class="mb-4">

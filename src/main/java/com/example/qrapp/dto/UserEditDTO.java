@@ -1,6 +1,7 @@
 package com.example.qrapp.dto;
 
 import com.example.qrapp.validator.SizeIfNotEmpty;
+import com.example.qrapp.validator.UniqueEmail;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -27,6 +28,7 @@ public class UserEditDTO {
 
   @NotBlank(message = "Inserisci la mail")
   @Email(message = "Il formato della email non è corretto")
+  @UniqueEmail
   @Size(min = 8, max = 30, message = "La mail deve essere compresa tra 8 e 30 caratteri")
   @Column(unique = true)
   private String email;

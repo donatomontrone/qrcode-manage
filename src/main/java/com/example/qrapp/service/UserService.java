@@ -1,5 +1,6 @@
 package com.example.qrapp.service;
 
+import com.example.qrapp.dto.UserEditDTO;
 import com.example.qrapp.model.Role;
 import com.example.qrapp.model.User;
 import com.example.qrapp.repository.RoleRepository;
@@ -33,143 +34,173 @@ import static com.example.qrapp.constants.Message.*;
 @SuppressWarnings("unused")
 public class UserService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+  private final RoleRepository roleRepository;
 
-    private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
 
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND + email));
+  @Override
+  @Transactional(readOnly = true)
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    return userRepository.findByEmail(email)
+        .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND + email));
+  }
+
+  public void registerUser(String firstName, String lastName, String email, String password) {
+    if (userRepository.existsByEmail(email)) {
+      throw new RuntimeException(EMAIL_ALREADY_EXISTS + email);
     }
 
-    public void registerUser(String firstName, String lastName, String email, String password) {
-        if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException(EMAIL_ALREADY_EXISTS + email);
+    User user = new User(firstName, lastName, email, passwordEncoder.encode(password));
+
+    Role userRole = roleRepository.findByName(Role.USER)
+        .orElseThrow(() -> new RuntimeException(INIT_ROLE_USER_NOT_FOUND.getValue()));
+    user.setRoles(Set.of(userRole));
+
+    userRepository.save(user);
+  }
+
+  public User createAdminUser(String firstName, String lastName, String email, String password) {
+    if (userRepository.existsByEmail(email)) {
+      throw new RuntimeException(EMAIL_ALREADY_EXISTS + email);
+    }
+
+    User user = new User(firstName, lastName, email, passwordEncoder.encode(password));
+
+    Role adminRole = roleRepository.findByName(Role.ADMIN)
+        .orElseThrow(() -> new RuntimeException(INIT_ROLE_ADMIN_NOT_FOUND.getValue()));
+    user.setRoles(Set.of(adminRole));
+
+    return userRepository.save(user);
+  }
+
+  @Transactional(readOnly = true)
+  public Optional<User> findByEmail(String email) {
+    return userRepository.findByEmail(email);
+  }
+
+  @Transactional(readOnly = true)
+  public Optional<User> findById(UUID id) {
+    return userRepository.findById(id);
+  }
+
+  @Transactional(readOnly = true)
+  public Page<User> findAll(Pageable pageable) {
+    return userRepository.findAll(pageable);
+  }
+
+  @Transactional(readOnly = true)
+  public Page<User> findAll(Pageable pageable, String filter, String search) {
+    Page<User> usersPage;
+
+    usersPage = switch (filter != null ? filter.toLowerCase() : "") {
+      case "user" -> findAllUserByRole(USER.name(), pageable);
+      case "admin" -> findAllUserByRole(ADMIN.name(), pageable);
+      default -> userRepository.findAll(pageable);
+    };
+
+    if (search != null && !search.trim().isEmpty()) {
+      List<User> filteredList = usersPage.getContent().stream()
+          .filter(user -> user.getLastName().toLowerCase().contains(search.toLowerCase()) ||
+              user.getFirstName().toLowerCase().contains(search.toLowerCase()) ||
+              user.getEmail().toLowerCase().contains(search.toLowerCase()))
+          .collect(Collectors.toList());
+      return new PageImpl<>(filteredList, pageable, filteredList.size());
+    }
+    return usersPage;
+  }
+
+  @Transactional
+  public Page<User> findAllUserByRole(String role, Pageable pageable) {
+    return userRepository.findAllUserByRole(role, pageable);
+  }
+
+  public User save(User user) {
+    return userRepository.save(user);
+  }
+
+  public void updateUser(UserEditDTO user, User currentUser) {
+    currentUser.setFirstName(
+        user.getFirstName() != null ? user.getFirstName() : currentUser.getFirstName());
+    currentUser.setLastName(
+        user.getLastName() != null ? user.getLastName() : currentUser.getLastName());
+    currentUser.setEmail(user.getEmail() != null ? user.getEmail() : currentUser.getEmail());
+
+    if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+      currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
+    }
+    userRepository.save(currentUser);
+  }
+
+  public boolean userCanUpdate(UserEditDTO user, User currentUser) {
+    if (user.getEmail().equalsIgnoreCase(currentUser.getEmail())
+    && user.getFirstName().equalsIgnoreCase(currentUser.getFirstName())
+    && user.getLastName().equalsIgnoreCase(currentUser.getLastName())
+    && (user.getPassword() == null || user.getPassword().isEmpty())
+    && (user.getConfirmPassword() == null || user.getConfirmPassword().isEmpty())) {
+      return false;
+    } else if (user.getEmail().equalsIgnoreCase(currentUser.getEmail())
+          && user.getFirstName().equalsIgnoreCase(currentUser.getFirstName())
+          && user.getLastName().equalsIgnoreCase(currentUser.getLastName())
+          && user.getPassword() != null
+          && !user.getPassword().isEmpty()
+          && user.getPassword().equalsIgnoreCase(currentUser.getPassword())) {
+          return false;
         }
+    return true;
+  }
 
-        User user = new User(firstName, lastName, email, passwordEncoder.encode(password));
+  public void deleteUser(UUID id) {
+    userRepository.deleteById(id);
+  }
 
-        Role userRole = roleRepository.findByName(Role.USER)
-                .orElseThrow(() -> new RuntimeException(INIT_ROLE_USER_NOT_FOUND.getValue()));
-        user.setRoles(Set.of(userRole));
+  @Transactional(readOnly = true)
+  public boolean existsByEmail(String email) {
+    return userRepository.existsByEmail(email);
+  }
 
-        userRepository.save(user);
-    }
+  @Transactional(readOnly = true)
+  public long countAll() {
+    return userRepository.count();
+  }
 
-    public User createAdminUser(String firstName, String lastName, String email, String password) {
-        if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException(EMAIL_ALREADY_EXISTS + email);
-        }
+  @Transactional(readOnly = true)
+  public List<User> findAll() {
+    return userRepository.findAll();
+  }
 
-        User user = new User(firstName, lastName, email, passwordEncoder.encode(password));
+  @Transactional(readOnly = true)
+  public boolean isAdmin(User user) {
+    return user.getRoles().stream()
+        .anyMatch(role -> Role.ADMIN.equals(role.getName()));
+  }
 
-        Role adminRole = roleRepository.findByName(Role.ADMIN)
-                .orElseThrow(() -> new RuntimeException(INIT_ROLE_ADMIN_NOT_FOUND.getValue()));
-        user.setRoles(Set.of(adminRole));
+  public void changePassword(User user, String newPassword) {
+    user.setPassword(passwordEncoder.encode(newPassword));
+    userRepository.save(user);
+  }
 
-        return userRepository.save(user);
-    }
+  public Long countRegistrationsToday() {
+    LocalDate today = LocalDate.now();
+    LocalDateTime startOfDay = today.atStartOfDay();
+    LocalDateTime endOfDay = today.plusDays(1).atStartOfDay().minusNanos(1);
+    return userRepository.countRegistrationToday(startOfDay, endOfDay);
+  }
 
-    @Transactional(readOnly = true)
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+  public Long countAdmins() {
+    return userRepository.countAdmins();
+  }
 
-    @Transactional(readOnly = true)
-    public Optional<User> findById(UUID id) {
-        return userRepository.findById(id);
-    }
+  public boolean existsEmail(String email) {
+    return userRepository.existsEmail(email);
+  }
 
-    @Transactional(readOnly = true)
-    public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
-    }
+  public List<User> findRecentUsers() {
+    return userRepository.findRecentUser();
+  }
 
-    @Transactional(readOnly = true)
-    public Page<User> findAll(Pageable pageable, String filter, String search) {
-        Page<User> usersPage;
-
-        usersPage = switch (filter != null ? filter.toLowerCase() : "") {
-            case "user" -> findAllUserByRole(USER.name(), pageable);
-            case "admin" -> findAllUserByRole(ADMIN.name(), pageable);
-            default -> userRepository.findAll(pageable);
-        };
-
-        if (search != null && !search.trim().isEmpty()) {
-            List<User> filteredList = usersPage.getContent().stream()
-                    .filter(user -> user.getLastName().toLowerCase().contains(search.toLowerCase()) ||
-                            user.getFirstName().toLowerCase().contains(search.toLowerCase()) ||
-                            user.getEmail().toLowerCase().contains(search.toLowerCase()))
-                    .collect(Collectors.toList());
-            return new PageImpl<>(filteredList, pageable, filteredList.size());
-        }
-        return usersPage;
-    }
-
-    @Transactional
-    public Page<User> findAllUserByRole(String role, Pageable pageable) {
-        return userRepository.findAllUserByRole(role, pageable);
-    }
-
-
-    public User updateUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public void deleteUser(UUID id) {
-        userRepository.deleteById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
-    }
-
-    @Transactional(readOnly = true)
-    public long countAll() {
-        return userRepository.count();
-    }
-
-    @Transactional(readOnly = true)
-    public List<User> findAll()  {
-        return userRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    public boolean isAdmin(User user) {
-        return user.getRoles().stream()
-                .anyMatch(role -> Role.ADMIN.equals(role.getName()));
-    }
-
-    public void changePassword(User user, String newPassword) {
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
-    }
-
-    public Long countRegistrationsToday() {
-        LocalDate today = LocalDate.now();
-        LocalDateTime startOfDay = today.atStartOfDay();
-        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay().minusNanos(1);
-        return userRepository.countRegistrationToday(startOfDay, endOfDay);
-    }
-
-    public Long countAdmins() {
-        return userRepository.countAdmins();
-    }
-
-    public boolean existsEmail(String email) {
-        return userRepository.existsEmail(email);
-    }
-
-    public List<User> findRecentUsers() {
-      return userRepository.findRecentUser();
-    }
-
-    public User findSuperAdmin() {
-      return userRepository.findSuperAdmin();
-    }
+  public User findSuperAdmin() {
+    return userRepository.findSuperAdmin();
+  }
 }

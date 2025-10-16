@@ -21,7 +21,7 @@
         <!-- Header -->
         <div th:replace="~{fragments/header :: header}"></div>
         <div id="toast-container" th:if="${qr != null}" class="fixed top-5 right-5 z-50 space-y-2">
-            <div th:replace="fragments/toast :: toastFragment(${qr})"></div>
+            <div th:replace="~{fragments/toast :: toastFragment(${qr})}"></div>
         </div>
 
         <!-- Main Content -->
@@ -64,8 +64,7 @@
                                              @click.away="open = false"
                                              x-transition
                                              class="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">
-                                            <input type="text"
-                                                   x-model="search"
+                                            <input type="text"                                                   x-model="search"
                                                    x-ref="searchInput"
                                                    @click.stop
                                                    placeholder="Cerca..."
@@ -278,7 +277,6 @@
                 }
             }
         </script>
-
         <script th:if="${qr != null}">
             showToast();
         </script>

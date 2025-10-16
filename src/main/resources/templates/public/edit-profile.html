@@ -16,6 +16,9 @@
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-200">
 <!-- Header -->
 <div th:replace="~{fragments/header :: header}"></div>
+    <div id="toast-container" th:if="${successMessage != null}" class="fixed top-5 right-5 z-50 space-y-2">
+        <div th:replace="~{fragments/toast-success :: toastSuccessFragment(${successMessage})}"></div>
+    </div>
 <!-- Main Content -->
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Page Header -->
@@ -33,40 +36,53 @@
     </div>
     <!-- Form Section -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-    <form th:action="@{/profile}" method="post" class="space-y-6" th:object="${userForm}">
+    <form th:action="@{/profile}" method="post" class="space-y-6" th:object="${user}">
         <div>
             <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Nome</label>
-            <input type="text" id="firstName" name="firstName" th:field="*{firstName}"
+            <input type="text" id="firstName" name="firstName" th:value="*{firstName}"
                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                            text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                           focus:ring-teal-500 focus:border-transparent" />
-            <div class="text-red-600 mt-1" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                           focus:ring-teal-500 focus:border-transparent"
+                   th:classappend="${errors != null && errors.hasFieldErrors('firstName')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'"/>
+            <p class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium" th:if="${errors != null && errors.hasFieldErrors('firstName')}">
+                [[ ${errors.getFieldError('firstName').getDefaultMessage()} ]]
+            </p>
         </div>
 
         <div class="mb-4">
             <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Cognome</label>
-            <input type="text" id="lastName" name="lastName" th:field="*{lastName}"
+            <input type="text" id="lastName" name="lastName" th:value="*{lastName}"
                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                            text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                           focus:ring-teal-500 focus:border-transparent" />
-            <div class="text-red-600 mt-1" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                           focus:ring-teal-500 focus:border-transparent"
+                   th:classappend="${errors != null && errors.hasFieldErrors('lastName')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'"/>
+            <p class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium" th:if="${errors != null && errors.hasFieldErrors('lastName')}">
+                [[ ${errors.getFieldError('lastName').getDefaultMessage()} ]]
+            </p>
         </div>
 
         <div class="mb-4">
             <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Email</label>
-            <input type="email" id="email" name="email" th:field="*{email}"
+            <input type="text" id="email" name="email" th:value="*{email}"
                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                            text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                           focus:ring-teal-500 focus:border-transparent" />
-            <div class="text-red-600 mt-1" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                           focus:ring-teal-500 focus:border-transparent"
+                   th:classappend="${errors != null && errors.hasFieldErrors('email')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'"/>
+            <p class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium" th:if="${errors != null && errors.hasFieldErrors('email')}">
+                [[ ${errors.getFieldError('email').getDefaultMessage()} ]]
+            </p>
         </div>
 
         <div class="mb-4">
             <label for="newPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Nuova Password</label>
-            <input type="password" id="newPassword" name="newPassword" placeholder="Lascia vuoto per non cambiare"
+            <input type="password" id="newPassword" name="password" placeholder="Lascia vuoto per non cambiare"
                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                            text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                           focus:ring-teal-500 focus:border-transparent" />
+                           focus:ring-teal-500 focus:border-transparent"
+                   th:classappend="${errors != null && errors.hasFieldErrors('password')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'">
+
+            <p th:if="${errors != null && errors.hasFieldErrors('password')}"
+               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium">[[ ${errors.getFieldError('password').getDefaultMessage()} ]]</p>
         </div>
 
         <div class="mb-4">
@@ -74,9 +90,12 @@
             <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Conferma la nuova password"
                    class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3
                            text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2
-                           focus:ring-teal-500 focus:border-transparent" />
-        </div>
+                           focus:ring-teal-500 focus:border-transparent"
+                   th:classappend="${errors != null && errors.hasFieldErrors('confirmPassword')} ? 'border-red-500 focus:ring-red-500 focus:border-red-500 dark:border-red-500' : 'border-gray-200 dark:border-gray-600'">
 
+            <p th:if="${errors != null && errors.hasFieldErrors('confirmPassword')}"
+               class="text-red-600 dark:text-red-400 text-xs mt-1 font-medium">[[ ${errors.getFieldError('confirmPassword').getDefaultMessage()} ]]</p>
+        </div>
         <div class="flex space-x-4 pt-4">
             <button type="submit"
                     class="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 px-6 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 flex items-center justify-center">
@@ -91,20 +110,11 @@
             </a>
         </div>
     </form>
-
-    <div th:if="${successMessage}" class="mt-4 p-2 bg-green-100 text-green-700 rounded">
-        <p th:text="${successMessage}"></p>
-    </div>
 </div>
 </div>
-<script>
-    tailwind.config = {
-        darkMode: 'class', // <--- fondamentale
-        theme: {
-            extend: {},
-        }
-    }
-</script>
+    <script th:if="${successMessage != null}">
+        document.addEventListener("DOMContentLoaded", () => showToast());
+    </script>
 <script th:src="@{/js/app.js}"></script>
 <script>
     lucide.createIcons();

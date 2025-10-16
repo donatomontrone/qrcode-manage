@@ -4,12 +4,17 @@ import com.example.qrapp.dto.UserEditDTO;
 import com.example.qrapp.mapper.InstanceMapper;
 import com.example.qrapp.model.User;
 import com.example.qrapp.service.UserService;
+import com.example.qrapp.validator.UniqueEmailValidator;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -32,7 +37,7 @@ public class UserController {
 
     private final UserService userService;
 
-    private final PasswordEncoder passwordEncoder;
+    private final UniqueEmailValidator uniqueEmailValidator;
 
     private final InstanceMapper instanceMapper;
 
@@ -77,36 +82,30 @@ public class UserController {
   @PostMapping("/{id}")
   public String updateUser(@PathVariable UUID id, @Valid @ModelAttribute UserEditDTO user,
                            BindingResult bindingResult, Model model,
-                           RedirectAttributes attributes) {
+                           RedirectAttributes attributes, HttpServletRequest request, HttpServletResponse response) {
     Optional<User> userOpt = userService.findById(id);
     if (userOpt.isPresent()) {
       User currentUser = userOpt.get();
-      if (userService.existsEmail(user.getEmail())) {
-        bindingResult.rejectValue("email", "error.user", "Email già utilizzata.");
-      }
-
+      uniqueEmailValidator.setCurrentUserId(currentUser.getId());
       if (user.getPassword() != null && !user.getPassword().isEmpty()) {
         if (!user.getPassword().equals(user.getConfirmPassword())) {
-          bindingResult.rejectValue("password", "error.user", "Le password non coincidono.");
-          bindingResult.rejectValue("confirmPassword", "error.user", "Le password non coincidono.");
+          bindingResult.rejectValue("password", "error.password", "Le password non coincidono");
+          bindingResult.rejectValue("confirmPassword", "error.confirmPassword", "Le password non coincidono");
         }
       }
-
       if (bindingResult.hasErrors()) {
         model.addAttribute("errors", bindingResult);
         model.addAttribute("user", user);
         return "admin/edit-user";
       }
-
-      currentUser.setFirstName(user.getFirstName() != null ? user.getFirstName() : currentUser.getFirstName());
-      currentUser.setLastName(user.getLastName()  != null ? user.getLastName() : currentUser.getLastName());
-      currentUser.setEmail(user.getEmail()  != null ? user.getEmail() : currentUser.getEmail());
-
-      if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-        currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
+      boolean emailChanged = !currentUser.getEmail().equals(user.getEmail());
+      userService.updateUser(user, currentUser);
+      if (emailChanged) {
+        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+        attributes.addFlashAttribute("logoutMessage",
+            "Email modificata con successo. Effettua nuovamente il login.");
+        return "redirect:/login";
       }
-
-      userService.updateUser(currentUser);
       attributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo.");
     }
     attributes.addFlashAttribute("errorMessage", "Profilo non aggiornato.");
