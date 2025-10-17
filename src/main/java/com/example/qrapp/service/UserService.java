@@ -62,10 +62,6 @@ public class UserService implements UserDetailsService {
   }
 
   public User createAdminUser(String firstName, String lastName, String email, String password) {
-    if (userRepository.existsByEmail(email)) {
-      throw new RuntimeException(EMAIL_ALREADY_EXISTS + email);
-    }
-
     User user = new User(firstName, lastName, email, passwordEncoder.encode(password));
 
     Role adminRole = roleRepository.findByName(Role.ADMIN)

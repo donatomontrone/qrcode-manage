@@ -8,19 +8,13 @@ import com.example.qrapp.validator.UniqueEmailValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.util.List;
+
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -86,7 +80,6 @@ public class UserController {
     Optional<User> userOpt = userService.findById(id);
     if (userOpt.isPresent()) {
       User currentUser = userOpt.get();
-      uniqueEmailValidator.setCurrentUserId(currentUser.getId());
       if (user.getPassword() != null && !user.getPassword().isEmpty()) {
         if (!user.getPassword().equals(user.getConfirmPassword())) {
           bindingResult.rejectValue("password", "error.password", "Le password non coincidono");
@@ -98,15 +91,8 @@ public class UserController {
         model.addAttribute("user", user);
         return "admin/edit-user";
       }
-      boolean emailChanged = !currentUser.getEmail().equals(user.getEmail());
-      userService.updateUser(user, currentUser);
-      if (emailChanged) {
-        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-        attributes.addFlashAttribute("logoutMessage",
-            "Email modificata con successo. Effettua nuovamente il login.");
-        return "redirect:/login";
-      }
-      attributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo.");
+        if (ProfileController.updateUser(user, attributes, request, response, currentUser, userService))
+            return "redirect:/login";
     }
     attributes.addFlashAttribute("errorMessage", "Profilo non aggiornato.");
     return "redirect:/admin/users";

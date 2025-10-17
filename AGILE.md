@@ -40,6 +40,7 @@
 
 Sistemare i toast per profilo e aggiornamento utente, sistemare i nomidelle variabili per messaggi
 nella login, controllare i messaggi di errore generali duranete aggiornamento utenti. qr-006
+Aggiunte varie fix ma adesso controllare l'aggiornamento di utente random (blocco su exists email)
 
 ### 🐞 Bug
 

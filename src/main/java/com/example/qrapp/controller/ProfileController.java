@@ -7,9 +7,9 @@ import com.example.qrapp.service.UserService;
 import com.example.qrapp.validator.UniqueEmailValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,12 +39,11 @@ public class ProfileController {
   }
 
   @PostMapping
-  public String updateProfile(@ModelAttribute("user") UserEditDTO user, Model model,
-                              BindingResult bindingResult, Principal principal,
+  public String updateProfile(@Valid @ModelAttribute("user") UserEditDTO user,
+                              BindingResult bindingResult, Model model, Principal principal,
                               RedirectAttributes attributes, HttpServletRequest request,
                               HttpServletResponse response) {
     Optional<User> userOpt = userService.findByEmail(principal.getName());
-    uniqueEmailValidator.setCurrentUserId(user.getId());
     if (userOpt.isPresent()) {
       User currentUser = userOpt.get();
       if (user.getPassword() != null && !user.getPassword().isEmpty()) {
@@ -60,19 +59,24 @@ public class ProfileController {
         return "public/edit-profile";
       }
       if (userService.userCanUpdate(user, currentUser)) {
-        boolean emailChanged = !currentUser.getEmail().equals(user.getEmail());
-        userService.updateUser(user, currentUser);
-        if (emailChanged) {
-          new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-          attributes.addFlashAttribute("logoutMessage",
-              "Email modificata con successo. Effettua nuovamente il login.");
-          return "redirect:/login";
-        }
-        attributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo.");
+          if (updateUser(user, attributes, request, response, currentUser, userService)) return "redirect:/login";
       }
     } else {
       attributes.addFlashAttribute("errorMessage", "Profilo non aggiornato.");
     }
     return "redirect:/profile";
   }
+
+    static boolean updateUser(@ModelAttribute("user") UserEditDTO user, RedirectAttributes attributes, HttpServletRequest request, HttpServletResponse response, User currentUser, UserService userService) {
+        boolean emailChanged = !currentUser.getEmail().equals(user.getEmail());
+        userService.updateUser(user, currentUser);
+        if (emailChanged) {
+          new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+          attributes.addFlashAttribute("successMessage",
+              "Email modificata con successo. Effettua nuovamente il login.");
+            return true;
+        }
+        attributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo.");
+        return false;
+    }
 }
