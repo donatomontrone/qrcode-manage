@@ -62,7 +62,7 @@ public class ProfileController {
           if (updateUser(user, attributes, request, response, currentUser, userService)) return "redirect:/login";
       }
     } else {
-      attributes.addFlashAttribute("errorMessage", "Profilo non aggiornato.");
+      attributes.addFlashAttribute("errorMessage", "Profilo non aggiornato");
     }
     return "redirect:/profile";
   }
@@ -76,7 +76,8 @@ public class ProfileController {
               "Email modificata con successo. Effettua nuovamente il login.");
             return true;
         }
-        attributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo.");
+        String fullName = String.format("%s %s", user.getFirstName(), user.getLastName());
+        attributes.addFlashAttribute("successMessage", String.format("Utente %s aggiornato con successo.", fullName));
         return false;
     }
 }

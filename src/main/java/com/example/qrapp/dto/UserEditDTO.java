@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@UniqueEmail
 public class UserEditDTO {
 
   private UUID id;
@@ -28,7 +29,6 @@ public class UserEditDTO {
 
   @NotBlank(message = "Inserisci la mail")
   @Email(message = "Il formato della email non è corretto")
-  @UniqueEmail
   @Size(min = 8, max = 30, message = "La mail deve essere compresa tra 8 e 30 caratteri")
   @Column(unique = true)
   private String email;

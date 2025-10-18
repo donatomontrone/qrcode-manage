@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -36,65 +37,67 @@ public class UserController {
     private final InstanceMapper instanceMapper;
 
 
-  @GetMapping("/elimina/{id}")
-  @PreAuthorize("hasRole('ADMIN')")
-  public String eliminaUtente(@PathVariable UUID id, RedirectAttributes attributes) {
-    User user = userService.findById(id).orElse(null);
-    String message;
-    String color;
+    @GetMapping("/elimina/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String eliminaUtente(@PathVariable UUID id, RedirectAttributes attributes) {
+        User user = userService.findById(id).orElse(null);
+        String message;
+        String color;
 
-    if (user != null) {
-      try {
-        message = "Utente '" + user.getEmail() + "' eliminato con successo!";
-        color = "success";
-        user.setQrCodes(null);
-        user.setRoles(null);
-        userService.deleteUser(id);
-      } catch (Exception e) {
-        message = "Errore durante l'eliminazione dell'utente: " + e.getMessage();
-        color = "danger";
-      }
-    } else {
-      message = "Utente non trovato!";
-      color = "danger";
-    }
-
-    attributes.addFlashAttribute("message", message);
-    attributes.addFlashAttribute("color", color);
-    return "redirect:/admin/users";
-  }
-
-
-  @GetMapping("/{id}")
-  public String viewUser(@PathVariable UUID id, Model model) {
-    User user = userService.findById(id)
-        .orElseThrow(() -> new RuntimeException("Utente non trovato con id: " + id));
-    model.addAttribute("user", instanceMapper.userToUserEditDTO(user));
-    return "admin/edit-user";
-  }
-
-  @PostMapping("/{id}")
-  public String updateUser(@PathVariable UUID id, @Valid @ModelAttribute UserEditDTO user,
-                           BindingResult bindingResult, Model model,
-                           RedirectAttributes attributes, HttpServletRequest request, HttpServletResponse response) {
-    Optional<User> userOpt = userService.findById(id);
-    if (userOpt.isPresent()) {
-      User currentUser = userOpt.get();
-      if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-        if (!user.getPassword().equals(user.getConfirmPassword())) {
-          bindingResult.rejectValue("password", "error.password", "Le password non coincidono");
-          bindingResult.rejectValue("confirmPassword", "error.confirmPassword", "Le password non coincidono");
+        if (user != null) {
+            try {
+                message = "Utente '" + user.getEmail() + "' eliminato con successo!";
+                color = "success";
+                user.setQrCodes(null);
+                user.setRoles(null);
+                userService.deleteUser(id);
+            } catch (Exception e) {
+                message = "Errore durante l'eliminazione dell'utente: " + e.getMessage();
+                color = "danger";
+            }
+        } else {
+            message = "Utente non trovato!";
+            color = "danger";
         }
-      }
-      if (bindingResult.hasErrors()) {
-        model.addAttribute("errors", bindingResult);
-        model.addAttribute("user", user);
-        return "admin/edit-user";
-      }
-        if (ProfileController.updateUser(user, attributes, request, response, currentUser, userService))
-            return "redirect:/login";
+
+        attributes.addFlashAttribute("message", message);
+        attributes.addFlashAttribute("color", color);
+        return "redirect:/admin/users";
     }
-    attributes.addFlashAttribute("errorMessage", "Profilo non aggiornato.");
-    return "redirect:/admin/users";
-  }
+
+
+    @GetMapping("/{id}")
+    public String viewUser(@PathVariable UUID id, Model model) {
+        User user = userService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato con id: " + id));
+        model.addAttribute("user", instanceMapper.userToUserEditDTO(user));
+        return "admin/edit-user";
+    }
+
+    @PostMapping("/{id}")
+    public String updateUser(@PathVariable UUID id, @Valid @ModelAttribute UserEditDTO user,
+                             BindingResult bindingResult, Model model,
+                             RedirectAttributes attributes, HttpServletRequest request, HttpServletResponse response) {
+        Optional<User> userOpt = userService.findById(id);
+        if (userOpt.isPresent()) {
+            User currentUser = userOpt.get();
+            if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+                if (!user.getPassword().equals(user.getConfirmPassword())) {
+                    bindingResult.rejectValue("password", "error.password", "Le password non coincidono");
+                    bindingResult.rejectValue("confirmPassword", "error.confirmPassword", "Le password non coincidono");
+                }
+            }
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("errors", bindingResult);
+                model.addAttribute("user", user);
+                return "admin/edit-user";
+            }
+            if (ProfileController.updateUser(user, attributes, request, response, currentUser, userService))
+                return "redirect:/login";
+        } else {
+
+            attributes.addFlashAttribute("errorMessage", "Profilo non aggiornato.");
+        }
+        return "redirect:/admin/users";
+    }
 }
